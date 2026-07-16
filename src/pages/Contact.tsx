@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MessageCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { initAuth, googleSignIn, getAccessToken } from '../lib/firebase';
-import type { User } from 'firebase/auth';
 
 export default function Contact() {
   const [step, setStep] = useState(1);
@@ -12,27 +10,6 @@ export default function Contact() {
     whatsapp: '',
     message: ''
   });
-
-  const [needsAuth, setNeedsAuth] = useState(false);
-  const [token, setToken] = useState<string | null>(null);
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
-
-  useEffect(() => {
-    const unsubscribe = initAuth(
-      (user, token) => {
-        setNeedsAuth(false);
-        setUser(user);
-        setToken(token);
-      },
-      () => {
-        setNeedsAuth(true);
-        setUser(null);
-        setToken(null);
-      }
-    );
-    return () => unsubscribe();
-  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -57,31 +34,10 @@ export default function Contact() {
     setIsSubmitting(true);
     setError(null);
     try {
-      let currentToken = await getAccessToken();
-      
-      if (!currentToken) {
-        // Authenticate the user if they don't have a token
-        setIsLoggingIn(true);
-        try {
-          const result = await googleSignIn();
-          if (result) {
-            currentToken = result.accessToken;
-            setToken(result.accessToken);
-            setUser(result.user);
-            setNeedsAuth(false);
-          } else {
-            throw new Error("Authentication failed.");
-          }
-        } finally {
-          setIsLoggingIn(false);
-        }
-      }
-
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${currentToken}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(formData),
       });
@@ -90,15 +46,12 @@ export default function Contact() {
       
       if (response.ok) {
         setSuccess(true);
+        setFormData({ name: '', whatsapp: '', message: '' });
       } else {
         setError(data.error || 'Failed to submit the form');
       }
     } catch (err: any) {
-      if (err.code === 'auth/popup-closed-by-user') {
-        setError('Sign-in popup was closed. Please sign in to send your message.');
-      } else {
-        setError(err.message || 'An error occurred. Please try again later.');
-      }
+      setError(err.message || 'An error occurred. Please try again later.');
     } finally {
       setIsSubmitting(false);
     }
@@ -201,10 +154,10 @@ export default function Contact() {
                   </button>
                   <button 
                     type="submit"
-                    disabled={!formData.message || isSubmitting || success || isLoggingIn}
+                    disabled={!formData.message || isSubmitting || success}
                     className="w-2/3 bg-blue-600 hover:bg-blue-500 disabled:bg-neutral-800 disabled:text-neutral-500 text-white font-bold py-4 rounded-xl transition-colors flex items-center justify-center gap-2"
                   >
-                    {isLoggingIn ? 'Signing in...' : isSubmitting ? 'Sending...' : success ? 'Sent!' : needsAuth ? 'Sign in & Send' : 'Send'}
+                    {isSubmitting ? 'Sending...' : success ? 'Sent!' : 'Send'}
                   </button>
                 </div>
                 {error && <p className="text-red-500 text-sm mt-2 text-center">{error}</p>}

@@ -13,13 +13,6 @@ async function startServer() {
 
   app.post("/api/contact", async (req, res) => {
     try {
-      const authHeader = req.headers.authorization;
-      if (!authHeader) {
-        res.status(401).json({ error: "Unauthorized: Missing Authorization header" });
-        return;
-      }
-      
-      const accessToken = authHeader.replace("Bearer ", "");
       const { name, whatsapp, message } = req.body;
       
       if (!name || !whatsapp || !message) {
@@ -27,57 +20,38 @@ async function startServer() {
         return;
       }
 
-      const authClient = new google.auth.OAuth2();
-      authClient.setCredentials({ access_token: accessToken });
-      
+      const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
+      const privateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
+
+      if (!clientEmail || !privateKey) {
+        console.error("Missing Google Service Account credentials.");
+        res.status(500).json({ error: "Server configuration error. Contact administrator." });
+        return;
+      }
+
+      const authClient = new google.auth.JWT(
+        clientEmail,
+        undefined,
+        privateKey,
+        ['https://www.googleapis.com/auth/spreadsheets']
+      );
+
       const sheets = google.sheets({ version: 'v4', auth: authClient });
       
-      // We need a spreadsheet to write to. For simplicity, we'll search for it or create it.
-      // But creating it is complex without Drive API. Let's create a new one every time if we can't find it? No.
-      // Let's create a spreadsheet on the user's account and return the URL.
-      // Since it's a demo, we'll create a new spreadsheet if not specified.
-      // Actually, let's just create a new one and append to it. 
-      // To avoid creating a new one every time, we need a place to store the spreadsheetId.
-      // We can use a property in the user's Google Drive, but we only have Sheets scope.
-      // Let's just create a new spreadsheet for this form submission as this is the only way with just sheets scope.
+      // Use the spreadsheet ID provided by the user
+      const spreadsheetId = '1TrM1rht74OkhXzJPyjME1_bB4cPJiaiFdwPZwt030NE';
       
-      const response = await sheets.spreadsheets.create({
-        requestBody: {
-          properties: {
-            title: `Contact from ${name}`
-          },
-          sheets: [
-            {
-              properties: {
-                title: 'Submissions'
-              }
-            }
-          ]
-        }
-      });
-      
-      const spreadsheetId = response.data.spreadsheetId!;
-      
-      // Create headers and append data
-      await sheets.spreadsheets.values.update({
-        spreadsheetId,
-        range: 'Submissions!A1:D1',
-        valueInputOption: 'USER_ENTERED',
-        requestBody: {
-          values: [['Timestamp', 'Name', 'WhatsApp Number', 'Message']]
-        }
-      });
-      
+      // Append data to the first sheet
       await sheets.spreadsheets.values.append({
         spreadsheetId,
-        range: 'Submissions!A2:D2',
+        range: 'A:D', // Appends to the next available row in columns A through D
         valueInputOption: 'USER_ENTERED',
         requestBody: {
-          values: [[new Date().toISOString(), name, whatsapp, message]]
+          values: [[new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }), name, whatsapp, message]]
         }
       });
 
-      res.json({ success: true, spreadsheetUrl: `https://docs.google.com/spreadsheets/d/${spreadsheetId}` });
+      res.json({ success: true, message: "Entry added successfully" });
     } catch (error: any) {
       console.error("Error saving contact:", error);
       res.status(500).json({ error: error.message || "Failed to save contact" });
