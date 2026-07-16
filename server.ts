@@ -2,7 +2,7 @@ import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
 import { google } from "googleapis";
-import { auth } from "google-auth-library";
+import { auth, OAuth2Client } from "google-auth-library";
 import fs from "fs";
 
 async function startServer() {
@@ -27,7 +27,7 @@ async function startServer() {
         return;
       }
 
-      const authClient = new auth.OAuth2();
+      const authClient = new google.auth.OAuth2();
       authClient.setCredentials({ access_token: accessToken });
       
       const sheets = google.sheets({ version: 'v4', auth: authClient });

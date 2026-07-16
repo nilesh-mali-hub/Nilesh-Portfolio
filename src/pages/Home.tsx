@@ -14,7 +14,7 @@ import {
   Smartphone, User, Mail, Instagram, Linkedin, 
   Pin, Figma, Scissors, Presentation, FileSpreadsheet, 
   FileText, Fingerprint, Search, Eye, Lightbulb, LayoutGrid,
-  PenTool, MonitorPlay, Layers, Zap
+  PenTool, MonitorPlay, Layers, Zap, ArrowUpRight
 } from 'lucide-react';
 import { motion } from 'motion/react';
 
@@ -33,7 +33,7 @@ export default function App() {
         
         <motion.nav initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="hidden md:flex items-center gap-8 text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-400">
           <a href="#about" className="hover:text-white transition-colors">About</a>
-          <a href="#works" className="hover:text-white transition-colors">Works</a>
+          <a href="#projects" className="hover:text-white transition-colors">Works</a>
           <a href="#services" className="hover:text-white transition-colors">Services</a>
           <Link to="/contact" className="px-6 py-2.5 border border-neutral-800 rounded-full hover:bg-white hover:text-black hover:border-white transition-all text-white">Contact</Link>
         </motion.nav>
@@ -128,31 +128,37 @@ export default function App() {
           </div>
         </div>
 
-        {/* Selected Works Section */}
-        <div className="mt-28">
-          <SectionHeading delay={0.1}>Selected Works</SectionHeading>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+        {/* Projects Section */}
+        <div className="mt-28" id="projects">
+          <SectionHeading delay={0.1}>Projects</SectionHeading>
+          <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-4 mt-8 min-h-[800px] md:min-h-[600px]">
             <ProjectCard 
               title="Aether OS" 
               category="UI/UX Concept" 
               imageUrl="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop" 
               delay={0.2}
-              featured={true}
+              className="md:col-span-2 md:row-span-2 h-full"
             />
-            <div className="col-span-1 flex flex-col gap-4">
-              <ProjectCard 
-                title="Neon Loom" 
-                category="E-Commerce" 
-                imageUrl="https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=800&auto=format&fit=crop" 
-                delay={0.3}
-              />
-              <BentoCard className="flex-1 p-8 bg-[#D1FF52] border-[#D1FF52] flex flex-col justify-center items-center text-center group cursor-pointer" delay={0.4}>
-                 <span className="text-black font-display font-black text-2xl uppercase tracking-tighter group-hover:scale-105 transition-transform">View All<br/>Projects</span>
-                 <div className="w-10 h-10 mt-4 rounded-full border border-black flex items-center justify-center text-black">
-                   <Zap className="w-4 h-4" />
-                 </div>
-              </BentoCard>
-            </div>
+            <ProjectCard 
+              title="Neon Loom" 
+              category="E-Commerce" 
+              imageUrl="https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=800&auto=format&fit=crop" 
+              delay={0.3}
+              className="md:col-span-2 md:row-span-1 h-full min-h-[250px]"
+            />
+            <BentoCard className="md:col-span-1 md:row-span-1 p-6 bg-[#D1FF52] border-[#D1FF52] flex flex-col justify-between group cursor-pointer" delay={0.4}>
+              <div className="w-10 h-10 rounded-full border border-black flex items-center justify-center text-black self-end group-hover:scale-110 transition-transform">
+                <ArrowUpRight className="w-5 h-5" />
+              </div>
+              <span className="text-black font-display font-black text-2xl uppercase tracking-tighter mt-4 leading-tight">View<br/>Recent<br/>Work</span>
+            </BentoCard>
+            <ProjectCard 
+              title="Echo Forms" 
+              category="Web App" 
+              imageUrl="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop" 
+              delay={0.5}
+              className="md:col-span-1 md:row-span-1 h-full min-h-[250px]"
+            />
           </div>
         </div>
 

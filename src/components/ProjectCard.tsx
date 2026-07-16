@@ -10,11 +10,12 @@ interface ProjectCardProps {
   link?: string;
   delay?: number;
   featured?: boolean;
+  className?: string;
 }
 
-export function ProjectCard({ title, category, imageUrl, link = "#", delay = 0, featured = false }: ProjectCardProps) {
+export function ProjectCard({ title, category, imageUrl, link = "#", delay = 0, featured = false, className = "" }: ProjectCardProps) {
   return (
-    <BentoCard className={`relative group cursor-pointer ${featured ? 'col-span-1 md:col-span-2 row-span-2 min-h-[400px]' : 'col-span-1 row-span-1 min-h-[300px] md:min-h-[400px]'}`} delay={delay}>
+    <BentoCard className={`relative group cursor-pointer ${className || (featured ? 'col-span-1 md:col-span-2 row-span-2 min-h-[400px]' : 'col-span-1 row-span-1 min-h-[300px] md:min-h-[400px]')}`} delay={delay}>
       <a href={link} className="absolute inset-0 z-20">
         <span className="sr-only">View {title}</span>
       </a>
