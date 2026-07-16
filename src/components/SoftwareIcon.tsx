@@ -10,10 +10,10 @@ interface SoftwareIconProps {
 export function SoftwareIcon({ name, icon, delay = 0 }: SoftwareIconProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.4, delay }}
+      initial={{ opacity: 0, y: 20, filter: "blur(5px)" }}
+      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
       className="w-14 h-14 sm:w-16 sm:h-16 bg-neutral-900 rounded-[1.5rem] border border-neutral-800 flex items-center justify-center text-white hover:border-[#D1FF52] hover:text-[#D1FF52] transition-colors cursor-pointer"
     >
       {icon ? (

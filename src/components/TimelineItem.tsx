@@ -10,13 +10,13 @@ interface TimelineItemProps {
 export function TimelineItem({ year, title, subtitle, delay = 0 }: TimelineItemProps) {
   return (
     <motion.div 
-      initial={{ opacity: 0, x: -20 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay }}
+      initial={{ opacity: 0, y: 20, filter: "blur(5px)" }}
+      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
       className="flex flex-col sm:flex-row gap-2 sm:gap-6 group"
     >
-      <div className="sm:w-24 flex-shrink-0 font-display font-black text-[#D1FF52] pt-1 leading-tight text-lg tracking-tighter uppercase italic">
+      <div className="sm:w-24 flex-shrink-0 font-display font-black text-[#D1FF52] pt-1 leading-tight text-lg tracking-tighter uppercase">
         {year.split('-').map((part, i) => (
           <span key={i}>
             {part}
@@ -26,7 +26,7 @@ export function TimelineItem({ year, title, subtitle, delay = 0 }: TimelineItemP
         ))}
       </div>
       <div>
-        <h4 className="font-display font-black text-xl text-white group-hover:text-[#D1FF52] transition-colors uppercase italic tracking-tight">{title}</h4>
+        <h4 className="font-display font-black text-xl text-white group-hover:text-[#D1FF52] transition-colors uppercase tracking-tight">{title}</h4>
         <p className="text-[10px] uppercase tracking-widest text-neutral-400 mt-2">{subtitle}</p>
       </div>
     </motion.div>
