@@ -10,7 +10,6 @@ import { HeroSlideshow } from '../components/HeroSlideshow';
 import { ProjectCard } from '../components/ProjectCard';
 import { ServiceCard } from '../components/ServiceCard';
 import { IntroAnimation } from '../components/IntroAnimation';
-import { Footer } from '../components/Footer';
 import { Marquee } from '../components/Marquee';
 import { NoiseOverlay } from '../components/NoiseOverlay';
 import { ProfileCard } from '../components/ProfileCard';
@@ -319,7 +318,6 @@ export default function App() {
         </div>
         
         <Marquee />
-        <Footer />
       </main>
     </div>
   );

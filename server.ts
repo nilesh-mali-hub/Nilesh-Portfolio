@@ -2,12 +2,17 @@ import { GoogleGenAI } from "@google/genai";
 import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
+import apiRouter from "./src/server/api";
 import { google } from "googleapis";
 import { auth, OAuth2Client } from "google-auth-library";
 import fs from "fs";
 
 async function startServer() {
   const app = express();
+  app.use(express.json());
+  
+  app.use("/api", apiRouter);
+
   const PORT = 3000;
 
   app.use(express.json());
