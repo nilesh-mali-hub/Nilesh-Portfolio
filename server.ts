@@ -29,12 +29,13 @@ async function startServer() {
         return;
       }
 
-      const authClient = new google.auth.JWT(
-        clientEmail,
-        undefined,
-        privateKey,
-        ['https://www.googleapis.com/auth/spreadsheets']
-      );
+      const authClient = new google.auth.GoogleAuth({
+        credentials: {
+          client_email: clientEmail,
+          private_key: privateKey
+        },
+        scopes: ['https://www.googleapis.com/auth/spreadsheets']
+      });
 
       const sheets = google.sheets({ version: 'v4', auth: authClient });
       

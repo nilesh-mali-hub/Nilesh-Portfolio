@@ -10,11 +10,12 @@ import { ProjectCard } from '../components/ProjectCard';
 import { ServiceCard } from '../components/ServiceCard';
 import { IntroAnimation } from '../components/IntroAnimation';
 import { Footer } from '../components/Footer';
+import { Marquee } from '../components/Marquee';
 import { 
   Smartphone, User, Mail, Instagram, Linkedin, 
-  Pin, Figma, Scissors, Presentation, FileSpreadsheet, 
-  FileText, Fingerprint, Search, Eye, Lightbulb, LayoutGrid,
-  PenTool, MonitorPlay, Layers, Zap, ArrowUpRight, Megaphone, Globe, BookOpen, Video
+  Pin, Figma, Fingerprint, Search, Eye, Lightbulb, LayoutGrid,
+  PenTool, MonitorPlay, Layers, Zap, ArrowUpRight, Megaphone, Globe, BookOpen, Video,
+  Scissors, Presentation, FileText
 } from 'lucide-react';
 import { motion } from 'motion/react';
 
@@ -185,8 +186,9 @@ export default function App() {
           <div className="flex flex-col">
             <SectionHeading delay={0.1}>Experience</SectionHeading>
             <div className="flex flex-col gap-8 w-full mt-4">
-              <TimelineItem delay={0.2} year="2022-Now" title="Freelance Graphic Designer" subtitle="Global Clients & Agencies" />
-              <TimelineItem delay={0.3} year="2021-2022" title="Visual Designer" subtitle="Creative Studio" />
+              <TimelineItem delay={0.2} year="2025-Now" title="Graphic Designer" subtitle="Redes Creation" />
+              <TimelineItem delay={0.3} year="2025" title="Graphic Design Intern" subtitle="Redes Creation" />
+              <TimelineItem delay={0.4} year="2024-Now" title="Founder" subtitle="BM Graphics & Media" />
             </div>
           </div>
           <div className="flex flex-col">
@@ -201,7 +203,7 @@ export default function App() {
         {/* Software Skills */}
         <div className="mt-28">
           <SectionHeading delay={0.1}>Software Skills</SectionHeading>
-          <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mt-8 max-w-3xl mx-auto">
+          <div className="flex flex-nowrap justify-start md:justify-center overflow-x-auto gap-2 sm:gap-4 mt-8 max-w-5xl mx-auto pb-4 px-4 [&::-webkit-scrollbar]:hidden" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
             <SoftwareIcon name="Ps" delay={0.1} />
             <SoftwareIcon name="Ai" delay={0.15} />
             <SoftwareIcon name="Xd" delay={0.2} />
@@ -209,8 +211,10 @@ export default function App() {
             <SoftwareIcon icon={<Figma className="w-8 h-8" />} delay={0.3} />
             <SoftwareIcon icon={<Scissors className="w-8 h-8" />} delay={0.35} />
             <SoftwareIcon icon={<Presentation className="w-8 h-8" />} delay={0.4} />
-            <SoftwareIcon icon={<FileSpreadsheet className="w-8 h-8" />} delay={0.45} />
             <SoftwareIcon icon={<FileText className="w-8 h-8" />} delay={0.5} />
+            <SoftwareIcon icon={<svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M10.651 0C10.265.019 9.4.272 8.584.657c-.816.39-3.696 2.161-3.752 6.536c.072 4.145 3.847 11.191 6.397 13.455c0 0-4.141-6.952-4.439-13.013C6.488 1.575 10.651 0 10.651 0m2.679 0s4.159 1.575 3.861 7.635c-.299 6.061-4.439 13.013-4.439 13.013c2.547-2.264 6.324-9.31 6.396-13.455c-.057-4.375-2.936-6.146-3.752-6.536C14.58.272 13.715.019 13.33 0m-1.38.019a1.1 1.1 0 0 0-.555.144C9.864.99 8.909 3.982 9.177 8.66c.185 3.242 1.009 7.291 2.422 11.988h.7c1.413-4.697 2.24-8.742 2.425-11.984c.268-4.677-.688-7.674-2.219-8.501a1.1 1.1 0 0 0-.555-.144M7.017 1.066S2.543 2.909 3.431 8.225c.884 5.32 5.588 10.995 6.986 12.2c.503.457-5.777-6.548-6.386-12.699c-.291-2.323.39-4.9 2.986-6.66m9.966 0c2.595 1.76 3.276 4.337 2.985 6.66c-.608 6.151-6.888 13.156-6.386 12.699c1.398-1.205 6.103-6.88 6.987-12.2c.888-5.316-3.586-7.159-3.586-7.159m-6.815 20.78L10.647 24h2.599l.488-2.154z" /></svg>} delay={0.55} />
+            <SoftwareIcon icon={<svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12s12-5.373 12-12S18.627 0 12 0M6.962 7.68c.754 0 1.337.549 1.405 1.2c.069.583-.171 1.097-.822 1.406c-.343.171-.48.172-.549.069c-.034-.069 0-.137.069-.206c.617-.514.617-.926.548-1.508c-.034-.378-.308-.618-.583-.618c-1.2 0-2.914 2.674-2.674 4.629c.103.754.549 1.646 1.509 1.646c.308 0 .65-.103.96-.24c.5-.264.799-.47 1.097-.8c-.073-.885.704-2.046 1.851-2.046c.515 0 .926.205.96.583c.068.514-.377.582-.514.582s-.378-.034-.378-.17c-.034-.138.309-.07.275-.378c-.035-.206-.24-.274-.446-.274c-.72 0-1.131.994-1.029 1.611c.035.275.172.549.447.549c.205 0 .514-.31.617-.755c.068-.308.343-.514.583-.514c.102 0 .17.034.205.171v.138c-.034.137-.137.548-.102.651c0 .069.034.171.17.171c.092 0 .436-.18.777-.459c.117-.59.253-1.298.253-1.357c.034-.24.137-.48.617-.48c.103 0 .171.034.205.171v.138l-.136.617c.445-.583 1.097-.994 1.508-.994c.172 0 .309.102.309.274c0 .103 0 .274-.069.446c-.137.377-.309.96-.412 1.474c0 .137.035.274.207.274s.685-.206 1.096-.754l.007-.004c-.002-.068-.007-.134-.007-.202c0-.411.035-.754.104-.994c.068-.274.411-.514.617-.514c.103 0 .205.069.205.171c0 .035 0 .103-.034.137c-.137.446-.24.857-.24 1.269c0 .24.034.582.102.788c0 .034.035.069.07.069c.068 0 .548-.445.89-1.028c-.308-.206-.48-.549-.48-.96c0-.72.446-1.097.858-1.097c.343 0 .617.24.617.72c0 .308-.103.65-.274.96h.102a.77.77 0 0 0 .584-.24a.3.3 0 0 1 .134-.117c.335-.425.83-.74 1.41-.74c.48 0 .924.205.959.582c.068.515-.378.618-.515.618l-.002-.002c-.138 0-.377-.035-.377-.172s.309-.068.274-.376c-.034-.206-.24-.275-.446-.275c-.686 0-1.13.891-1.028 1.611c.034.275.171.583.445.583c.206 0 .515-.308.652-.754c.068-.274.343-.514.583-.514c.103 0 .17.034.205.171c0 .069 0 .206-.137.652c-.17.308-.171.48-.137.617c.034.274.171.48.309.583c.034.034.068.102.068.102c0 .069-.034.138-.137.138c-.034 0-.068 0-.103-.035c-.514-.205-.72-.548-.789-.891c-.205.24-.445.377-.72.377c-.445 0-.89-.411-.96-.926a1.6 1.6 0 0 1 .075-.649c-.203.13-.422.203-.623.203h-.17c-.447.652-.927 1.098-1.27 1.303a.9.9 0 0 1-.377.104c-.068 0-.171-.035-.205-.104c-.095-.152-.156-.392-.193-.667c-.481.527-1.145.805-1.453.805c-.343 0-.548-.206-.582-.55v-.376c.102-.754.377-1.2.377-1.337a.074.074 0 0 0-.069-.07c-.24 0-1.028.824-1.166 1.373l-.103.445c-.068.309-.377.515-.582.515c-.103 0-.172-.035-.206-.172v-.137l.046-.233c-.435.31-.87.508-1.075.508c-.308 0-.48-.172-.514-.412c-.206.274-.445.412-.754.412c-.352 0-.696-.24-.862-.593c-.244.275-.523.553-.852.764c-.48.309-1.028.549-1.68.549c-.582 0-1.097-.309-1.371-.583c-.412-.377-.651-.96-.686-1.509c-.205-1.68.823-3.84 2.4-4.8c.378-.205.755-.343 1.132-.343m9.77 3.291c-.104 0-.172.172-.172.343c0 .274.137.583.309.755a1.7 1.7 0 0 0 .102-.583c0-.343-.137-.515-.24-.515z" /></svg>} delay={0.6} />
+            <SoftwareIcon icon={<svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9.998 12L2 16c0 1.886 0 2.328.586 2.914S4.114 19.5 6 19.5h8c1.886 0 2.828 0 3.414-.586S18 17.886 18 16m-8.002-4l11.998-6M9.998 12L2 8c0-1.386 0-2.328.586-2.914S4.114 4.5 6 4.5h8c1.886 0 2.828 0 3.414.586S18 6.614 18 8m-8.002 4l11.998 6" /></svg>} delay={0.65} />
           </div>
         </div>
 
@@ -361,6 +365,7 @@ export default function App() {
           </motion.div>
         </div>
         
+        <Marquee />
         <Footer />
       </main>
     </div>

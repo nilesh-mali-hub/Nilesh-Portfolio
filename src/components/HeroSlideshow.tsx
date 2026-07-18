@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react';
 
 const images = [
   "https://res.cloudinary.com/dfknctbhw/image/upload/v1784199299/nilesh_nvzcmq.jpg",
-  "https://res.cloudinary.com/dfknctbhw/image/upload/v1782624949/Screenshot_2026-06-28_110531_va0txn.png"
+  "https://res.cloudinary.com/dfknctbhw/image/upload/v1782624949/Screenshot_2026-06-28_110531_va0txn.png",
+  "https://res.cloudinary.com/dfknctbhw/image/upload/v1784204841/nilesh_rdo57m.webp"
 ];
 
 export function HeroSlideshow() {

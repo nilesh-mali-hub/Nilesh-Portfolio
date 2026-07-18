@@ -14,7 +14,7 @@ export function SoftwareIcon({ name, icon, delay = 0 }: SoftwareIconProps) {
       whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
-      className="w-14 h-14 sm:w-16 sm:h-16 bg-neutral-900 rounded-[1.5rem] border border-neutral-800 flex items-center justify-center text-white hover:border-[#D1FF52] hover:text-[#D1FF52] transition-colors cursor-pointer"
+      className="w-14 h-14 sm:w-16 sm:h-16 flex-shrink-0 bg-neutral-900 rounded-[1.5rem] border border-neutral-800 flex items-center justify-center text-white hover:border-[#D1FF52] hover:text-[#D1FF52] transition-colors cursor-pointer"
     >
       {icon ? (
         <div className="text-current transition-colors">{icon}</div>
