@@ -41,7 +41,7 @@ export function ProjectCard({ title, category, imageUrl, link = "#", delay = 0, 
         </div>
         
         <div>
-          <h3 className="font-display font-black text-3xl leading-none text-white tracking-tighter uppercase group-hover:text-[#D1FF52] transition-colors">{title}</h3>
+          <h3 className="font-display font-bold text-3xl leading-none text-white tracking-tighter uppercase group-hover:text-[#D1FF52] transition-colors">{title}</h3>
         </div>
       </div>
     </BentoCard>

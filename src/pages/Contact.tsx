@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MessageCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { NoiseOverlay } from '../components/NoiseOverlay';
 
 export default function Contact() {
   const [step, setStep] = useState(1);
@@ -58,16 +59,11 @@ export default function Contact() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-white font-sans relative flex flex-col items-center justify-center p-6">
-      <div className="noise-overlay"></div>
+    <div className="min-h-screen bg-neutral-950 text-white font-sans relative flex flex-col items-center justify-center p-6 pt-24">
+      <NoiseOverlay />
       
-      {/* Back button */}
-      <Link to="/" className="absolute top-8 left-8 text-neutral-500 hover:text-white transition-colors z-20 text-sm font-bold uppercase tracking-widest">
-        &larr; Back to Home
-      </Link>
-
       <div className="w-full max-w-md relative z-10 flex flex-col items-center">
-        <h1 className="font-display font-black text-5xl md:text-6xl text-white uppercase tracking-tighter mb-12 text-center">
+        <h1 className="font-display font-bold text-5xl md:text-6xl text-white uppercase tracking-tighter mb-12 text-center">
           Get in Touch!
         </h1>
 

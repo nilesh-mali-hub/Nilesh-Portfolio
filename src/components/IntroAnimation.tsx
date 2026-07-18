@@ -39,7 +39,7 @@ export function IntroAnimation() {
                 transition={{ duration: 0.5, delay: 0.4, type: "spring", stiffness: 200 }}
                 className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover"
               />
-              <span className="font-display font-black text-4xl md:text-5xl tracking-tighter uppercase text-white">Nilesh Mali</span>
+              <span className="font-display font-bold text-4xl md:text-5xl tracking-tighter uppercase text-white">Nilesh Mali</span>
             </motion.div>
           </div>
           

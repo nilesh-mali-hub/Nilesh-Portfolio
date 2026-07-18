@@ -10,7 +10,7 @@ export function SectionHeading({ children, delay = 0 }: { children: ReactNode, d
       transition={{ duration: 0.8, delay, ease: [0.22, 1, 0.36, 1] }}
       className="flex justify-center my-8 md:my-12"
     >
-      <div className="font-display text-2xl md:text-3xl font-black tracking-tighter uppercase text-white flex items-center gap-4">
+      <div className="font-display text-2xl md:text-3xl font-bold tracking-tighter uppercase text-white flex items-center gap-4">
         <div className="w-4 h-4 bg-[#D1FF52] rounded-full"></div>
         {children}
       </div>

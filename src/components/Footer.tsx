@@ -11,7 +11,7 @@ export function Footer() {
           href="#" 
           className="md:w-1/3 border border-neutral-800 rounded-full h-20 flex items-center justify-center hover:border-white transition-colors group"
         >
-          <span className="font-display font-black text-3xl tracking-tighter uppercase group-hover:scale-105 transition-transform">CV</span>
+          <span className="font-display font-bold text-3xl tracking-tighter uppercase group-hover:scale-105 transition-transform">CV</span>
         </a>
         <Link 
           to="/contact"
