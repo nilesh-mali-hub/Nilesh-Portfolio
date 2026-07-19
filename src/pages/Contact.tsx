@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MessageCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { SEO } from '../components/SEO';
 import { NoiseOverlay } from '../components/NoiseOverlay';
 
 export default function Contact() {
@@ -60,6 +61,10 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen bg-neutral-950 text-white font-sans relative flex flex-col items-center justify-center p-6 pt-24">
+      <SEO 
+        title="Contact Nilesh Mali | Get in Touch"
+        description="Have a dynamic brand design project or want a premium creative website? Contact Nilesh Mali today via WhatsApp or the web contact form."
+      />
       <NoiseOverlay />
       
       <div className="w-full max-w-md relative z-10 flex flex-col items-center">
@@ -80,16 +85,16 @@ export default function Contact() {
         </div>
 
         {/* Form Container */}
-        <div className="w-full relative min-h-[300px]">
+        <div className="w-full relative min-h-[260px] bg-neutral-900/20 border border-neutral-900 rounded-2xl p-6 sm:p-8">
           <AnimatePresence mode="wait">
             {step === 1 && (
               <motion.form 
                 key="step1"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 20 }}
-                transition={{ duration: 0.3 }}
-                className="w-full flex flex-col gap-4 absolute inset-0"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+                className="w-full flex flex-col gap-4"
               >
                 <input 
                   type="text" 
@@ -97,7 +102,7 @@ export default function Contact() {
                   placeholder="Full Name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full bg-neutral-900/50 border border-neutral-700 rounded-xl px-4 py-4 text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#D1FF52] transition-colors"
+                  className="w-full bg-neutral-900/50 border border-neutral-750 rounded-xl px-4 py-4 text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#D1FF52] transition-colors"
                   required
                 />
                 <input 
@@ -106,14 +111,14 @@ export default function Contact() {
                   placeholder="WhatsApp Number"
                   value={formData.whatsapp}
                   onChange={handleChange}
-                  className="w-full bg-neutral-900/50 border border-neutral-700 rounded-xl px-4 py-4 text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#D1FF52] transition-colors"
+                  className="w-full bg-neutral-900/50 border border-neutral-750 rounded-xl px-4 py-4 text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#D1FF52] transition-colors"
                   required
                 />
                 <button 
                   type="button"
                   onClick={nextStep}
                   disabled={!formData.name || !formData.whatsapp}
-                  className="w-full bg-blue-600 hover:bg-blue-500 disabled:bg-neutral-800 disabled:text-neutral-500 text-white font-bold py-4 rounded-xl transition-colors mt-2"
+                  className="w-full bg-blue-600 hover:bg-blue-500 disabled:bg-neutral-800 disabled:text-neutral-500 text-white font-bold py-4 rounded-xl transition-colors mt-2 cursor-pointer select-none"
                 >
                   Next
                 </button>
@@ -123,12 +128,12 @@ export default function Contact() {
             {step === 2 && (
               <motion.form 
                 key="step2"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 20 }}
-                transition={{ duration: 0.3 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
                 onSubmit={handleSubmit}
-                className="w-full flex flex-col gap-4 absolute inset-0"
+                className="w-full flex flex-col gap-4"
               >
                 <textarea 
                   name="message"
@@ -136,7 +141,7 @@ export default function Contact() {
                   value={formData.message}
                   onChange={handleChange}
                   rows={4}
-                  className="w-full bg-neutral-900/50 border border-neutral-700 rounded-xl px-4 py-4 text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#D1FF52] transition-colors resize-none"
+                  className="w-full bg-neutral-900/50 border border-neutral-750 rounded-xl px-4 py-4 text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#D1FF52] transition-colors resize-none"
                   required
                 />
                 <div className="flex gap-2 mt-2">
@@ -144,14 +149,14 @@ export default function Contact() {
                     type="button"
                     onClick={prevStep}
                     disabled={isSubmitting || success}
-                    className="w-1/3 bg-neutral-800 hover:bg-neutral-700 disabled:opacity-50 text-white font-bold py-4 rounded-xl transition-colors"
+                    className="w-1/3 bg-neutral-850 hover:bg-neutral-800 disabled:opacity-50 text-white font-bold py-4 rounded-xl transition-colors cursor-pointer select-none"
                   >
                     Back
                   </button>
                   <button 
                     type="submit"
                     disabled={!formData.message || isSubmitting || success}
-                    className="w-2/3 bg-blue-600 hover:bg-blue-500 disabled:bg-neutral-800 disabled:text-neutral-500 text-white font-bold py-4 rounded-xl transition-colors flex items-center justify-center gap-2"
+                    className="w-2/3 bg-blue-600 hover:bg-blue-500 disabled:bg-neutral-800 disabled:text-neutral-500 text-white font-bold py-4 rounded-xl transition-colors flex items-center justify-center gap-2 cursor-pointer select-none"
                   >
                     {isSubmitting ? 'Sending...' : success ? 'Sent!' : 'Send'}
                   </button>

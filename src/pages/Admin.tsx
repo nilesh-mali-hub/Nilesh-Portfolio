@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { LayoutDashboard, Briefcase, Settings, Users, MessageSquare, FileText, Image as ImageIcon, BookOpen, UserCircle, Menu, X, Plus, Edit2, Trash2, ExternalLink, Save } from 'lucide-react';
+import { LayoutDashboard, Briefcase, Settings, Users, MessageSquare, FileText, Image as ImageIcon, BookOpen, UserCircle, Menu, X, Plus, Edit2, Trash2, ExternalLink, Save, Cloud, Copy, Check, BarChart3 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { SEO } from '../components/SEO';
+import { AnalyticsTab } from '../components/AnalyticsTab';
 
 const tabs = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { id: 'analytics', label: 'Traffic Analytics', icon: BarChart3 },
   { id: 'projects', label: 'Projects', icon: Briefcase },
   { id: 'services', label: 'Services', icon: FileText },
   { id: 'testimonials', label: 'Testimonials', icon: MessageSquare },
@@ -13,6 +16,7 @@ const tabs = [
   { id: 'resume', label: 'Resume', icon: UserCircle },
   { id: 'gallery', label: 'Gallery', icon: ImageIcon },
   { id: 'knowledge', label: 'AI Knowledge', icon: BookOpen },
+  { id: 'drive', label: 'Google Drive', icon: Cloud },
   { id: 'settings', label: 'Settings', icon: Settings },
 ];
 
@@ -29,6 +33,7 @@ export default function Admin() {
 
   return (
     <div className="min-h-screen bg-neutral-950 text-white flex">
+      <SEO title="Admin Dashboard" noindex={true} />
       {/* Sidebar */}
       <aside 
         className={`fixed md:sticky top-0 h-screen bg-neutral-900 border-r border-neutral-800 transition-all duration-300 z-50 overflow-hidden flex flex-col ${isSidebarOpen ? 'w-64' : 'w-0 md:w-20'}`}
@@ -117,9 +122,11 @@ export default function Admin() {
             >
               <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-6 shadow-xl min-h-[600px] relative">
                 {activeTab === 'dashboard' && <DashboardTab />}
+                {activeTab === 'analytics' && <AnalyticsTab />}
                 {['projects', 'services', 'testimonials', 'leads', 'blog', 'gallery', 'knowledge'].includes(activeTab) && (
                   <GenericTab collection={activeTab} />
                 )}
+                {activeTab === 'drive' && <DriveTab />}
                 {['settings', 'resume'].includes(activeTab) && <SettingsTab name={activeTab} />}
               </div>
             </motion.div>
@@ -408,10 +415,36 @@ function GenericTab({ collection }: { collection: string }) {
                 <input 
                   type="text" 
                   value={formData.image}
-                  onChange={(e) => setFormData({...formData, image: e.target.value})}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    const converted = getGoogleDriveDirectLink(val);
+                    setFormData({...formData, image: converted});
+                  }}
                   className="w-full bg-neutral-950 border border-neutral-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52]"
-                  placeholder="https://..."
+                  placeholder="https://... or paste Google Drive link"
                 />
+                {formData.image && formData.image.includes('lh3.googleusercontent.com/d/') && (
+                  <div className="mt-2 p-2 bg-[#D1FF52]/10 border border-[#D1FF52]/20 rounded-lg">
+                    <span className="text-xs text-[#D1FF52] font-semibold flex items-center gap-1">
+                      ✓ Google Drive link converted automatically!
+                    </span>
+                  </div>
+                )}
+                {formData.image && (
+                  <div className="mt-3 relative aspect-video w-full rounded-xl overflow-hidden border border-neutral-800 bg-neutral-950 flex items-center justify-center">
+                    <img 
+                      src={formData.image} 
+                      alt="Preview" 
+                      className="object-contain max-h-[140px] max-w-full"
+                      onError={(e) => {
+                        (e.target as HTMLElement).style.display = 'none';
+                      }}
+                    />
+                    <div className="absolute top-2 right-2 text-[10px] bg-black/60 px-2 py-0.5 rounded text-neutral-400 font-mono">
+                      Image Preview
+                    </div>
+                  </div>
+                )}
               </div>
               <div className="pt-4 flex gap-3">
                 <button 
@@ -437,19 +470,378 @@ function GenericTab({ collection }: { collection: string }) {
 }
 
 function SettingsTab({ name }: { name: string }) {
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [formData, setFormData] = useState<any>({});
+  const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    setSuccess(false);
+    fetch(`/api/${name}`)
+      .then(res => res.json())
+      .then(data => {
+        setFormData(data || {});
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error(`Error loading ${name}:`, err);
+        setLoading(false);
+      });
+  }, [name]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+    setSuccess(false);
+    try {
+      const res = await fetch(`/api/${name}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      if (res.ok) {
+        setSuccess(true);
+        setTimeout(() => setSuccess(false), 3000);
+      }
+    } catch (err) {
+      console.error(`Error saving ${name}:`, err);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex-1 flex items-center justify-center min-h-[300px]">
+        <div className="w-8 h-8 border-4 border-neutral-800 border-t-[#D1FF52] rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col h-full">
       <div className="mb-6">
         <h2 className="text-2xl font-display font-bold capitalize text-white">{name} Configuration</h2>
-        <p className="text-neutral-400 text-sm mt-1">Manage global {name} preferences.</p>
+        <p className="text-neutral-400 text-sm mt-1">Manage global {name} preferences in real-time.</p>
       </div>
-      
-      <div className="flex-1 flex flex-col items-center justify-center text-center py-20 bg-neutral-950/50 border-2 border-dashed border-neutral-800 rounded-xl min-h-[300px]">
-        <div className="w-16 h-16 bg-neutral-900 rounded-full flex items-center justify-center mb-4 text-neutral-600">
-          <Settings className="w-8 h-8" />
+
+      <form onSubmit={handleSubmit} className="space-y-6 max-w-xl bg-neutral-950/50 border border-neutral-800/80 rounded-2xl p-6 backdrop-blur-md">
+        {name === 'resume' ? (
+          <div>
+            <label className="block text-sm font-medium text-neutral-400 mb-2">Resume PDF URL</label>
+            <input 
+              type="text" 
+              value={formData.pdfUrl || ''}
+              onChange={(e) => setFormData({ ...formData, pdfUrl: e.target.value })}
+              className="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] font-mono text-sm transition-colors"
+              placeholder="https://example.com/resume.pdf"
+              required
+            />
+            <p className="text-xs text-neutral-500 mt-2">
+              Enter the URL of your hosted PDF resume. This URL is used directly on the "Download Resume" button in your About page.
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-neutral-400 mb-2">Site Name</label>
+              <input 
+                type="text" 
+                value={formData.siteName || ''}
+                onChange={(e) => setFormData({ ...formData, siteName: e.target.value })}
+                className="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] transition-colors"
+                placeholder="Nilesh Mali"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-neutral-400 mb-2">Email Address</label>
+              <input 
+                type="email" 
+                value={formData.email || ''}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                className="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] transition-colors"
+                placeholder="work.nileshmali@gmail.com"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-neutral-400 mb-2">Google Analytics ID (gtag.js)</label>
+              <input 
+                type="text" 
+                value={formData.gaMeasurementId || ''}
+                onChange={(e) => setFormData({ ...formData, gaMeasurementId: e.target.value })}
+                className="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] transition-colors font-mono text-sm"
+                placeholder="G-XXXXXXXXXX"
+              />
+              <p className="text-xs text-neutral-500 mt-2">
+                Enter your Google Analytics Measurement ID to automatically activate Google Analytics (gtag.js) tracking across all pages.
+              </p>
+            </div>
+          </div>
+        )}
+
+        <div className="pt-4 flex items-center justify-between gap-4">
+          {success && (
+            <span className="text-[#D1FF52] text-sm font-bold flex items-center gap-1">
+              ✓ Successfully saved {name}!
+            </span>
+          )}
+          <button 
+            type="submit"
+            disabled={saving}
+            className="ml-auto bg-[#D1FF52] text-black px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-[#c5f542] disabled:opacity-50 transition-all duration-200 text-sm shadow-lg shadow-[#D1FF52]/10"
+          >
+            {saving ? 'Saving...' : 'Save Configuration'}
+          </button>
         </div>
-        <h3 className="text-lg font-bold text-white mb-2">Configuration Panel</h3>
-        <p className="text-neutral-500 text-sm max-w-sm">The {name} configuration panel will be available in the next update.</p>
+      </form>
+    </div>
+  );
+}
+
+// Helper to convert standard Google Drive share links into direct, high-performance embed links in the frontend
+function getGoogleDriveDirectLink(url: string): string {
+  if (!url) return '';
+  if (url.includes('drive.google.com')) {
+    const dPattern = /\/file\/d\/([a-zA-Z0-9_-]+)/;
+    const idQueryPattern = /[?&]id=([a-zA-Z0-9_-]+)/;
+    
+    let fileId = '';
+    const dMatch = url.match(dPattern);
+    if (dMatch) {
+      fileId = dMatch[1];
+    } else {
+      const idMatch = url.match(idQueryPattern);
+      if (idMatch) {
+        fileId = idMatch[1];
+      }
+    }
+    
+    if (fileId) {
+      return `https://lh3.googleusercontent.com/d/${fileId}`;
+    }
+  }
+  return url;
+}
+
+function DriveTab() {
+  const [driveData, setDriveData] = useState<{ configured: boolean; files: any[]; message?: string }>({ configured: false, files: [] });
+  const [loading, setLoading] = useState(true);
+  const [converterUrl, setConverterUrl] = useState('');
+  const [convertedUrl, setConvertedUrl] = useState('');
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    fetch('/api/drive/files')
+      .then(res => res.json())
+      .then(data => {
+        setDriveData({
+          configured: !!data.configured,
+          files: Array.isArray(data.files) ? data.files : [],
+          message: data.message || data.error || ''
+        });
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error("Error fetching Drive files:", err);
+        setDriveData({ configured: false, files: [], message: err.message });
+        setLoading(false);
+      });
+  }, []);
+
+  const handleConvert = (url: string) => {
+    setConverterUrl(url);
+    if (!url) {
+      setConvertedUrl('');
+      return;
+    }
+    const converted = getGoogleDriveDirectLink(url);
+    setConvertedUrl(converted);
+  };
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  if (loading) {
+    return (
+      <div className="flex-1 flex items-center justify-center min-h-[300px]">
+        <div className="w-8 h-8 border-4 border-neutral-800 border-t-[#D1FF52] rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-8">
+      {/* Header */}
+      <div>
+        <h2 className="text-2xl font-display font-bold text-white">Google Drive Integration</h2>
+        <p className="text-neutral-400 text-sm mt-1">Directly convert Google Drive assets to high-performance web direct links or browse files in real-time.</p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Converter Toolbox */}
+        <div className="lg:col-span-1 bg-neutral-950/50 border border-neutral-800 rounded-2xl p-6 flex flex-col h-fit">
+          <h3 className="font-bold text-lg mb-4 flex items-center gap-2 text-white">
+            <ImageIcon className="w-5 h-5 text-[#D1FF52]" /> Direct Link Converter
+          </h3>
+          <p className="text-xs text-neutral-400 mb-4 leading-relaxed">
+            Paste any Google Drive sharing URL below to instantly transform it into a direct web-friendly image link suitable for image tags.
+          </p>
+
+          <div className="space-y-4">
+            <div>
+              <label className="block text-xs font-medium text-neutral-400 mb-1.5">Paste Drive Sharing Link</label>
+              <textarea
+                value={converterUrl}
+                onChange={(e) => handleConvert(e.target.value)}
+                placeholder="https://drive.google.com/file/d/.../view"
+                className="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-[#D1FF52] min-h-[70px] resize-none"
+              />
+            </div>
+
+            {convertedUrl && (
+              <div className="space-y-3 pt-2">
+                <div>
+                  <label className="block text-xs font-medium text-emerald-400 mb-1.5 flex items-center gap-1">
+                    <span>✓ Direct Embeddable URL</span>
+                  </label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      readOnly
+                      value={convertedUrl}
+                      className="flex-1 bg-neutral-900 border border-neutral-800 rounded-lg px-3 py-2 text-xs text-neutral-300 font-mono focus:outline-none"
+                    />
+                    <button
+                      onClick={() => copyToClipboard(convertedUrl)}
+                      className="bg-[#D1FF52] text-black hover:bg-[#c5f542] p-2 rounded-lg font-bold transition-colors shrink-0 flex items-center justify-center min-w-[65px]"
+                    >
+                      {copied ? <span className="text-[10px]">Copied!</span> : <Copy className="w-3.5 h-3.5" />}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="border border-neutral-800 rounded-xl overflow-hidden aspect-video bg-black/60 flex items-center justify-center relative">
+                  <img
+                    src={convertedUrl}
+                    alt="Converted Preview"
+                    className="object-contain max-h-full max-w-full"
+                    onError={(e) => {
+                      (e.target as HTMLElement).style.display = 'none';
+                    }}
+                  />
+                  <div className="absolute top-2 right-2 text-[9px] bg-black/70 px-1.5 py-0.5 rounded text-neutral-400">
+                    Live Preview
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Drive Explorer */}
+        <div className="lg:col-span-2 bg-neutral-950/50 border border-neutral-800 rounded-2xl p-6 flex flex-col min-h-[400px]">
+          <h3 className="font-bold text-lg mb-4 flex items-center gap-2 text-white">
+            <Cloud className="w-5 h-5 text-blue-400" /> Google Drive Explorer
+          </h3>
+
+          {!driveData.configured ? (
+            <div className="flex-1 flex flex-col items-center justify-center text-center p-6 border border-dashed border-neutral-800 rounded-xl">
+              <div className="w-12 h-12 bg-neutral-900 rounded-full flex items-center justify-center mb-4 text-neutral-600">
+                <Cloud className="w-6 h-6" />
+              </div>
+              <h4 className="text-base font-bold text-white mb-2">Service Account Not Connected</h4>
+              <p className="text-neutral-500 text-xs max-w-sm mb-4 leading-relaxed">
+                To browse your actual Google Drive files in real-time, configure Google Service Account credentials in your project settings.
+              </p>
+              <div className="bg-neutral-900/60 p-4 rounded-xl border border-neutral-800/80 text-left max-w-md w-full space-y-2 text-xs text-neutral-400">
+                <p className="font-bold text-white text-[13px] border-b border-neutral-800 pb-1 flex items-center justify-between">
+                  <span>Configuration Guide:</span>
+                  <span className="text-[10px] font-mono text-[#D1FF52] bg-[#D1FF52]/10 px-1.5 py-0.5 rounded">Setup</span>
+                </p>
+                <p>1. Open Google Cloud Console & enable the <strong className="text-white">Google Drive API</strong>.</p>
+                <p>2. Create a <strong className="text-white">Service Account</strong>, generate a JSON key, and download it.</p>
+                <p>3. Add these variables in your environment or settings panel:</p>
+                <code className="block bg-black p-2 rounded text-[11px] font-mono text-blue-400 select-all overflow-x-auto whitespace-pre">
+                  GOOGLE_SERVICE_ACCOUNT_EMAIL=your-sa@project.iam.gserviceaccount.com
+GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n..."
+                </code>
+                <p className="text-[11px] text-neutral-500 italic">
+                  Note: Share your Google Drive folders with the Service Account email to allow file discovery!
+                </p>
+              </div>
+            </div>
+          ) : (driveData.files || []).length === 0 ? (
+            <div className="flex-1 flex flex-col items-center justify-center text-center py-12 border border-dashed border-neutral-800 rounded-xl">
+              <p className="text-neutral-500 text-sm">No supported files found in your Google Drive.</p>
+              <p className="text-xs text-neutral-600 mt-1 max-w-xs">
+                Ensure you share Google Drive folders or files with your Service Account email:
+                <br />
+                <span className="font-mono text-blue-400 text-[11px] select-all block mt-2 p-1.5 bg-black rounded word-break-all">
+                  {driveData.message || 'your-service-account-email'}
+                </span>
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-[500px] overflow-y-auto pr-1 no-scrollbar">
+              {(driveData.files || []).map((file) => {
+                const directLink = `https://lh3.googleusercontent.com/d/${file.id}`;
+                return (
+                  <div key={file.id} className="bg-neutral-900 border border-neutral-800/80 rounded-xl p-4 flex flex-col group hover:border-neutral-700 transition-colors">
+                    <div className="aspect-video w-full rounded-lg bg-black/40 overflow-hidden mb-3 relative flex items-center justify-center">
+                      {file.mimeType.startsWith('image/') ? (
+                        <img
+                          src={directLink}
+                          alt={file.name}
+                          className="object-cover w-full h-full"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="text-xs text-neutral-500 text-center p-4">
+                          <FileText className="w-8 h-8 text-neutral-600 mx-auto mb-2" />
+                          <span className="font-mono">{file.mimeType.split('/').pop()}</span>
+                        </div>
+                      )}
+                      <div className="absolute top-2 right-2 text-[10px] bg-black/70 px-1.5 py-0.5 rounded text-neutral-400 capitalize font-mono">
+                        {file.mimeType.split('/').pop()}
+                      </div>
+                    </div>
+
+                    <h4 className="font-bold text-xs text-white truncate mb-1" title={file.name}>
+                      {file.name}
+                    </h4>
+                    <p className="text-[10px] text-neutral-500 font-mono mb-3">
+                      ID: {file.id.slice(0, 12)}...
+                    </p>
+
+                    <div className="mt-auto flex gap-2">
+                      <button
+                        onClick={() => copyToClipboard(directLink)}
+                        className="flex-1 bg-[#D1FF52] text-black py-1.5 rounded-lg text-xs font-bold hover:bg-[#c5f542] transition-colors flex items-center justify-center gap-1"
+                      >
+                        <Copy className="w-3.5 h-3.5" /> Copy Embed Link
+                      </button>
+                      <a
+                        href={file.webViewLink}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="p-1.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-400 hover:text-white rounded-lg transition-colors flex items-center justify-center"
+                        title="Open in Google Drive"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                      </a>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

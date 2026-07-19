@@ -1,7 +1,21 @@
+import { useState, useEffect } from 'react';
 import { Instagram, Linkedin, Twitter, Youtube, ArrowRight, Mail } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export function Footer() {
+  const [resumeUrl, setResumeUrl] = useState<string>('https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf');
+
+  useEffect(() => {
+    fetch('/api/resume')
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.pdfUrl) {
+          setResumeUrl(data.pdfUrl);
+        }
+      })
+      .catch(err => console.error('Error fetching resume in footer:', err));
+  }, []);
+
   return (
     <footer className="mt-20 w-full flex flex-col items-center">
       
@@ -10,17 +24,19 @@ export function Footer() {
         {/* Top Row */}
         <div className="flex flex-col md:flex-row gap-4">
           <a 
-            href="#" 
-            className="md:w-1/3 border border-neutral-800 rounded-full h-20 flex items-center justify-center hover:border-white transition-colors group"
+            href={resumeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="md:w-1/3 border border-neutral-800 rounded-full min-h-[5rem] py-4 px-6 flex items-center justify-center hover:border-white transition-colors group"
           >
             <span className="font-display font-bold text-3xl tracking-tighter uppercase group-hover:scale-105 transition-transform text-white">CV</span>
           </a>
           <Link 
             to="/contact"
-            className="md:w-2/3 bg-[#D1FF52] rounded-full h-20 flex items-center justify-center hover:bg-[#c5f542] transition-colors group"
+            className="md:w-2/3 bg-[#D1FF52] rounded-full min-h-[5rem] py-4 px-6 sm:px-8 flex items-center justify-center hover:bg-[#c5f542] transition-colors group text-center"
           >
-            <span className="font-bold text-lg flex items-center gap-2 group-hover:scale-105 transition-transform text-black">
-              Let's Make Magic – Your vision, my expertise <ArrowRight className="w-5 h-5" />
+            <span className="font-bold text-sm sm:text-base md:text-lg flex items-center justify-center gap-2 group-hover:scale-105 transition-transform text-black leading-tight">
+              Let's Make Magic – Your vision, my expertise <ArrowRight className="w-5 h-5 shrink-0" />
             </span>
           </Link>
         </div>
@@ -31,13 +47,13 @@ export function Footer() {
             href="https://api.whatsapp.com/send/?phone=916378954363&text=Hello+Nilesh+Mali%21&type=phone_number&app_absent=0" 
             target="_blank"
             rel="noopener noreferrer"
-            className="md:w-2/3 border border-neutral-800 rounded-full h-20 flex items-center justify-center hover:border-white transition-colors group"
+            className="md:w-2/3 border border-neutral-800 rounded-full min-h-[5rem] py-4 px-6 flex items-center justify-center hover:border-white transition-colors group text-center"
           >
-            <span className="font-bold text-lg flex items-center gap-2 group-hover:scale-105 transition-transform text-white">
-              Say hello <ArrowRight className="w-5 h-5" />
+            <span className="font-bold text-sm sm:text-base md:text-lg flex items-center justify-center gap-2 group-hover:scale-105 transition-transform text-white leading-tight">
+              Say hello <ArrowRight className="w-5 h-5 shrink-0" />
             </span>
           </a>
-          <div className="md:w-1/3 border border-neutral-800 rounded-full h-20 flex items-center justify-center gap-6 text-white">
+          <div className="md:w-1/3 border border-neutral-800 rounded-full min-h-[5rem] py-4 px-6 flex items-center justify-center gap-6 text-white">
             <a href="https://www.instagram.com/_nilesh._.mali_?" target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-[#D1FF52] transition-colors">
               <Instagram className="w-5 h-5" />
             </a>

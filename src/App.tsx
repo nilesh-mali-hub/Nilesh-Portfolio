@@ -1,8 +1,10 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
+import { HelmetProvider } from 'react-helmet-async';
 import { LoadingScreen } from './components/LoadingScreen';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
+import { AnalyticsTracker } from './components/AnalyticsTracker';
 
 const Home = lazy(() => import('./pages/Home'));
 const Contact = lazy(() => import('./pages/Contact'));
@@ -15,6 +17,7 @@ function AppContent() {
 
   return (
     <>
+      <AnalyticsTracker />
       {!isAdmin && <Header />}
       <Suspense fallback={<LoadingScreen />}>
         <Routes>
@@ -31,8 +34,10 @@ function AppContent() {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <AppContent />
-    </BrowserRouter>
+    <HelmetProvider>
+      <BrowserRouter>
+        <AppContent />
+      </BrowserRouter>
+    </HelmetProvider>
   );
 }

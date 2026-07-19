@@ -9,15 +9,18 @@ export const defaultData = {
   testimonials: [],
   leads: [],
   blog: [],
+  analytics: [],
   resume: {
     experience: [],
-    education: []
+    education: [],
+    pdfUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'
   },
   gallery: [],
   knowledge: [],
   settings: {
     siteName: 'Nilesh Mali',
-    email: 'work.nileshmali@gmail.com'
+    email: 'work.nileshmali@gmail.com',
+    gaMeasurementId: ''
   }
 };
 

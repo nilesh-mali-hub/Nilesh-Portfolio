@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { SEO } from '../components/SEO';
 import { BentoCard } from '../components/BentoCard';
 import { SectionHeading } from '../components/SectionHeading';
 import { Badge } from '../components/Badge';
@@ -38,6 +39,10 @@ const staggerContainer = {
 export default function App() {
   return (
     <div className="min-h-screen bg-neutral-950 text-white pt-[100px] pb-20 overflow-x-hidden font-sans relative">
+      <SEO 
+        title="Creative Portfolio & Branding Design"
+        description="Nilesh Mali is a freelance Graphic Designer & Creative Developer specializing in Brand Identity, UI/UX design, custom websites, and creative marketing campaigns."
+      />
       <IntroAnimation />
       <NoiseOverlay />
       <FloatingResumeButton />

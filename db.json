@@ -6,12 +6,15 @@
   "blog": [],
   "resume": {
     "experience": [],
-    "education": []
+    "education": [],
+    "pdfUrl": "https://drive.google.com/file/d/1sN8nxXk8lKggF4AD8B2875OVB9lbcpYz/view?usp=drivesdk"
   },
   "gallery": [],
   "knowledge": [],
+  "analytics": [],
   "settings": {
     "siteName": "Nilesh Mali",
-    "email": "work.nileshmali@gmail.com"
+    "email": "work.nileshmali@gmail.com",
+    "gaMeasurementId": ""
   }
 }

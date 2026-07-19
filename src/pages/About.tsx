@@ -1,10 +1,29 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
+import { SEO } from '../components/SEO';
 import { NoiseOverlay } from '../components/NoiseOverlay';
-import { Youtube, Instagram } from 'lucide-react';
+import { Download } from 'lucide-react';
 
 export default function About() {
+  const [resumeUrl, setResumeUrl] = useState<string>('https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf');
+
+  useEffect(() => {
+    fetch('/api/resume')
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.pdfUrl) {
+          setResumeUrl(data.pdfUrl);
+        }
+      })
+      .catch(err => console.error('Error fetching resume:', err));
+  }, []);
+
   return (
     <div className="min-h-screen bg-neutral-950 text-white pt-24 pb-20 overflow-x-hidden font-sans relative">
+      <SEO 
+        title="About Nilesh Mali | Graphic Designer & AI Creative"
+        description="Learn more about Nilesh Mali, a passionate Graphic Designer, Creative Developer, and AI Creative Specialist delivering impactful design solutions."
+      />
       <NoiseOverlay />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 w-full relative z-10 mt-8">
@@ -45,7 +64,7 @@ export default function About() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="font-medium text-black/80 max-w-xl mb-12 space-y-6 leading-relaxed"
+              className="font-medium text-black/80 max-w-xl mb-8 space-y-6 leading-relaxed"
             >
               <p>
                 I create modern brands, high-converting social media creatives, premium websites, and AI-powered visual experiences that help businesses grow.
@@ -55,7 +74,31 @@ export default function About() {
               </p>
             </motion.div>
 
-
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="flex flex-col sm:flex-row gap-4"
+            >
+              <a 
+                href={resumeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-3 bg-black text-[#D1FF52] hover:bg-neutral-900 px-6 py-4 rounded-xl font-bold transition-all duration-200 shadow-xl hover:scale-105 active:scale-95 group w-full sm:w-auto"
+              >
+                <Download className="w-5 h-5 transition-transform group-hover:translate-y-0.5" />
+                Download Resume
+              </a>
+              <a 
+                href={resumeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-3 bg-transparent text-white hover:text-[#D1FF52] border border-neutral-850 hover:border-[#D1FF52]/50 hover:bg-black/30 px-6 py-4 rounded-xl font-bold transition-all duration-200 shadow-xl hover:scale-105 active:scale-95 group w-full sm:w-auto"
+              >
+                <Download className="w-5 h-5 text-[#D1FF52] transition-transform group-hover:translate-y-0.5" />
+                Download CV
+              </a>
+            </motion.div>
           </div>
 
           {/* Right Image */}
