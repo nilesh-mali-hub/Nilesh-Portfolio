@@ -256,6 +256,7 @@ collections.forEach(collection => {
   router.post(`/${collection}`, async (req, res) => {
     try {
       const db = await readDB();
+      if (!db[collection]) db[collection] = [];
       const processedBody = convertDriveLinks(req.body);
       const newItem = { id: Date.now().toString(), ...processedBody };
       db[collection].push(newItem);
@@ -269,6 +270,7 @@ collections.forEach(collection => {
   router.put(`/${collection}/:id`, async (req, res) => {
     try {
       const db = await readDB();
+      if (!db[collection]) db[collection] = [];
       const index = db[collection].findIndex((item: any) => item.id === req.params.id);
       if (index === -1) return res.status(404).json({ error: 'Not found' });
       const processedBody = convertDriveLinks(req.body);
@@ -283,6 +285,7 @@ collections.forEach(collection => {
   router.delete(`/${collection}/:id`, async (req, res) => {
     try {
       const db = await readDB();
+      if (!db[collection]) db[collection] = [];
       db[collection] = db[collection].filter((item: any) => item.id !== req.params.id);
       await writeDB(db);
       res.json({ success: true });

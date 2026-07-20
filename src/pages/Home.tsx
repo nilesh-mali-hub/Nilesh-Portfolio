@@ -19,7 +19,6 @@ import { TechStackCard } from '../components/TechStackCard';
 import { ExperienceCard } from '../components/ExperienceCard';
 import { Testimonials } from '../components/Testimonials';
 import { ServicesSection } from '../components/ServicesSection';
-import * as LucideIcons from 'lucide-react';
 import { GraduationCap } from 'lucide-react';
 import { 
   Smartphone, User, Mail, Instagram, Linkedin, 
@@ -65,6 +64,7 @@ export default function App() {
     })
     .catch(console.error);
   }, []);
+
   return (
     <div className="min-h-screen bg-neutral-950 text-white pt-[100px] pb-20 overflow-x-hidden font-sans relative">
       <SEO 
@@ -207,9 +207,9 @@ export default function App() {
             <ExperienceCard 
               title="Experience"
               items={experience.length > 0 ? experience.map((exp: any) => ({
-                year: exp.year,
-                title: exp.role,
-                subtitle: exp.company
+                year: exp.year || exp.duration || exp.image,
+                title: exp.role || exp.title,
+                subtitle: exp.company || exp.description
               })) : [
                 { year: "2025-Now", title: "Graphic Designer", subtitle: "Redes Creation" },
                 { year: "2025", title: "Graphic Design Intern", subtitle: "Redes Creation" },
@@ -232,11 +232,12 @@ export default function App() {
           <SectionHeading delay={0.1}>Software Skills</SectionHeading>
           <div className="flex flex-nowrap justify-start md:justify-center overflow-x-auto gap-2 sm:gap-4 mt-8 max-w-5xl mx-auto pb-4 px-4 [&::-webkit-scrollbar]:hidden" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
             {skills.length > 0 ? skills.map((skill: any, idx: number) => {
-              const IconComp = IconMap[skill.icon];
+              const iconKey = skill.icon || skill.image || skill.title;
+              const IconComp = IconMap[iconKey];
               return (
                 <SoftwareIcon 
                   key={skill.id} 
-                  name={IconComp ? undefined : (skill.name || skill.icon?.substring(0,2))} 
+                  name={IconComp ? undefined : (skill.name || skill.title || iconKey?.substring(0,2))} 
                   icon={IconComp ? <IconComp className="w-8 h-8" /> : undefined}
                   delay={0.1 + (idx * 0.05)} 
                 />
@@ -297,15 +298,15 @@ export default function App() {
               <p className="text-[10px] font-bold text-neutral-500 mt-3 uppercase tracking-widest group-hover:text-[#D1FF52] transition-colors">LinkedIn</p>
             </BentoCard>
 
-            {/* Phone */}
+            {/* Behance */}
             <BentoCard className="md:col-start-2 md:col-span-2 md:row-start-2 md:row-span-2 p-8 flex items-center gap-6 group hover:border-[#D1FF52] transition-colors relative" staggered={true}>
-              <a href={`tel:${contact?.phone || '+91 9876543210'}`} className="absolute inset-0 z-10"><span className="sr-only">Phone</span></a>
-              <div className="bg-white text-black p-3 rounded-full flex-shrink-0 w-12 h-12 flex items-center justify-center group-hover:bg-[#D1FF52] transition-colors">
-                <Smartphone className="w-6 h-6" />
+              <a href={contact?.behance || "https://www.behance.net/nileshmali25"} target="_blank" rel="noopener noreferrer" className="absolute inset-0 z-10"><span className="sr-only">Behance</span></a>
+              <div className="bg-[#1769ff] text-white p-3 rounded-full flex-shrink-0 w-12 h-12 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current"><path d="M22 7h-7v-2h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.908 5.388 4.581h-7.32c.146 1.832 1.713 2.151 3.036 2.151 1.636 0 2.417-1.124 2.641-2.145l1.454.008zm-3.359-3.904c-.217-1.253-1.174-1.957-2.13-1.957-1.389 0-2.025 1.09-2.145 1.957h4.275zm-14.367-1.125c1.464 0 2.235-.916 2.235-2.046 0-1.159-.728-1.924-2.188-1.924h-4.048v3.97h4.001zm.557 5.029c1.676 0 2.502-.989 2.502-2.176 0-1.175-.809-2.228-2.585-2.228h-4.474v4.404h4.557zm1.443-4.102c1.493-.362 2.766-1.579 2.766-3.328 0-2.613-1.96-3.57-4.66-3.57h-6.106v15h6.634c3.155 0 5.215-1.503 5.215-4.185 0-2.224-1.466-3.418-3.849-3.917z"/></svg>
               </div>
               <div>
-                <h3 className="font-display font-bold text-2xl text-white uppercase tracking-tighter">{contact?.phone || '+91 9876543210'}</h3>
-                <p className="text-[10px] font-bold text-neutral-500 mt-1 uppercase tracking-widest">Direct Line</p>
+                <h3 className="font-display font-bold text-2xl text-white uppercase tracking-tighter">Portfolio</h3>
+                <p className="text-[10px] font-bold text-neutral-500 mt-1 uppercase tracking-widest">Behance</p>
               </div>
             </BentoCard>
 

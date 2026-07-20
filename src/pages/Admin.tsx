@@ -1,26 +1,25 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { LayoutDashboard, Briefcase, Settings, Users, MessageSquare, FileText, Image as ImageIcon, BookOpen, UserCircle, Menu, X, Plus, Edit2, Trash2, ExternalLink, Save, Cloud, Copy, Check, BarChart3 } from 'lucide-react';
+import { LayoutDashboard, Briefcase, Settings, Users, MessageSquare, FileText, Image as ImageIcon, BookOpen, UserCircle, Menu, X, Plus, Edit2, Trash2, ExternalLink, Save, Cloud, Copy, Check, BarChart3, Zap, GraduationCap, LayoutGrid, Mail } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { SEO } from '../components/SEO';
 import { AnalyticsTab } from '../components/AnalyticsTab';
 
 const tabs = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { id: 'analytics', label: 'Traffic Analytics', icon: BarChart3 },
+  { id: 'hero', label: 'Hero Section', icon: Zap },
+  { id: 'experience', label: 'Journey & Experience', icon: GraduationCap },
+  { id: 'skills', label: 'Software Skills', icon: LayoutGrid },
+  { id: 'contact', label: 'Contact Details', icon: Mail },
   { id: 'projects', label: 'Projects', icon: Briefcase },
   { id: 'services', label: 'Services', icon: FileText },
-  { id: 'experience', label: 'Journey', icon: Briefcase },
-  { id: 'skills', label: 'Skills', icon: Settings },
   { id: 'testimonials', label: 'Testimonials', icon: MessageSquare },
   { id: 'leads', label: 'Leads', icon: Users },
   { id: 'blog', label: 'Blog', icon: FileText },
-  { id: 'hero', label: 'Hero Section', icon: UserCircle },
   { id: 'resume', label: 'Resume', icon: UserCircle },
   { id: 'gallery', label: 'Gallery', icon: ImageIcon },
   { id: 'knowledge', label: 'AI Knowledge', icon: BookOpen },
   { id: 'drive', label: 'Google Drive', icon: Cloud },
-  { id: 'contact', label: 'Contact Details', icon: MessageSquare },
   { id: 'settings', label: 'Settings', icon: Settings },
 ];
 
@@ -54,7 +53,7 @@ export default function Admin() {
           </button>
         </div>
         
-        <div className="p-4 flex-1 overflow-y-auto overflow-x-hidden no-scrollbar">
+        <div className="p-4 flex-1 overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:hidden" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
           <nav className="flex flex-col gap-2">
             {tabs.map((tab) => (
               <button
@@ -67,7 +66,7 @@ export default function Admin() {
                 title={!isSidebarOpen ? tab.label : undefined}
               >
                 <tab.icon className={`w-5 h-5 flex-shrink-0 transition-transform ${activeTab === tab.id ? 'scale-110' : 'group-hover:scale-110'}`} />
-                <span className={`whitespace-nowrap transition-opacity duration-200 ${isSidebarOpen ? 'opacity-100 w-auto' : 'opacity-0 w-0 overflow-hidden'}`}>
+                <span className={`truncate text-left transition-opacity duration-200 ${isSidebarOpen ? 'opacity-100 w-auto' : 'opacity-0 w-0 overflow-hidden'}`}>
                   {tab.label}
                 </span>
               </button>
@@ -127,11 +126,11 @@ export default function Admin() {
               <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-6 shadow-xl min-h-[600px] relative">
                 {activeTab === 'dashboard' && <DashboardTab />}
                 {activeTab === 'analytics' && <AnalyticsTab />}
-                {['projects', 'services', 'testimonials', 'leads', 'blog', 'gallery', 'knowledge', 'experience', 'skills'].includes(activeTab) && (
+                {['projects', 'services', 'testimonials', 'leads', 'blog', 'gallery', 'knowledge'].includes(activeTab) && (
                   <GenericTab collection={activeTab} />
                 )}
                 {activeTab === 'drive' && <DriveTab />}
-                {['settings', 'resume', 'hero', 'contact'].includes(activeTab) && <SettingsTab name={activeTab} />}
+                {['settings', 'resume'].includes(activeTab) && <SettingsTab name={activeTab} />}
               </div>
             </motion.div>
           </AnimatePresence>
@@ -298,7 +297,7 @@ function GenericTab({ collection }: { collection: string }) {
           onClick={openNew}
           className="bg-[#D1FF52] text-black px-4 py-2.5 rounded-lg font-bold flex items-center gap-2 hover:bg-[#c5f542] transition-transform hover:scale-105 active:scale-95 text-sm w-full sm:w-auto justify-center shadow-lg shadow-[#D1FF52]/20"
         >
-          <Plus className="w-4 h-4" /> Add New {collection.slice(0, -1)}
+          <Plus className="w-4 h-4" /> Add New {collection === 'experience' ? 'Experience' : collection === 'skills' ? 'Skill' : collection.slice(0, -1)}
         </button>
       </div>
 
@@ -353,7 +352,7 @@ function GenericTab({ collection }: { collection: string }) {
           {items.map(item => (
             <div key={item.id} className="bg-neutral-950 border border-neutral-800 p-5 rounded-xl flex flex-col group hover:border-neutral-700 transition-colors">
               <div className="flex justify-between items-start mb-4">
-                <h3 className="font-bold text-white line-clamp-1">{item.title || item.name || item.role || 'Untitled'}</h3>
+                <h3 className="font-bold text-white line-clamp-1">{item.title || item.name || 'Untitled'}</h3>
                 <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button 
                     onClick={() => openEdit(item)}
@@ -370,7 +369,7 @@ function GenericTab({ collection }: { collection: string }) {
                 </div>
               </div>
               <p className="text-neutral-500 text-sm line-clamp-2 mt-auto">
-                {item.description || item.content || item.company || item.icon || 'No description available for this item.'}
+                {item.description || item.content || 'No description available for this item.'}
               </p>
             </div>
           ))}
@@ -386,7 +385,7 @@ function GenericTab({ collection }: { collection: string }) {
             className="bg-neutral-900 border border-neutral-800 rounded-2xl p-6 w-full max-w-lg shadow-2xl"
           >
             <div className="flex justify-between items-center mb-6">
-              <h3 className="text-xl font-bold">{editingItem ? 'Edit' : 'Add'} {collection.slice(0, -1)}</h3>
+              <h3 className="text-xl font-bold">{editingItem ? 'Edit' : 'Add'} {collection === 'experience' ? 'Experience' : collection === 'skills' ? 'Skill' : collection.slice(0, -1)}</h3>
               <button 
                 onClick={() => setIsModalOpen(false)}
                 className="p-2 text-neutral-400 hover:text-white bg-neutral-800/50 hover:bg-neutral-800 rounded-lg transition-colors"
@@ -396,122 +395,76 @@ function GenericTab({ collection }: { collection: string }) {
             </div>
             
             <form onSubmit={handleSave} className="space-y-4">
-              {collection === 'experience' ? (
-                <>
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-400 mb-1">Year (e.g., 2023 - Present)</label>
-                    <input 
-                      type="text" 
-                      value={formData.year || ''}
-                      onChange={(e) => setFormData({...formData, year: e.target.value})}
-                      className="w-full bg-neutral-950 border border-neutral-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52]"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-400 mb-1">Role</label>
-                    <input 
-                      type="text" 
-                      value={formData.role || ''}
-                      onChange={(e) => setFormData({...formData, role: e.target.value})}
-                      className="w-full bg-neutral-950 border border-neutral-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52]"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-400 mb-1">Company</label>
-                    <input 
-                      type="text" 
-                      value={formData.company || ''}
-                      onChange={(e) => setFormData({...formData, company: e.target.value})}
-                      className="w-full bg-neutral-950 border border-neutral-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52]"
-                      required
-                    />
-                  </div>
-                </>
-              ) : collection === 'skills' ? (
-                <>
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-400 mb-1">Skill Name</label>
-                    <input 
-                      type="text" 
-                      value={formData.name || ''}
-                      onChange={(e) => setFormData({...formData, name: e.target.value})}
-                      className="w-full bg-neutral-950 border border-neutral-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52]"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-400 mb-1">Icon Name (e.g., Code, Image, Figma)</label>
-                    <input 
-                      type="text" 
-                      value={formData.icon || ''}
-                      onChange={(e) => setFormData({...formData, icon: e.target.value})}
-                      className="w-full bg-neutral-950 border border-neutral-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52]"
-                      required
-                    />
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-400 mb-1">Title / Name</label>
-                    <input 
-                      type="text" 
-                      value={formData.title || ''}
-                      onChange={(e) => setFormData({...formData, title: e.target.value})}
-                      className="w-full bg-neutral-950 border border-neutral-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52]"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-400 mb-1">Description / Content</label>
-                    <textarea 
-                      value={formData.description || ''}
-                      onChange={(e) => setFormData({...formData, description: e.target.value})}
-                      className="w-full bg-neutral-950 border border-neutral-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] min-h-[100px] resize-y"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-400 mb-1">
-                      {collection === 'services' ? 'Icon Name (e.g., PenTool, Globe, Zap)' : 'Image URL (Optional)'}
-                    </label>
-                    <input 
-                      type="text" 
-                      value={formData.image || ''}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        const converted = collection === 'services' ? val : getGoogleDriveDirectLink(val);
-                        setFormData({...formData, image: converted});
-                      }}
-                      className="w-full bg-neutral-950 border border-neutral-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52]"
-                      placeholder={collection === 'services' ? 'Lucide Icon Name' : 'https://... or paste Google Drive link'}
-                    />
-                    {collection !== 'services' && formData.image && formData.image.includes('lh3.googleusercontent.com/d/') && (
-                      <div className="mt-2 p-2 bg-[#D1FF52]/10 border border-[#D1FF52]/20 rounded-lg">
-                        <span className="text-xs text-[#D1FF52] font-semibold flex items-center gap-1">
-                          ✓ Google Drive link converted automatically!
-                        </span>
-                      </div>
-                    )}
-                    {collection !== 'services' && formData.image && (
-                      <div className="mt-3 relative aspect-video w-full rounded-xl overflow-hidden border border-neutral-800 bg-neutral-950 flex items-center justify-center">
-                        <img 
-                          src={formData.image} 
-                          alt="Preview" 
-                          className="object-contain max-h-[140px] max-w-full"
-                          onError={(e) => {
-                            (e.target as HTMLElement).style.display = 'none';
-                          }}
-                        />
-                        <div className="absolute top-2 right-2 text-[10px] bg-black/60 px-2 py-0.5 rounded text-neutral-400 font-mono">
-                          Image Preview
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </>
+              <div>
+                <label className="block text-sm font-medium text-neutral-400 mb-1">
+                  {collection === 'experience' ? 'Role / Title' : collection === 'skills' ? 'Skill Name (or 2-letter abbreviation)' : 'Title / Name'}
+                </label>
+                <input 
+                  type="text" 
+                  value={formData.title}
+                  onChange={(e) => setFormData({...formData, title: e.target.value})}
+                  className="w-full bg-neutral-950 border border-neutral-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52]"
+                  required
+                />
+              </div>
+              {collection !== 'skills' && (
+                <div>
+                  <label className="block text-sm font-medium text-neutral-400 mb-1">
+                    {collection === 'experience' ? 'Company Name / Description' : 'Description / Content'}
+                  </label>
+                  <textarea 
+                    value={formData.description}
+                    onChange={(e) => setFormData({...formData, description: e.target.value})}
+                    className="w-full bg-neutral-950 border border-neutral-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] min-h-[100px] resize-y"
+                  />
+                </div>
               )}
+              <div>
+                <label className="block text-sm font-medium text-neutral-400 mb-1">
+                  {collection === 'services' ? 'Icon Name (e.g., PenTool, Globe)' : 
+                   collection === 'skills' ? 'Icon Component (e.g. Figma) or Text' : 
+                   collection === 'experience' ? 'Year / Duration (e.g., 2024-Now)' : 
+                   'Image URL (Optional)'}
+                </label>
+                <input 
+                  type="text" 
+                  value={formData.image}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    const converted = (collection === 'services' || collection === 'skills' || collection === 'experience') ? val : getGoogleDriveDirectLink(val);
+                    setFormData({...formData, image: converted});
+                  }}
+                  className="w-full bg-neutral-950 border border-neutral-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52]"
+                  placeholder={
+                    collection === 'services' ? 'Lucide Icon Name' : 
+                    collection === 'skills' ? 'Figma, Scissors, etc' : 
+                    collection === 'experience' ? '2024-Present' : 
+                    'https://... or paste Google Drive link'
+                  }
+                />
+                {collection !== 'services' && collection !== 'skills' && collection !== 'experience' && formData.image && formData.image.includes('lh3.googleusercontent.com/d/') && (
+                  <div className="mt-2 p-2 bg-[#D1FF52]/10 border border-[#D1FF52]/20 rounded-lg">
+                    <span className="text-xs text-[#D1FF52] font-semibold flex items-center gap-1">
+                      ✓ Google Drive link converted automatically!
+                    </span>
+                  </div>
+                )}
+                {collection !== 'services' && collection !== 'skills' && collection !== 'experience' && formData.image && (
+                  <div className="mt-3 relative aspect-video w-full rounded-xl overflow-hidden border border-neutral-800 bg-neutral-950 flex items-center justify-center">
+                    <img 
+                      src={formData.image} 
+                      alt="Preview" 
+                      className="object-contain max-h-[140px] max-w-full"
+                      onError={(e) => {
+                        (e.target as HTMLElement).style.display = 'none';
+                      }}
+                    />
+                    <div className="absolute top-2 right-2 text-[10px] bg-black/60 px-2 py-0.5 rounded text-neutral-400 font-mono">
+                      Image Preview
+                    </div>
+                  </div>
+                )}
+              </div>
               <div className="pt-4 flex gap-3">
                 <button 
                   type="button"
@@ -562,7 +515,7 @@ function SettingsTab({ name }: { name: string }) {
     setSuccess(false);
     try {
       const res = await fetch(`/api/${name}`, {
-        method: 'PUT',
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
@@ -617,7 +570,7 @@ function SettingsTab({ name }: { name: string }) {
                 value={formData.title || ''}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 className="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] transition-colors"
-                required
+                placeholder="Graphic Designer"
               />
             </div>
             <div>
@@ -625,75 +578,28 @@ function SettingsTab({ name }: { name: string }) {
               <textarea 
                 value={formData.subtitle || ''}
                 onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
-                className="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] transition-colors min-h-[100px] resize-y"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-neutral-400 mb-2">Button Text</label>
-              <input 
-                type="text" 
-                value={formData.buttonText || ''}
-                onChange={(e) => setFormData({ ...formData, buttonText: e.target.value })}
-                className="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] transition-colors"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-neutral-400 mb-2">Button Link</label>
-              <input 
-                type="text" 
-                value={formData.buttonLink || ''}
-                onChange={(e) => setFormData({ ...formData, buttonLink: e.target.value })}
-                className="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] transition-colors"
+                className="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] transition-colors min-h-[100px]"
+                placeholder="Creative graphic designer..."
               />
             </div>
           </div>
         ) : name === 'contact' ? (
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-neutral-400 mb-2">Email Address</label>
-              <input 
-                type="email" 
-                value={formData.email || ''}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] transition-colors"
-              />
+              <label className="block text-sm font-medium text-neutral-400 mb-2">Email</label>
+              <input type="email" value={formData.email || ''} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] transition-colors" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-neutral-400 mb-2">Phone</label>
-              <input 
-                type="text" 
-                value={formData.phone || ''}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                className="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] transition-colors"
-              />
+              <label className="block text-sm font-medium text-neutral-400 mb-2">Behance</label>
+              <input type="url" value={formData.behance || ''} onChange={(e) => setFormData({ ...formData, behance: e.target.value })} className="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] transition-colors" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-neutral-400 mb-2">Address</label>
-              <input 
-                type="text" 
-                value={formData.address || ''}
-                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                className="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] transition-colors"
-              />
+              <label className="block text-sm font-medium text-neutral-400 mb-2">Instagram</label>
+              <input type="url" value={formData.instagram || ''} onChange={(e) => setFormData({ ...formData, instagram: e.target.value })} className="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] transition-colors" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-neutral-400 mb-2">LinkedIn URL</label>
-              <input 
-                type="url" 
-                value={formData.linkedin || ''}
-                onChange={(e) => setFormData({ ...formData, linkedin: e.target.value })}
-                className="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] transition-colors"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-neutral-400 mb-2">Instagram URL</label>
-              <input 
-                type="url" 
-                value={formData.instagram || ''}
-                onChange={(e) => setFormData({ ...formData, instagram: e.target.value })}
-                className="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] transition-colors"
-              />
+              <label className="block text-sm font-medium text-neutral-400 mb-2">LinkedIn</label>
+              <input type="url" value={formData.linkedin || ''} onChange={(e) => setFormData({ ...formData, linkedin: e.target.value })} className="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] transition-colors" />
             </div>
           </div>
         ) : (

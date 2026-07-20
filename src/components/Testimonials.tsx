@@ -115,10 +115,10 @@ export function Testimonials() {
       <div className="absolute top-10 left-1/4 w-80 h-80 bg-[#D1FF52] opacity-[0.03] blur-[120px] rounded-full pointer-events-none"></div>
       <div className="absolute bottom-10 right-1/4 w-80 h-80 bg-purple-500 opacity-[0.03] blur-[120px] rounded-full pointer-events-none"></div>
 
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+      <div className="flex flex-col items-center justify-center mb-10 gap-6 text-center">
         <div>
           <SectionHeading delay={0.1}>Client Stories</SectionHeading>
-          <p className="text-neutral-400 text-xs sm:text-sm font-sans mt-3 max-w-xl text-left md:text-left">
+          <p className="text-neutral-400 text-xs sm:text-sm font-sans mt-3 max-w-xl mx-auto">
             Hear from partners and clients who have collaborated on brand identities, creative graphics, and digital products.
           </p>
         </div>

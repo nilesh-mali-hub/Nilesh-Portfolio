@@ -22,7 +22,6 @@ export function TechStackCard({ className = "" }: { className?: string }) {
             <div key={index} className="flex flex-col gap-2">
               <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-neutral-400">
                 <span className="text-white">{skill.name}</span>
-                <span className="text-[#D1FF52]">{skill.percentage}%</span>
               </div>
               <div className="w-full bg-neutral-800/80 rounded-full h-1.5 overflow-hidden border border-neutral-800">
                 <motion.div 
