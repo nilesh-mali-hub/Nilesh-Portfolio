@@ -27,6 +27,7 @@ import {
   Scissors, Presentation, FileText, Image as ImageIcon
 } from 'lucide-react';
 import { motion } from 'motion/react';
+import { defaultData } from '../data/defaultData';
 
 const staggerContainer = {
   hidden: { opacity: 0 },
@@ -44,23 +45,23 @@ const IconMap: Record<string, any> = {
 };
 
 export default function App() {
-  const [hero, setHero] = useState<any>(null);
-  const [experience, setExperience] = useState<any[]>([]);
-  const [skills, setSkills] = useState<any[]>([]);
-  const [contact, setContact] = useState<any>(null);
+  const [hero, setHero] = useState<any>(defaultData.hero);
+  const [experience, setExperience] = useState<any[]>(defaultData.experience);
+  const [skills, setSkills] = useState<any[]>(defaultData.skills);
+  const [contact, setContact] = useState<any>(defaultData.contact);
 
   useEffect(() => {
     Promise.all([
-      fetch('/api/hero').then(res => res.json()),
-      fetch('/api/experience').then(res => res.json()),
-      fetch('/api/skills').then(res => res.json()),
-      fetch('/api/contact').then(res => res.json()),
+      fetch('/api/hero').then(res => res.ok ? res.json() : null).catch(() => null),
+      fetch('/api/experience').then(res => res.ok ? res.json() : null).catch(() => null),
+      fetch('/api/skills').then(res => res.ok ? res.json() : null).catch(() => null),
+      fetch('/api/contact').then(res => res.ok ? res.json() : null).catch(() => null),
     ])
     .then(([heroData, expData, skillsData, contactData]) => {
-      setHero(heroData);
-      setExperience(Array.isArray(expData) ? expData : []);
-      setSkills(Array.isArray(skillsData) ? skillsData : []);
-      setContact(contactData);
+      if (heroData) setHero(heroData);
+      if (Array.isArray(expData) && expData.length > 0) setExperience(expData);
+      if (Array.isArray(skillsData) && skillsData.length > 0) setSkills(skillsData);
+      if (contactData) setContact(contactData);
     })
     .catch(console.error);
   }, []);
