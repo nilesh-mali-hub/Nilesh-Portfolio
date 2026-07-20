@@ -5,6 +5,8 @@ import { LoadingScreen } from './components/LoadingScreen';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { AnalyticsTracker } from './components/AnalyticsTracker';
+import { ThemeProvider } from './context/ThemeContext';
+import { AIAssistantWidget } from './components/AIAssistantWidget';
 
 const Home = lazy(() => import('./pages/Home'));
 const Contact = lazy(() => import('./pages/Contact'));
@@ -28,6 +30,7 @@ function AppContent() {
         </Routes>
       </Suspense>
       {!isAdmin && <Footer />}
+      {!isAdmin && <AIAssistantWidget />}
     </>
   );
 }
@@ -35,9 +38,11 @@ function AppContent() {
 export default function App() {
   return (
     <HelmetProvider>
-      <BrowserRouter>
-        <AppContent />
-      </BrowserRouter>
+      <ThemeProvider>
+        <BrowserRouter>
+          <AppContent />
+        </BrowserRouter>
+      </ThemeProvider>
     </HelmetProvider>
   );
 }

@@ -240,7 +240,7 @@ router.get('/analytics/summary', async (req, res) => {
   }
 });
 
-const collections = ['projects', 'services', 'testimonials', 'leads', 'blog', 'gallery', 'knowledge'];
+const collections = ['projects', 'services', 'testimonials', 'leads', 'blog', 'gallery', 'knowledge', 'experience', 'skills'];
 
 // Generic CRUD for collections
 collections.forEach(collection => {
@@ -292,8 +292,8 @@ collections.forEach(collection => {
   });
 });
 
-// Singletons (Settings, Resume)
-['settings', 'resume'].forEach(singleton => {
+// Singletons (Settings, Resume, Hero, Contact)
+['settings', 'resume', 'hero', 'contact'].forEach(singleton => {
   router.get(`/${singleton}`, async (req, res) => {
     try {
       const db = await readDB();

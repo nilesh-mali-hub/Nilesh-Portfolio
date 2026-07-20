@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link } from 'react-router-dom';
-import { Menu, X, ArrowUpRight, Github, Linkedin, MessageCircle } from 'lucide-react';
+import { Menu, X, ArrowUpRight, Github, Linkedin, MessageCircle, Sun, Moon } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -33,29 +35,52 @@ export function Header() {
             <a href="/#projects" className="text-[#D1FF52] hover:text-white transition-colors">Works</a>
             <a href="/#services" className="hover:text-[#D1FF52] transition-colors">Services</a>
             <Link to="/contact" className="px-6 py-3 bg-[#D1FF52] text-black rounded-[0.25rem] hover:bg-[#c5f542] transition-all font-display font-bold text-xs uppercase tracking-wider ml-4">Contact</Link>
+            
+            {/* Desktop Theme Switcher */}
+            <button
+              onClick={toggleTheme}
+              aria-label="Toggle Theme"
+              className="w-10 h-10 rounded-full border border-neutral-800 flex items-center justify-center text-neutral-400 hover:text-[#D1FF52] hover:border-neutral-700 transition-colors bg-neutral-900/40 relative overflow-hidden active:scale-95 cursor-pointer ml-2"
+            >
+              <Sun className={`w-4 h-4 transition-all duration-500 absolute ${theme === 'light' ? 'rotate-0 scale-100 opacity-100' : 'rotate-90 scale-0 opacity-0'}`} />
+              <Moon className={`w-4 h-4 transition-all duration-500 absolute ${theme === 'dark' ? 'rotate-0 scale-100 opacity-100' : '-rotate-90 scale-0 opacity-0'}`} />
+            </button>
           </motion.nav>
 
-          {/* Mobile Nav toggle button */}
-          <motion.button 
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: 1 }} 
-            transition={{ delay: 0.3 }}
-            onClick={toggleMenu}
-            aria-label="Toggle Menu"
-            className="md:hidden flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white focus:outline-none select-none cursor-pointer"
-          >
-            <span className="mr-1">{isOpen ? 'Close' : 'Menu'}</span>
-            <div className="w-9 h-9 rounded-full bg-neutral-900 border border-neutral-850 flex items-center justify-center transition-colors hover:bg-neutral-850">
-              {isOpen ? (
-                <X className="w-4 h-4 text-white" />
-              ) : (
-                <div className="flex flex-col items-center justify-center gap-[4px] w-4">
-                  <div className="w-full h-[1.5px] bg-white rounded-full"></div>
-                  <div className="w-4/5 h-[1.5px] bg-white rounded-full self-start"></div>
-                </div>
-              )}
-            </div>
-          </motion.button>
+          {/* Right Section for Mobile */}
+          <div className="flex md:hidden items-center gap-3">
+            {/* Mobile Theme Switcher */}
+            <button
+              onClick={toggleTheme}
+              aria-label="Toggle Theme"
+              className="w-9 h-9 rounded-full border border-neutral-800 flex items-center justify-center text-neutral-400 hover:text-[#D1FF52] hover:border-neutral-700 transition-colors bg-neutral-900/40 relative overflow-hidden active:scale-95 cursor-pointer"
+            >
+              <Sun className={`w-3.5 h-3.5 transition-all duration-500 absolute ${theme === 'light' ? 'rotate-0 scale-100 opacity-100' : 'rotate-90 scale-0 opacity-0'}`} />
+              <Moon className={`w-3.5 h-3.5 transition-all duration-500 absolute ${theme === 'dark' ? 'rotate-0 scale-100 opacity-100' : '-rotate-90 scale-0 opacity-0'}`} />
+            </button>
+
+            {/* Mobile Nav toggle button */}
+            <motion.button 
+              initial={{ opacity: 0 }} 
+              animate={{ opacity: 1 }} 
+              transition={{ delay: 0.3 }}
+              onClick={toggleMenu}
+              aria-label="Toggle Menu"
+              className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white focus:outline-none select-none cursor-pointer"
+            >
+              <span className="mr-1">{isOpen ? 'Close' : 'Menu'}</span>
+              <div className="w-9 h-9 rounded-full bg-neutral-900 border border-neutral-850 flex items-center justify-center transition-colors hover:bg-neutral-850">
+                {isOpen ? (
+                  <X className="w-4 h-4 text-white" />
+                ) : (
+                  <div className="flex flex-col items-center justify-center gap-[4px] w-4">
+                    <div className="w-full h-[1.5px] bg-white rounded-full"></div>
+                    <div className="w-4/5 h-[1.5px] bg-white rounded-full self-start"></div>
+                  </div>
+                )}
+              </div>
+            </motion.button>
+          </div>
         </div>
       </header>
 

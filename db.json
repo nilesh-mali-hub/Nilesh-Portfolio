@@ -1,7 +1,102 @@
 {
   "projects": [],
-  "services": [],
-  "testimonials": [],
+  "services": [
+    {
+      "id": "1784485000004",
+      "title": "Brand Identity",
+      "description": "Crafting distinctive and memorable visual identities that capture the essence of your business.",
+      "image": "PenTool"
+    },
+    {
+      "id": "1784485000005",
+      "title": "Social Media Design",
+      "description": "Engaging social media graphics and templates tailored for your digital presence.",
+      "image": "Megaphone"
+    },
+    {
+      "id": "1784485000006",
+      "title": "Website UI",
+      "description": "Designing intuitive, user-centric interfaces for web that deliver seamless digital experiences.",
+      "image": "Globe"
+    },
+    {
+      "id": "1784485000007",
+      "title": "Brochure",
+      "description": "Professional and elegant print and digital brochure designs to showcase your products.",
+      "image": "BookOpen"
+    },
+    {
+      "id": "1784485000008",
+      "title": "Motion Graphics",
+      "description": "Bringing ideas to life through dynamic and captivating motion graphics.",
+      "image": "Zap"
+    },
+    {
+      "id": "1784485000009",
+      "title": "Video Editing",
+      "description": "Compelling video edits that tell your story and engage your audience.",
+      "image": "Video"
+    }
+  ],
+  "testimonials": [
+    {
+      "id": "1784485000001",
+      "title": "Sarah Jenkins – Creative Director, Loom Studio",
+      "description": "Nilesh transformed our brand identity with absolute precision. His attention to detail, visual storytelling, and strategic thinking exceeded our highest expectations. He didn't just design a logo; he built a complete, highly versatile visual system.",
+      "image": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop"
+    },
+    {
+      "id": "1784485000002",
+      "title": "Rohan Mehta – Founder, TechLoom Co.",
+      "description": "An exceptional developer and visual designer who perfectly bridges aesthetics with performance. The custom website UI Nilesh designed is clean, immersive, and incredibly fast. Our lead generation has increased by 40% since the launch.",
+      "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop"
+    },
+    {
+      "id": "1784485000003",
+      "title": "Elena Rostova – Marketing Lead, Zenith Digital",
+      "description": "Nilesh is a creative force. He delivers high-converting social media graphics, branding packages, and marketing assets that make our campaigns stand out. Extremely professional, collaborative, and full of fresh design strategies.",
+      "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop"
+    }
+  ],
+  "experience": [
+    {
+      "id": "exp1",
+      "year": "2023 - Present",
+      "role": "Senior Designer",
+      "company": "TechLoom Co."
+    },
+    {
+      "id": "exp2",
+      "year": "2020 - 2023",
+      "role": "UI/UX Designer",
+      "company": "Zenith Digital"
+    }
+  ],
+  "skills": [
+    {
+      "id": "sk1",
+      "name": "Photoshop",
+      "icon": "Image"
+    },
+    {
+      "id": "sk2",
+      "name": "React",
+      "icon": "Code"
+    }
+  ],
+  "hero": {
+    "title": "Creative Developer & Designer",
+    "subtitle": "Building beautiful digital experiences.",
+    "buttonText": "View Work",
+    "buttonLink": "#work"
+  },
+  "contact": {
+    "email": "work.nileshmali@gmail.com",
+    "phone": "+91 9876543210",
+    "address": "Abu Road, Rajasthan, India",
+    "linkedin": "https://linkedin.com",
+    "instagram": "https://instagram.com"
+  },
   "leads": [],
   "blog": [],
   "resume": {
@@ -11,7 +106,281 @@
   },
   "gallery": [],
   "knowledge": [],
-  "analytics": [],
+  "analytics": [
+    {
+      "id": "1784482064712",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "mobile",
+      "userAgent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Mobile Safari/537.36",
+      "ip": "2402:8100:24ed:2e0d:e40c:4df8:c3f9:e0d9",
+      "timestamp": "2026-07-19T17:27:44.712Z"
+    },
+    {
+      "id": "1784482064774",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "mobile",
+      "userAgent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Mobile Safari/537.36",
+      "ip": "2402:8100:24ed:2e0d:e40c:4df8:c3f9:e0d9",
+      "timestamp": "2026-07-19T17:27:44.774Z"
+    },
+    {
+      "id": "1784482291665",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "mobile",
+      "userAgent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Mobile Safari/537.36",
+      "ip": "2402:8100:24ed:2e0d:e40c:4df8:c3f9:e0d9",
+      "timestamp": "2026-07-19T17:31:31.665Z"
+    },
+    {
+      "id": "1784482291714",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "mobile",
+      "userAgent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Mobile Safari/537.36",
+      "ip": "2402:8100:24ed:2e0d:e40c:4df8:c3f9:e0d9",
+      "timestamp": "2026-07-19T17:31:31.714Z"
+    },
+    {
+      "id": "1784482607464",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "mobile",
+      "userAgent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Mobile Safari/537.36",
+      "ip": "2402:8100:24ed:2e0d:e40c:4df8:c3f9:e0d9",
+      "timestamp": "2026-07-19T17:36:47.464Z"
+    },
+    {
+      "id": "1784482607543",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "mobile",
+      "userAgent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Mobile Safari/537.36",
+      "ip": "2402:8100:24ed:2e0d:e40c:4df8:c3f9:e0d9",
+      "timestamp": "2026-07-19T17:36:47.543Z"
+    },
+    {
+      "id": "1784542151811",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T10:09:11.811Z"
+    },
+    {
+      "id": "1784542151878",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T10:09:11.878Z"
+    },
+    {
+      "id": "1784542248840",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T10:10:48.840Z"
+    },
+    {
+      "id": "1784542248902",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T10:10:48.902Z"
+    },
+    {
+      "id": "1784542267121",
+      "path": "/admin",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T10:11:07.121Z"
+    },
+    {
+      "id": "1784542346676",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T10:12:26.676Z"
+    },
+    {
+      "id": "1784542346697",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T10:12:26.697Z"
+    },
+    {
+      "id": "1784542432482",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T10:13:52.482Z"
+    },
+    {
+      "id": "1784542433804",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T10:13:53.804Z"
+    },
+    {
+      "id": "1784542609308",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T10:16:49.308Z"
+    },
+    {
+      "id": "1784542609353",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T10:16:49.353Z"
+    },
+    {
+      "id": "1784542811545",
+      "path": "/admin",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T10:20:11.545Z"
+    },
+    {
+      "id": "1784542811606",
+      "path": "/admin",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T10:20:11.606Z"
+    },
+    {
+      "id": "1784542840931",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T10:20:40.931Z"
+    },
+    {
+      "id": "1784542840969",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T10:20:40.969Z"
+    }
+  ],
   "settings": {
     "siteName": "Nilesh Mali",
     "email": "work.nileshmali@gmail.com",

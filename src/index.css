@@ -7,7 +7,7 @@
 }
 
 body {
-  @apply bg-neutral-950 text-white;
+  @apply bg-neutral-950 text-white transition-colors duration-500;
 }
 
 .noise-overlay {
@@ -21,3 +21,247 @@ body {
   opacity: 0.04;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
+
+/* Smooth transitions on elements for theme toggles */
+body, header, div, section, p, h1, h2, h3, h4, span, a, input, textarea, button {
+  transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease, backdrop-filter 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Light Mode Rules */
+body.light {
+  background-color: #f8fafc !important; /* slate-50 */
+  color: #0f172a !important; /* slate-900 */
+}
+
+/* Base text color overrides in light mode */
+body.light .text-white {
+  color: #0f172a !important;
+}
+
+body.light .text-neutral-100 {
+  color: #1e293b !important;
+}
+
+body.light .text-neutral-200 {
+  color: #334155 !important;
+}
+
+body.light .text-neutral-300 {
+  color: #475569 !important;
+}
+
+body.light .text-neutral-400 {
+  color: #64748b !important;
+}
+
+body.light .text-neutral-500 {
+  color: #94a3b8 !important;
+}
+
+/* Base background color overrides in light mode */
+body.light .bg-black {
+  background-color: #ffffff !important;
+}
+
+body.light .bg-neutral-950 {
+  background-color: #f8fafc !important;
+}
+
+body.light .bg-neutral-950\/80 {
+  background-color: rgba(248, 250, 252, 0.8) !important;
+}
+
+body.light .bg-neutral-900 {
+  background-color: rgba(255, 255, 255, 0.55) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.04) !important;
+}
+
+body.light .bg-neutral-900\/20 {
+  background-color: rgba(255, 255, 255, 0.3) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+}
+
+body.light .bg-neutral-900\/30 {
+  background-color: rgba(255, 255, 255, 0.35) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+}
+
+body.light .bg-neutral-900\/40 {
+  background-color: rgba(255, 255, 255, 0.45) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+}
+
+body.light .bg-neutral-900\/50 {
+  background-color: rgba(255, 255, 255, 0.5) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+}
+
+body.light .bg-neutral-900\/80 {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+}
+
+body.light .bg-neutral-850 {
+  background-color: rgba(15, 23, 42, 0.05) !important;
+}
+
+body.light .bg-neutral-800 {
+  background-color: rgba(15, 23, 42, 0.04) !important;
+}
+
+body.light .bg-neutral-800\/80 {
+  background-color: rgba(15, 23, 42, 0.04) !important;
+}
+
+body.light .bg-\[\#111111\] {
+  background-color: rgba(255, 255, 255, 0.65) !important;
+  border-color: rgba(15, 23, 42, 0.06) !important;
+}
+
+/* Header background override */
+body.light header {
+  background-color: rgba(248, 250, 252, 0.85) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border-bottom-color: rgba(15, 23, 42, 0.06) !important;
+  box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.03) !important;
+}
+
+/* Borders in light mode */
+body.light .border-neutral-900 {
+  border-color: rgba(15, 23, 42, 0.06) !important;
+}
+
+body.light .border-neutral-850 {
+  border-color: rgba(15, 23, 42, 0.07) !important;
+}
+
+body.light .border-neutral-800 {
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light .border-neutral-750 {
+  border-color: rgba(15, 23, 42, 0.1) !important;
+}
+
+body.light .border-white\/10 {
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light .border-white\/5 {
+  border-color: rgba(15, 23, 42, 0.05) !important;
+}
+
+body.light .hover\:border-neutral-700:hover {
+  border-color: rgba(15, 23, 42, 0.18) !important;
+}
+
+body.light .group:hover .group-hover\:border-neutral-700 {
+  border-color: rgba(15, 23, 42, 0.18) !important;
+}
+
+/* Gradient overrides */
+body.light .from-neutral-800\/20 {
+  --tw-gradient-from: rgba(255, 255, 255, 0.45) !important;
+}
+
+body.light .to-neutral-900\/50 {
+  --tw-gradient-to: rgba(255, 255, 255, 0.65) !important;
+}
+
+/* Accent Buttons and Text Hovers */
+body.light .hover\:text-white:hover {
+  color: #0f172a !important;
+}
+
+body.light .text-neutral-400.hover\:text-white:hover {
+  color: #0f172a !important;
+}
+
+/* Mobile Nav Drawer override */
+body.light .fixed.inset-0.top-\[77px\] {
+  background-color: #f8fafc !important;
+  border-top-color: rgba(15, 23, 42, 0.06) !important;
+}
+
+/* Form Fields & Admin inputs */
+body.light input, body.light textarea, body.light select {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: rgba(15, 23, 42, 0.12) !important;
+}
+
+body.light input::placeholder, body.light textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+body.light input:focus, body.light textarea:focus, body.light select:focus {
+  border-color: #0f172a !important;
+  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.05) !important;
+}
+
+body.light .disabled\:bg-neutral-800:disabled {
+  background-color: #e2e8f0 !important;
+  color: #94a3b8 !important;
+}
+
+/* Custom testimonial adjustments */
+body.light .text-white\/\[0\.04\] {
+  color: rgba(15, 23, 42, 0.03) !important;
+}
+
+/* Ambient glow adjustments in light mode */
+body.light .bg-\[\#D1FF52\] {
+  /* Keep main lime color vibrant, as it's the signature highlight of Nilesh Mali */
+}
+
+body.light .bg-purple-500 {
+  background-color: #8b5cf6 !important;
+}
+
+body.light .opacity-\[0\.03\] {
+  opacity: 0.07 !important;
+}
+
+body.light .opacity-\[0\.02\] {
+  opacity: 0.05 !important;
+}
+
+body.light .opacity-\[0\.05\] {
+  opacity: 0.08 !important;
+}
+
+/* Adjust noise overlay for light background so it is subtle */
+body.light .noise-overlay {
+  opacity: 0.015 !important;
+}
+
+/* Extra overrides for specific UI text highlights */
+body.light .text-neutral-500 {
+  color: #475569 !important;
+}
+
+/* Fix mobile drawer subtext details */
+body.light .fixed.inset-0.top-\[77px\] a {
+  color: #334155 !important;
+}
+
+body.light .fixed.inset-0.top-\[77px\] a:hover {
+  color: #0f172a !important;
+}
+
+body.light .fixed.inset-0.top-\[77px\] span {
+  color: #0f172a !important;
+}
+
+body.light .fixed.inset-0.top-\[77px\] .text-neutral-500 {
+  color: #64748b !important;
+}
+

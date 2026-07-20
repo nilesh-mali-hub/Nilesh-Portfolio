@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { SEO } from '../components/SEO';
 import { BentoCard } from '../components/BentoCard';
@@ -16,12 +17,15 @@ import { NoiseOverlay } from '../components/NoiseOverlay';
 import { ProfileCard } from '../components/ProfileCard';
 import { TechStackCard } from '../components/TechStackCard';
 import { ExperienceCard } from '../components/ExperienceCard';
+import { Testimonials } from '../components/Testimonials';
+import { ServicesSection } from '../components/ServicesSection';
+import * as LucideIcons from 'lucide-react';
 import { GraduationCap } from 'lucide-react';
 import { 
   Smartphone, User, Mail, Instagram, Linkedin, 
   Pin, Figma, Fingerprint, Search, Eye, Lightbulb, LayoutGrid,
   PenTool, MonitorPlay, Layers, Zap, ArrowUpRight, Megaphone, Globe, BookOpen, Video,
-  Scissors, Presentation, FileText
+  Scissors, Presentation, FileText, Image as ImageIcon
 } from 'lucide-react';
 import { motion } from 'motion/react';
 
@@ -36,7 +40,31 @@ const staggerContainer = {
   }
 };
 
+const IconMap: Record<string, any> = {
+  Figma, Scissors, Presentation, FileText, Code: LayoutGrid, Image: ImageIcon,
+};
+
 export default function App() {
+  const [hero, setHero] = useState<any>(null);
+  const [experience, setExperience] = useState<any[]>([]);
+  const [skills, setSkills] = useState<any[]>([]);
+  const [contact, setContact] = useState<any>(null);
+
+  useEffect(() => {
+    Promise.all([
+      fetch('/api/hero').then(res => res.json()),
+      fetch('/api/experience').then(res => res.json()),
+      fetch('/api/skills').then(res => res.json()),
+      fetch('/api/contact').then(res => res.json()),
+    ])
+    .then(([heroData, expData, skillsData, contactData]) => {
+      setHero(heroData);
+      setExperience(Array.isArray(expData) ? expData : []);
+      setSkills(Array.isArray(skillsData) ? skillsData : []);
+      setContact(contactData);
+    })
+    .catch(console.error);
+  }, []);
   return (
     <div className="min-h-screen bg-neutral-950 text-white pt-[100px] pb-20 overflow-x-hidden font-sans relative">
       <SEO 
@@ -66,9 +94,9 @@ export default function App() {
                 <span className="text-2xl filter drop-shadow-md">🚀</span>
               </div>
               <p className="text-[#D1FF52] uppercase text-[10px] font-bold tracking-[0.2em] mb-4">About Me</p>
-              <h2 className="font-display font-bold text-3xl leading-none mb-4 text-white uppercase tracking-tighter">Graphic<br/>Designer.</h2>
+              <h2 className="font-display font-bold text-3xl leading-none mb-4 text-white uppercase tracking-tighter" dangerouslySetInnerHTML={{ __html: hero?.title ? hero.title.replace(/ /g, '<br/>') : 'Graphic<br/>Designer.' }}></h2>
               <p className="text-[12px] text-neutral-400 leading-relaxed">
-                Creative graphic designer blending imagination with strategy. I specialize in branding, digital experiences, and visual storytelling that elevate brands and engage audiences across all platforms.
+                {hero?.subtitle || 'Creative graphic designer blending imagination with strategy. I specialize in branding, digital experiences, and visual storytelling that elevate brands and engage audiences across all platforms.'}
               </p>
             </BentoCard>
             <div className="flex flex-wrap gap-2 justify-start">
@@ -178,7 +206,11 @@ export default function App() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
             <ExperienceCard 
               title="Experience"
-              items={[
+              items={experience.length > 0 ? experience.map((exp: any) => ({
+                year: exp.year,
+                title: exp.role,
+                subtitle: exp.company
+              })) : [
                 { year: "2025-Now", title: "Graphic Designer", subtitle: "Redes Creation" },
                 { year: "2025", title: "Graphic Design Intern", subtitle: "Redes Creation" },
                 { year: "2024-Now", title: "Founder", subtitle: "BM Graphics & Media" }
@@ -199,69 +231,36 @@ export default function App() {
         <div className="mt-28">
           <SectionHeading delay={0.1}>Software Skills</SectionHeading>
           <div className="flex flex-nowrap justify-start md:justify-center overflow-x-auto gap-2 sm:gap-4 mt-8 max-w-5xl mx-auto pb-4 px-4 [&::-webkit-scrollbar]:hidden" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-            <SoftwareIcon name="Ps" delay={0.1} />
-            <SoftwareIcon name="Ai" delay={0.15} />
-            <SoftwareIcon name="Xd" delay={0.2} />
-            <SoftwareIcon name="Id" delay={0.25} />
-            <SoftwareIcon icon={<Figma className="w-8 h-8" />} delay={0.3} />
-            <SoftwareIcon icon={<Scissors className="w-8 h-8" />} delay={0.35} />
-            <SoftwareIcon icon={<Presentation className="w-8 h-8" />} delay={0.4} />
-            <SoftwareIcon icon={<FileText className="w-8 h-8" />} delay={0.5} />
-            <SoftwareIcon icon={<svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M10.651 0C10.265.019 9.4.272 8.584.657c-.816.39-3.696 2.161-3.752 6.536c.072 4.145 3.847 11.191 6.397 13.455c0 0-4.141-6.952-4.439-13.013C6.488 1.575 10.651 0 10.651 0m2.679 0s4.159 1.575 3.861 7.635c-.299 6.061-4.439 13.013-4.439 13.013c2.547-2.264 6.324-9.31 6.396-13.455c-.057-4.375-2.936-6.146-3.752-6.536C14.58.272 13.715.019 13.33 0m-1.38.019a1.1 1.1 0 0 0-.555.144C9.864.99 8.909 3.982 9.177 8.66c.185 3.242 1.009 7.291 2.422 11.988h.7c1.413-4.697 2.24-8.742 2.425-11.984c.268-4.677-.688-7.674-2.219-8.501a1.1 1.1 0 0 0-.555-.144M7.017 1.066S2.543 2.909 3.431 8.225c.884 5.32 5.588 10.995 6.986 12.2c.503.457-5.777-6.548-6.386-12.699c-.291-2.323.39-4.9 2.986-6.66m9.966 0c2.595 1.76 3.276 4.337 2.985 6.66c-.608 6.151-6.888 13.156-6.386 12.699c1.398-1.205 6.103-6.88 6.987-12.2c.888-5.316-3.586-7.159-3.586-7.159m-6.815 20.78L10.647 24h2.599l.488-2.154z" /></svg>} delay={0.55} />
-            <SoftwareIcon icon={<svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12s12-5.373 12-12S18.627 0 12 0M6.962 7.68c.754 0 1.337.549 1.405 1.2c.069.583-.171 1.097-.822 1.406c-.343.171-.48.172-.549.069c-.034-.069 0-.137.069-.206c.617-.514.617-.926.548-1.508c-.034-.378-.308-.618-.583-.618c-1.2 0-2.914 2.674-2.674 4.629c.103.754.549 1.646 1.509 1.646c.308 0 .65-.103.96-.24c.5-.264.799-.47 1.097-.8c-.073-.885.704-2.046 1.851-2.046c.515 0 .926.205.96.583c.068.514-.377.582-.514.582s-.378-.034-.378-.17c-.034-.138.309-.07.275-.378c-.035-.206-.24-.274-.446-.274c-.72 0-1.131.994-1.029 1.611c.035.275.172.549.447.549c.205 0 .514-.31.617-.755c.068-.308.343-.514.583-.514c.102 0 .17.034.205.171v.138c-.034.137-.137.548-.102.651c0 .069.034.171.17.171c.092 0 .436-.18.777-.459c.117-.59.253-1.298.253-1.357c.034-.24.137-.48.617-.48c.103 0 .171.034.205.171v.138l-.136.617c.445-.583 1.097-.994 1.508-.994c.172 0 .309.102.309.274c0 .103 0 .274-.069.446c-.137.377-.309.96-.412 1.474c0 .137.035.274.207.274s.685-.206 1.096-.754l.007-.004c-.002-.068-.007-.134-.007-.202c0-.411.035-.754.104-.994c.068-.274.411-.514.617-.514c.103 0 .205.069.205.171c0 .035 0 .103-.034.137c-.137.446-.24.857-.24 1.269c0 .24.034.582.102.788c0 .034.035.069.07.069c.068 0 .548-.445.89-1.028c-.308-.206-.48-.549-.48-.96c0-.72.446-1.097.858-1.097c.343 0 .617.24.617.72c0 .308-.103.65-.274.96h.102a.77.77 0 0 0 .584-.24a.3.3 0 0 1 .134-.117c.335-.425.83-.74 1.41-.74c.48 0 .924.205.959.582c.068.515-.378.618-.515.618l-.002-.002c-.138 0-.377-.035-.377-.172s.309-.068.274-.376c-.034-.206-.24-.275-.446-.275c-.686 0-1.13.891-1.028 1.611c.034.275.171.583.445.583c.206 0 .515-.308.652-.754c.068-.274.343-.514.583-.514c.103 0 .17.034.205.171c0 .069 0 .206-.137.652c-.17.308-.171.48-.137.617c.034.274.171.48.309.583c.034.034.068.102.068.102c0 .069-.034.138-.137.138c-.034 0-.068 0-.103-.035c-.514-.205-.72-.548-.789-.891c-.205.24-.445.377-.72.377c-.445 0-.89-.411-.96-.926a1.6 1.6 0 0 1 .075-.649c-.203.13-.422.203-.623.203h-.17c-.447.652-.927 1.098-1.27 1.303a.9.9 0 0 1-.377.104c-.068 0-.171-.035-.205-.104c-.095-.152-.156-.392-.193-.667c-.481.527-1.145.805-1.453.805c-.343 0-.548-.206-.582-.55v-.376c.102-.754.377-1.2.377-1.337a.074.074 0 0 0-.069-.07c-.24 0-1.028.824-1.166 1.373l-.103.445c-.068.309-.377.515-.582.515c-.103 0-.172-.035-.206-.172v-.137l.046-.233c-.435.31-.87.508-1.075.508c-.308 0-.48-.172-.514-.412c-.206.274-.445.412-.754.412c-.352 0-.696-.24-.862-.593c-.244.275-.523.553-.852.764c-.48.309-1.028.549-1.68.549c-.582 0-1.097-.309-1.371-.583c-.412-.377-.651-.96-.686-1.509c-.205-1.68.823-3.84 2.4-4.8c.378-.205.755-.343 1.132-.343m9.77 3.291c-.104 0-.172.172-.172.343c0 .274.137.583.309.755a1.7 1.7 0 0 0 .102-.583c0-.343-.137-.515-.24-.515z" /></svg>} delay={0.6} />
-            <SoftwareIcon icon={<svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9.998 12L2 16c0 1.886 0 2.328.586 2.914S4.114 19.5 6 19.5h8c1.886 0 2.828 0 3.414-.586S18 17.886 18 16m-8.002-4l11.998-6M9.998 12L2 8c0-1.386 0-2.328.586-2.914S4.114 4.5 6 4.5h8c1.886 0 2.828 0 3.414.586S18 6.614 18 8m-8.002 4l11.998 6" /></svg>} delay={0.65} />
+            {skills.length > 0 ? skills.map((skill: any, idx: number) => {
+              const IconComp = IconMap[skill.icon];
+              return (
+                <SoftwareIcon 
+                  key={skill.id} 
+                  name={IconComp ? undefined : (skill.name || skill.icon?.substring(0,2))} 
+                  icon={IconComp ? <IconComp className="w-8 h-8" /> : undefined}
+                  delay={0.1 + (idx * 0.05)} 
+                />
+              );
+            }) : (
+              <>
+                <SoftwareIcon name="Ps" delay={0.1} />
+                <SoftwareIcon name="Ai" delay={0.15} />
+                <SoftwareIcon name="Xd" delay={0.2} />
+                <SoftwareIcon name="Id" delay={0.25} />
+                <SoftwareIcon icon={<Figma className="w-8 h-8" />} delay={0.3} />
+                <SoftwareIcon icon={<Scissors className="w-8 h-8" />} delay={0.35} />
+                <SoftwareIcon icon={<Presentation className="w-8 h-8" />} delay={0.4} />
+                <SoftwareIcon icon={<FileText className="w-8 h-8" />} delay={0.5} />
+              </>
+            )}
           </div>
         </div>
 
         {/* Services Section */}
-        <div className="mt-28" id="services">
-          <SectionHeading delay={0.1}>Services</SectionHeading>
-          
-          <motion.div 
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8"
-          >
-            <ServiceCard 
-              title="Brand Identity"
-              description="Crafting distinctive and memorable visual identities that capture the essence of your business."
-              icon={<PenTool className="w-6 h-6" />}
-              staggered={true}
-            />
-            <ServiceCard 
-              title="Social Media Design"
-              description="Engaging social media graphics and templates tailored for your digital presence."
-              icon={<Megaphone className="w-6 h-6" />}
-              staggered={true}
-            />
-            <ServiceCard 
-              title="Website UI"
-              description="Designing intuitive, user-centric interfaces for web that deliver seamless digital experiences."
-              icon={<Globe className="w-6 h-6" />}
-              staggered={true}
-            />
-            <ServiceCard 
-              title="Brochure"
-              description="Professional and elegant print and digital brochure designs to showcase your products."
-              icon={<BookOpen className="w-6 h-6" />}
-              staggered={true}
-            />
-            <ServiceCard 
-              title="Motion Graphics"
-              description="Bringing ideas to life through dynamic and captivating motion graphics."
-              icon={<Zap className="w-6 h-6" />}
-              staggered={true}
-            />
-            <ServiceCard 
-              title="Video Editing"
-              description="Compelling video edits that tell your story and engage your audience."
-              icon={<Video className="w-6 h-6" />}
-              staggered={true}
-            />
-          </motion.div>
-        </div>
+        <ServicesSection />
+
+        {/* Testimonials Section */}
+        <Testimonials />
 
         {/* Contact Layout */}
         <div className="mt-32">
@@ -280,43 +279,44 @@ export default function App() {
 
             {/* Email */}
             <BentoCard className="md:col-start-2 md:col-span-2 md:row-start-1 p-8 flex items-center justify-between group hover:border-[#D1FF52] transition-colors cursor-pointer" staggered={true}>
+              <a href={`mailto:${contact?.email || 'work.nileshmali@gmail.com'}`} className="absolute inset-0 z-10"><span className="sr-only">Email</span></a>
               <div>
                 <p className="text-[10px] font-bold tracking-[0.2em] mb-2 uppercase text-neutral-500">Inquiries</p>
-                <span className="font-display font-bold text-xl sm:text-2xl text-white break-all tracking-tighter uppercase">work.nileshmali@gmail.com</span>
+                <span className="font-display font-bold text-xl sm:text-2xl text-white break-all tracking-tighter uppercase">{contact?.email || 'work.nileshmali@gmail.com'}</span>
               </div>
               <Mail className="w-8 h-8 text-neutral-600 group-hover:text-[#D1FF52] transition-colors hidden sm:block" />
             </BentoCard>
 
             {/* LinkedIn */}
             <BentoCard className="md:col-start-4 md:row-start-1 md:row-span-2 p-8 flex flex-col justify-center min-h-[200px] group hover:border-[#D1FF52] transition-colors relative" staggered={true}>
-              <a href="https://www.linkedin.com/in/nilesh-mali-a5997b28a/" target="_blank" rel="noopener noreferrer" className="absolute inset-0 z-10"><span className="sr-only">LinkedIn</span></a>
-              <div className="bg-white text-black w-12 h-12 rounded-full flex items-center justify-center mb-6 group-hover:bg-[#D1FF52] transition-colors">
+              <a href={contact?.linkedin || "https://www.linkedin.com"} target="_blank" rel="noopener noreferrer" className="absolute inset-0 z-10"><span className="sr-only">LinkedIn</span></a>
+              <div className="bg-[#0A66C2] text-white w-12 h-12 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                 <Linkedin className="w-6 h-6" fill="currentColor" />
               </div>
-              <h3 className="font-display font-bold text-2xl leading-tight text-white uppercase tracking-tighter">Nilesh<br/>Mali</h3>
-              <p className="text-[10px] font-bold text-neutral-500 mt-3 uppercase tracking-widest group-hover:text-[#D1FF52] transition-colors">Connect on LinkedIn</p>
+              <h3 className="font-display font-bold text-2xl leading-tight text-white uppercase tracking-tighter">Let's<br/>Connect</h3>
+              <p className="text-[10px] font-bold text-neutral-500 mt-3 uppercase tracking-widest group-hover:text-[#D1FF52] transition-colors">LinkedIn</p>
             </BentoCard>
 
+            {/* Phone */}
             <BentoCard className="md:col-start-2 md:col-span-2 md:row-start-2 md:row-span-2 p-8 flex items-center gap-6 group hover:border-[#D1FF52] transition-colors relative" staggered={true}>
-              <a href="https://www.behance.net/nileshmali25" target="_blank" rel="noopener noreferrer" className="absolute inset-0 z-10"><span className="sr-only">Behance</span></a>
+              <a href={`tel:${contact?.phone || '+91 9876543210'}`} className="absolute inset-0 z-10"><span className="sr-only">Phone</span></a>
               <div className="bg-white text-black p-3 rounded-full flex-shrink-0 w-12 h-12 flex items-center justify-center group-hover:bg-[#D1FF52] transition-colors">
-                <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current"><path d="M22 7h-7v-2h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.908 5.388 4.581h-7.32c.146 1.832 1.713 2.151 3.036 2.151 1.636 0 2.417-1.124 2.641-2.145l1.454.008zm-3.359-3.904c-.217-1.253-1.174-1.957-2.13-1.957-1.389 0-2.025 1.09-2.145 1.957h4.275zm-14.367-1.125c1.464 0 2.235-.916 2.235-2.046 0-1.159-.728-1.924-2.188-1.924h-4.048v3.97h4.001zm.557 5.029c1.676 0 2.502-.989 2.502-2.176 0-1.175-.809-2.228-2.585-2.228h-4.474v4.404h4.557zm1.443-4.102c1.493-.362 2.766-1.579 2.766-3.328 0-2.613-1.96-3.57-4.66-3.57h-6.106v15h6.634c3.155 0 5.215-1.503 5.215-4.185 0-2.224-1.466-3.418-3.849-3.917z"/></svg>
+                <Smartphone className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="font-display font-bold text-2xl text-white uppercase tracking-tighter">Nilesh Mali</h3>
-                <p className="text-[10px] font-bold text-neutral-500 mt-1 uppercase tracking-widest">Behance</p>
+                <h3 className="font-display font-bold text-2xl text-white uppercase tracking-tighter">{contact?.phone || '+91 9876543210'}</h3>
+                <p className="text-[10px] font-bold text-neutral-500 mt-1 uppercase tracking-widest">Direct Line</p>
               </div>
             </BentoCard>
 
-            {/* Mosque Photo Card */}
-            <BentoCard className="md:col-start-4 md:row-start-3 p-2 h-full min-h-[160px]" staggered={true}>
-              <div className="relative w-full h-full rounded-[1.5rem] overflow-hidden group">
-                <img src="https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?q=80&w=600&auto=format&fit=crop" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-80 grayscale group-hover:grayscale-0" alt="Captured Moment" />
-                <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/80 to-transparent"></div>
-                <div className="absolute bottom-4 left-4 bg-black/50 backdrop-blur-md text-[10px] font-bold px-3 py-1.5 rounded-full text-white uppercase tracking-widest border border-white/10">
-                  Captured Moment
-                </div>
+            {/* Instagram */}
+            <BentoCard className="md:col-start-4 md:row-start-3 p-8 flex flex-col justify-center h-full min-h-[160px] group hover:border-[#D1FF52] transition-colors relative" staggered={true}>
+              <a href={contact?.instagram || "https://instagram.com"} target="_blank" rel="noopener noreferrer" className="absolute inset-0 z-10"><span className="sr-only">Instagram</span></a>
+              <div className="w-10 h-10 rounded-lg bg-gradient-to-tr from-[#FD1D1D] via-[#E1306C] to-[#C13584] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <Instagram className="w-5 h-5 text-white" />
               </div>
+              <h3 className="font-display font-bold text-xl text-white uppercase tracking-tighter">Visuals</h3>
+              <p className="text-[10px] font-bold text-neutral-500 mt-1 uppercase tracking-widest">Instagram</p>
             </BentoCard>
             
           </motion.div>
