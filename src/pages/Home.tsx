@@ -23,7 +23,7 @@ import { GraduationCap } from 'lucide-react';
 import { 
   Smartphone, User, Mail, Instagram, Linkedin, 
   Pin, Figma, Fingerprint, Search, Eye, Lightbulb, LayoutGrid,
-  PenTool, MonitorPlay, Layers, Zap, ArrowUpRight, Megaphone, Globe, BookOpen, Video,
+  PenTool, MonitorPlay, Layers, Zap, ArrowUpRight, Megaphone, Globe, BookOpen, Video, Palette,
   Scissors, Presentation, FileText, Image as ImageIcon
 } from 'lucide-react';
 import { motion } from 'motion/react';
@@ -41,13 +41,14 @@ const staggerContainer = {
 };
 
 const IconMap: Record<string, any> = {
-  Figma, Scissors, Presentation, FileText, Code: LayoutGrid, Image: ImageIcon,
+  Figma, Scissors, Presentation, FileText, Code: LayoutGrid, Image: ImageIcon, Palette, PenTool, Video,
 };
 
 export default function App() {
   const [hero, setHero] = useState<any>(defaultData.hero);
   const [experience, setExperience] = useState<any[]>(defaultData.experience);
   const [skills, setSkills] = useState<any[]>(defaultData.skills);
+  const [projects, setProjects] = useState<any[]>(defaultData.projects);
   const [contact, setContact] = useState<any>(defaultData.contact);
 
   useEffect(() => {
@@ -55,12 +56,14 @@ export default function App() {
       fetch('/api/hero').then(res => res.ok ? res.json() : null).catch(() => null),
       fetch('/api/experience').then(res => res.ok ? res.json() : null).catch(() => null),
       fetch('/api/skills').then(res => res.ok ? res.json() : null).catch(() => null),
+      fetch('/api/projects').then(res => res.ok ? res.json() : null).catch(() => null),
       fetch('/api/contact').then(res => res.ok ? res.json() : null).catch(() => null),
     ])
-    .then(([heroData, expData, skillsData, contactData]) => {
+    .then(([heroData, expData, skillsData, projectsData, contactData]) => {
       if (heroData) setHero(heroData);
       if (Array.isArray(expData) && expData.length > 0) setExperience(expData);
       if (Array.isArray(skillsData) && skillsData.length > 0) setSkills(skillsData);
+      if (Array.isArray(projectsData) && projectsData.length > 0) setProjects(projectsData);
       if (contactData) setContact(contactData);
     })
     .catch(console.error);
@@ -169,36 +172,52 @@ export default function App() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
-            className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-4 mt-8 min-h-[800px] md:min-h-[600px]"
+            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-8"
           >
-            <ProjectCard 
-              title="Aether OS" 
-              category="UI/UX Concept" 
-              imageUrl="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop" 
-              staggered={true}
-              className="md:col-span-2 md:row-span-2 h-full"
-            />
-            <ProjectCard 
-              title="Neon Loom" 
-              category="E-Commerce" 
-              imageUrl="https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=800&auto=format&fit=crop" 
-              staggered={true}
-              className="md:col-span-2 md:row-span-1 h-full min-h-[250px]"
-            />
-            <BentoCard className="md:col-span-1 md:row-span-1 p-6 bg-[#D1FF52] border-[#D1FF52] flex flex-col justify-between group cursor-pointer relative" staggered={true}>
+            {projects.length > 0 ? (
+              projects.map((project, idx) => (
+                <ProjectCard
+                  key={project.id}
+                  title={project.title || project.name}
+                  category={project.description || project.category || 'Project'}
+                  imageUrl={project.image || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop"}
+                  staggered={true}
+                  className="h-full min-h-[300px]"
+                />
+              ))
+            ) : (
+              <>
+                <ProjectCard 
+                  title="Aether OS" 
+                  category="UI/UX Concept" 
+                  imageUrl="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop" 
+                  staggered={true}
+                  className="md:col-span-2 md:row-span-2 h-full min-h-[400px]"
+                />
+                <ProjectCard 
+                  title="Neon Loom" 
+                  category="E-Commerce" 
+                  imageUrl="https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=800&auto=format&fit=crop" 
+                  staggered={true}
+                  className="h-full min-h-[300px]"
+                />
+                <ProjectCard 
+                  title="Echo Forms" 
+                  category="Web App" 
+                  imageUrl="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop" 
+                  staggered={true}
+                  className="h-full min-h-[300px]"
+                />
+              </>
+            )}
+            
+            <BentoCard className="p-6 bg-[#D1FF52] border-[#D1FF52] flex flex-col justify-between group cursor-pointer relative min-h-[300px]" staggered={true}>
               <a href="https://www.behance.net/nileshmali25" target="_blank" rel="noopener noreferrer" className="absolute inset-0 z-10"><span className="sr-only">Behance Portfolio</span></a>
               <div className="w-10 h-10 rounded-full border border-black flex items-center justify-center text-black self-end group-hover:scale-110 transition-transform">
                 <ArrowUpRight className="w-5 h-5" />
               </div>
               <span className="text-black font-display font-bold text-2xl uppercase tracking-tighter mt-4 leading-tight">View<br/>Recent<br/>Work</span>
             </BentoCard>
-            <ProjectCard 
-              title="Echo Forms" 
-              category="Web App" 
-              imageUrl="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop" 
-              staggered={true}
-              className="md:col-span-1 md:row-span-1 h-full min-h-[250px]"
-            />
           </motion.div>
         </div>
         {/* Experience & Education */}
@@ -238,7 +257,7 @@ export default function App() {
               return (
                 <SoftwareIcon 
                   key={skill.id} 
-                  name={IconComp ? undefined : (skill.name || skill.title || iconKey?.substring(0,2))} 
+                  name={IconComp ? undefined : (skill.icon || skill.image || skill.name || skill.title)?.substring(0,2)} 
                   icon={IconComp ? <IconComp className="w-8 h-8" /> : undefined}
                   delay={0.1 + (idx * 0.05)} 
                 />

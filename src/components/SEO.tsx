@@ -24,7 +24,7 @@ export function SEO({
   const origin = typeof window !== 'undefined' ? window.location.origin : 'https://nileshmali.com';
   const url = `${origin}${location.pathname}`;
   
-  const defaultTitle = "Nilesh Mali | Graphic Designer & Creative Developer";
+  const defaultTitle = "Creative Portfolio | Nilesh Mali";
   const finalTitle = title ? `${title} | Nilesh Mali` : defaultTitle;
 
   // Schema.org structured data for SEO Google keyword matching

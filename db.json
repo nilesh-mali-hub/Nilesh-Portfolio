@@ -58,45 +58,6 @@
       "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop"
     }
   ],
-  "experience": [
-    {
-      "id": "exp1",
-      "year": "2023 - Present",
-      "role": "Senior Designer",
-      "company": "TechLoom Co."
-    },
-    {
-      "id": "exp2",
-      "year": "2020 - 2023",
-      "role": "UI/UX Designer",
-      "company": "Zenith Digital"
-    }
-  ],
-  "skills": [
-    {
-      "id": "sk1",
-      "name": "Photoshop",
-      "icon": "Image"
-    },
-    {
-      "id": "sk2",
-      "name": "React",
-      "icon": "Code"
-    }
-  ],
-  "hero": {
-    "title": "Creative Developer & Designer",
-    "subtitle": "Building beautiful digital experiences.",
-    "buttonText": "View Work",
-    "buttonLink": "#work"
-  },
-  "contact": {
-    "email": "work.nileshmali@gmail.com",
-    "phone": "+91 9876543210",
-    "address": "Abu Road, Rajasthan, India",
-    "linkedin": "https://linkedin.com",
-    "instagram": "https://instagram.com"
-  },
   "leads": [],
   "blog": [],
   "resume": {
@@ -303,7 +264,7 @@
       "timestamp": "2026-07-20T10:13:53.804Z"
     },
     {
-      "id": "1784542609308",
+      "id": "1784543992699",
       "path": "/",
       "referrer": "https://aistudio.google.com/",
       "utmSource": "",
@@ -313,10 +274,10 @@
       "device": "desktop",
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
       "ip": "103.126.140.40",
-      "timestamp": "2026-07-20T10:16:49.308Z"
+      "timestamp": "2026-07-20T10:39:52.699Z"
     },
     {
-      "id": "1784542609353",
+      "id": "1784543992749",
       "path": "/",
       "referrer": "https://aistudio.google.com/",
       "utmSource": "",
@@ -326,10 +287,36 @@
       "device": "desktop",
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
       "ip": "103.126.140.40",
-      "timestamp": "2026-07-20T10:16:49.353Z"
+      "timestamp": "2026-07-20T10:39:52.749Z"
     },
     {
-      "id": "1784542811545",
+      "id": "1784544129626",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T10:42:09.626Z"
+    },
+    {
+      "id": "1784544129666",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T10:42:09.666Z"
+    },
+    {
+      "id": "1784544155055",
       "path": "/admin",
       "referrer": "https://aistudio.google.com/",
       "utmSource": "",
@@ -339,10 +326,10 @@
       "device": "desktop",
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
       "ip": "103.126.140.40",
-      "timestamp": "2026-07-20T10:20:11.545Z"
+      "timestamp": "2026-07-20T10:42:35.055Z"
     },
     {
-      "id": "1784542811606",
+      "id": "1784544155115",
       "path": "/admin",
       "referrer": "https://aistudio.google.com/",
       "utmSource": "",
@@ -352,10 +339,10 @@
       "device": "desktop",
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
       "ip": "103.126.140.40",
-      "timestamp": "2026-07-20T10:20:11.606Z"
+      "timestamp": "2026-07-20T10:42:35.115Z"
     },
     {
-      "id": "1784542840931",
+      "id": "1784544260913",
       "path": "/",
       "referrer": "https://aistudio.google.com/",
       "utmSource": "",
@@ -365,10 +352,10 @@
       "device": "desktop",
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
       "ip": "103.126.140.40",
-      "timestamp": "2026-07-20T10:20:40.931Z"
+      "timestamp": "2026-07-20T10:44:20.913Z"
     },
     {
-      "id": "1784542840969",
+      "id": "1784544618762",
       "path": "/",
       "referrer": "https://aistudio.google.com/",
       "utmSource": "",
@@ -378,12 +365,426 @@
       "device": "desktop",
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
       "ip": "103.126.140.40",
-      "timestamp": "2026-07-20T10:20:40.969Z"
+      "timestamp": "2026-07-20T10:50:18.762Z"
+    },
+    {
+      "id": "1784544618813",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T10:50:18.813Z"
+    },
+    {
+      "id": "1784544652140",
+      "path": "/asdmin",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T10:50:52.140Z"
+    },
+    {
+      "id": "1784544652209",
+      "path": "/asdmin",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T10:50:52.209Z"
+    },
+    {
+      "id": "1784544656350",
+      "path": "/admin",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T10:50:56.350Z"
+    },
+    {
+      "id": "1784544656391",
+      "path": "/admin",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T10:50:56.391Z"
+    },
+    {
+      "id": "1784544876833",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T10:54:36.833Z"
+    },
+    {
+      "id": "1784544876881",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T10:54:36.881Z"
+    },
+    {
+      "id": "1784544937715",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T10:55:37.715Z"
+    },
+    {
+      "id": "1784544937755",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T10:55:37.755Z"
+    },
+    {
+      "id": "1784544951022",
+      "path": "/admin",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T10:55:51.022Z"
+    },
+    {
+      "id": "1784544951033",
+      "path": "/admin",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T10:55:51.033Z"
+    },
+    {
+      "id": "1784545038623",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T10:57:18.623Z"
+    },
+    {
+      "id": "1784545038634",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T10:57:18.634Z"
+    },
+    {
+      "id": "1784545187139",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T10:59:47.139Z"
+    },
+    {
+      "id": "1784545187154",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T10:59:47.154Z"
+    },
+    {
+      "id": "1784545277509",
+      "path": "/admin",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T11:01:17.509Z"
+    },
+    {
+      "id": "1784545277532",
+      "path": "/admin",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T11:01:17.532Z"
+    },
+    {
+      "id": "1784545400497",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T11:03:20.497Z"
+    },
+    {
+      "id": "1784545400549",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T11:03:20.549Z"
+    },
+    {
+      "id": "1784545455803",
+      "path": "/admin",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T11:04:15.803Z"
+    },
+    {
+      "id": "1784545455847",
+      "path": "/admin",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T11:04:15.847Z"
+    },
+    {
+      "id": "1784545608783",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T11:06:48.783Z"
+    },
+    {
+      "id": "1784545824934",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T11:10:24.934Z"
+    },
+    {
+      "id": "1784545824988",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T11:10:24.988Z"
+    },
+    {
+      "id": "1784546121807",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T11:15:21.807Z"
+    },
+    {
+      "id": "1784546223203",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T11:17:03.203Z"
+    },
+    {
+      "id": "1784546223243",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T11:17:03.243Z"
+    },
+    {
+      "id": "1784546436171",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T11:20:36.171Z"
+    },
+    {
+      "id": "1784546436235",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "ip": "103.126.140.40",
+      "timestamp": "2026-07-20T11:20:36.235Z"
     }
   ],
   "settings": {
     "siteName": "Nilesh Mali",
     "email": "work.nileshmali@gmail.com",
     "gaMeasurementId": ""
-  }
+  },
+  "skills": [
+    {
+      "id": "sk-1",
+      "name": "Ps",
+      "icon": "Ps"
+    },
+    {
+      "id": "sk-2",
+      "name": "Ai",
+      "icon": "Ai"
+    },
+    {
+      "id": "sk-3",
+      "name": "Xd",
+      "icon": "Xd"
+    },
+    {
+      "id": "sk-4",
+      "name": "Id",
+      "icon": "Id"
+    },
+    {
+      "id": "sk-5",
+      "name": "Figma",
+      "icon": "Figma"
+    },
+    {
+      "id": "sk-6",
+      "name": "Pr",
+      "icon": "Scissors"
+    },
+    {
+      "id": "sk-7",
+      "name": "Ae",
+      "icon": "Presentation"
+    }
+  ]
 }

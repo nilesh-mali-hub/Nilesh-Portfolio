@@ -1,9 +1,14 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { LayoutDashboard, Briefcase, Settings, Users, MessageSquare, FileText, Image as ImageIcon, BookOpen, UserCircle, Menu, X, Plus, Edit2, Trash2, ExternalLink, Save, Cloud, Copy, Check, BarChart3, Zap, GraduationCap, LayoutGrid, Mail } from 'lucide-react';
+import { LayoutDashboard, Briefcase, Settings, Users, MessageSquare, FileText, Image as ImageIcon, BookOpen, UserCircle, Menu, X, Plus, Edit2, Trash2, ExternalLink, Save, Cloud, Copy, Check, BarChart3, Zap, GraduationCap, LayoutGrid, Mail, Figma, Scissors, Presentation, Code, Palette, PenTool, Video } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { SEO } from '../components/SEO';
 import { AnalyticsTab } from '../components/AnalyticsTab';
+import { SoftwareIcon } from '../components/SoftwareIcon';
+
+const IconMap: Record<string, any> = {
+  Figma, Scissors, Presentation, FileText, Code: LayoutGrid, Image: ImageIcon, Palette, PenTool, Video,
+};
 
 const tabs = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -275,7 +280,7 @@ function GenericTab({ collection }: { collection: string }) {
     setFormData({ 
       title: item.title || item.name || '', 
       description: item.description || item.content || '',
-      image: item.image || ''
+      image: item.image || item.icon || ''
     });
     setIsModalOpen(true);
   };
@@ -346,6 +351,37 @@ function GenericTab({ collection }: { collection: string }) {
               </div>
             ))}
           </div>
+        </div>
+      ) : collection === 'skills' ? (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-4">
+          {items.map(item => {
+            const iconKey = item.icon || item.image || item.title || item.name;
+            const IconComp = IconMap[iconKey];
+            return (
+              <div key={item.id} className="bg-neutral-950 border border-neutral-800 p-5 rounded-xl flex flex-col items-center justify-center group hover:border-neutral-700 transition-colors relative min-h-[140px]">
+                <SoftwareIcon 
+                  name={IconComp ? undefined : (item.icon || item.image || item.name || item.title)?.substring(0,2)} 
+                  icon={IconComp ? <IconComp className="w-8 h-8" /> : undefined}
+                />
+                <h3 className="font-bold text-white mt-4 text-center line-clamp-1 text-sm">{item.title || item.name || 'Untitled'}</h3>
+                
+                <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-neutral-900/80 backdrop-blur rounded-lg p-1">
+                  <button 
+                    onClick={() => openEdit(item)}
+                    className="p-1.5 text-blue-400 hover:bg-blue-400/20 rounded-md transition-colors"
+                  >
+                    <Edit2 className="w-4 h-4" />
+                  </button>
+                  <button 
+                    onClick={() => handleDelete(item.id)}
+                    className="p-1.5 text-red-400 hover:bg-red-400/20 rounded-md transition-colors"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            );
+          })}
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">

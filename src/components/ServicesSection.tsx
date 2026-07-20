@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { SectionHeading } from './SectionHeading';
 import { ServiceCard } from './ServiceCard';
 import * as LucideIcons from 'lucide-react';
-import { PenTool, Megaphone, Globe, BookOpen, Zap, Video, FileText } from 'lucide-react';
+import { PenTool, Megaphone, Globe, BookOpen, Zap, Video, FileText, Palette } from 'lucide-react';
 import { defaultData } from '../data/defaultData';
 
 interface Service {
