@@ -71,5 +71,15 @@ export const defaultData = {
     instagram: 'https://instagram.com/nileshmali',
     linkedin: 'https://linkedin.com/in/nileshmali',
     behance: 'https://behance.net/nileshmali25'
+  },
+  seo: {
+    siteTitle: 'Nilesh Mali | Graphic Designer, Creative Developer & Brand Identity Specialist',
+    metaDescription: 'Nilesh Mali is a professional Graphic Designer & Creative Developer based in India. Specializing in Brand Identity, Social Media Creatives, UI/UX Design, Custom Websites, and AI-powered Visual Content.',
+    focusKeywords: 'Nilesh Mali, Graphic Designer India, Brand Identity Designer, UI/UX Designer, Creative Developer, Logo Designer, Social Media Graphics, Portfolio Website, Freelance Graphic Designer Rajasthan, Abu Road Designer',
+    googleVerificationId: 'h9kB-6SF_IHCD-DKwQmTWZgGhDdt0mZkXLwjzAEsvFg',
+    ogImageUrl: 'https://res.cloudinary.com/dfknctbhw/image/upload/v1784198733/nm-logo_achjmg.png',
+    canonicalDomain: 'https://nileshmali2026.netlify.app',
+    authorName: 'Nilesh Mali',
+    isIndexingEnabled: true
   }
 };

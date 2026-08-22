@@ -367,7 +367,7 @@ router.get('/auth/profile', async (req, res) => {
 
 router.put('/auth/credentials', async (req, res) => {
   try {
-    const { username, newPassword, currentPassword } = req.body || {};
+    const { username, newPassword, password, currentPassword } = req.body || {};
     const db = await readDB();
     const currentAuth = db.auth || { username: 'nilesh', password: 'nilesh2025' };
 
@@ -375,9 +375,11 @@ router.put('/auth/credentials', async (req, res) => {
       return res.status(403).json({ success: false, message: 'Current password does not match.' });
     }
 
+    const passwordToSet = newPassword ? newPassword.trim() : password ? password.trim() : currentAuth.password;
+
     const updatedAuth = {
       username: (username || currentAuth.username || 'nilesh').trim(),
-      password: newPassword ? newPassword.trim() : currentAuth.password
+      password: passwordToSet
     };
 
     db.auth = updatedAuth;

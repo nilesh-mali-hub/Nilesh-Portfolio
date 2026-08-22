@@ -781,9 +781,12 @@ function QuickActionBtn({ label, icon: Icon, onClick }: { label: string; icon: a
 function GenericTab({ collection }: { collection: string }) {
   const [items, setItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<any>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [notification, setNotification] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
   const [formData, setFormData] = useState({ 
     title: '', 
     description: '', 
@@ -792,9 +795,18 @@ function GenericTab({ collection }: { collection: string }) {
     timeline: '', 
     role: '', 
     duration: '',
+    link: '',
+    github: '',
     whatsapp: '',
+    email: '',
+    rating: '5',
     message: ''
   });
+
+  const showToast = (type: 'success' | 'error', text: string) => {
+    setNotification({ type, text });
+    setTimeout(() => setNotification(null), 3500);
+  };
 
   const fetchItems = () => {
     setLoading(true);
@@ -817,36 +829,46 @@ function GenericTab({ collection }: { collection: string }) {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    const url = editingItem ? `/api/${collection}/${editingItem.id}` : `/api/${collection}`;
-    const method = editingItem ? 'PUT' : 'POST';
-    
-    await fetch(url, {
-      method,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData)
-    });
-    
-    setIsModalOpen(false);
-    setEditingItem(null);
-    setFormData({ 
-      title: '', 
-      description: '', 
-      image: '', 
-      tagline: '', 
-      timeline: '', 
-      role: '', 
-      duration: '',
-      whatsapp: '',
-      message: ''
-    });
-    fetchItems();
+    setSaving(true);
+    try {
+      const url = editingItem ? `/api/${collection}/${editingItem.id}` : `/api/${collection}`;
+      const method = editingItem ? 'PUT' : 'POST';
+      
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+      
+      if (res.ok) {
+        showToast('success', `${collection.slice(0, -1)} saved successfully!`);
+        setIsModalOpen(false);
+        setEditingItem(null);
+        fetchItems();
+      } else {
+        showToast('error', `Failed to save ${collection.slice(0, -1)}.`);
+      }
+    } catch (err) {
+      showToast('error', 'Network error while saving.');
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this item?')) return;
+    if (!confirm(`Are you sure you want to delete this ${collection.slice(0, -1)}?`)) return;
     
-    await fetch(`/api/${collection}/${id}`, { method: 'DELETE' });
-    fetchItems();
+    try {
+      const res = await fetch(`/api/${collection}/${id}`, { method: 'DELETE' });
+      if (res.ok) {
+        showToast('success', 'Item deleted.');
+        fetchItems();
+      } else {
+        showToast('error', 'Failed to delete item.');
+      }
+    } catch (err) {
+      showToast('error', 'Network error.');
+    }
   };
 
   const openEdit = (item: any) => {
@@ -855,11 +877,15 @@ function GenericTab({ collection }: { collection: string }) {
       title: item.title || item.name || '', 
       description: item.description || item.content || item.message || '',
       image: item.image || item.icon || item.avatar || '',
-      tagline: item.tagline || '',
+      tagline: item.tagline || item.category || '',
       timeline: item.timeline || item.duration || '',
       role: item.role || item.position || '',
       duration: item.duration || item.year || '',
+      link: item.link || '',
+      github: item.github || '',
       whatsapp: item.whatsapp || item.phone || '',
+      email: item.email || '',
+      rating: item.rating ? String(item.rating) : '5',
       message: item.message || ''
     });
     setIsModalOpen(true);
@@ -875,19 +901,32 @@ function GenericTab({ collection }: { collection: string }) {
       timeline: '', 
       role: '', 
       duration: '',
+      link: '',
+      github: '',
       whatsapp: '',
+      email: '',
+      rating: '5',
       message: ''
     });
     setIsModalOpen(true);
   };
 
   const filteredItems = items.filter(item => {
-    const text = `${item.title || ''} ${item.name || ''} ${item.description || ''} ${item.role || ''} ${item.message || ''}`.toLowerCase();
+    const text = `${item.title || ''} ${item.name || ''} ${item.description || ''} ${item.role || ''} ${item.message || ''} ${item.tagline || ''} ${item.category || ''}`.toLowerCase();
     return text.includes(searchTerm.toLowerCase());
   });
 
   return (
     <div className="flex flex-col h-full relative">
+      {/* Toast Notification */}
+      {notification && (
+        <div className={`fixed top-5 right-5 z-[150] px-4 py-3 rounded-xl font-bold text-xs flex items-center gap-2 shadow-2xl transition-all ${
+          notification.type === 'success' ? 'bg-[#D1FF52] text-black shadow-[#D1FF52]/30' : 'bg-red-600 text-white shadow-red-600/30'
+        }`}>
+          <span>{notification.text}</span>
+        </div>
+      )}
+
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div>
@@ -989,6 +1028,11 @@ function GenericTab({ collection }: { collection: string }) {
                       {new Date(item.timestamp).toLocaleDateString()}
                     </span>
                   )}
+                  {item.email && (
+                    <span className="text-[11px] font-mono text-neutral-400 bg-neutral-900 px-2 py-0.5 rounded">
+                      {item.email}
+                    </span>
+                  )}
                   <span className="text-[10px] font-mono text-[#D1FF52] bg-[#D1FF52]/10 px-2 py-0.5 rounded font-bold">
                     Lead
                   </span>
@@ -1000,7 +1044,7 @@ function GenericTab({ collection }: { collection: string }) {
                   </p>
                 )}
 
-                <p className="text-xs sm:text-sm text-neutral-300 bg-neutral-900/50 p-3 rounded-lg border border-neutral-850 mt-2">
+                <p className="text-xs sm:text-sm text-neutral-300 bg-neutral-900/50 p-3 rounded-lg border border-neutral-800 mt-2">
                   "{item.message || item.description || item.content || 'No message provided'}"
                 </p>
               </div>
@@ -1036,7 +1080,7 @@ function GenericTab({ collection }: { collection: string }) {
               className="bg-neutral-950 border border-neutral-800 rounded-2xl p-4 sm:p-5 flex flex-col justify-between group hover:border-[#D1FF52]/40 transition-colors relative"
             >
               <div>
-                {/* Optional Image Thumbnail Preview */}
+                {/* Image Thumbnail Preview */}
                 {item.image && (
                   <div className="aspect-video w-full rounded-xl bg-neutral-900 border border-neutral-800 overflow-hidden mb-3.5 relative flex items-center justify-center">
                     <img 
@@ -1064,12 +1108,32 @@ function GenericTab({ collection }: { collection: string }) {
                   <p className="text-xs text-[#D1FF52]/80 font-mono mb-2 line-clamp-1">{item.tagline}</p>
                 )}
 
+                {item.role && (
+                  <p className="text-xs text-neutral-400 font-medium mb-1 line-clamp-1">{item.role}</p>
+                )}
+
                 <p className="text-neutral-400 text-xs line-clamp-3 leading-relaxed mb-4">
                   {item.description || item.content || item.message || 'No description available.'}
                 </p>
+
+                {/* Optional Links */}
+                {(item.link || item.github) && (
+                  <div className="flex items-center gap-2 mb-3">
+                    {item.link && (
+                      <a href={item.link} target="_blank" rel="noreferrer" className="text-[11px] font-mono text-[#D1FF52] hover:underline flex items-center gap-1">
+                        <ExternalLink className="w-3 h-3" /> Live Demo
+                      </a>
+                    )}
+                    {item.github && (
+                      <a href={item.github} target="_blank" rel="noreferrer" className="text-[11px] font-mono text-neutral-400 hover:underline flex items-center gap-1">
+                        <ExternalLink className="w-3 h-3" /> Source
+                      </a>
+                    )}
+                  </div>
+                )}
               </div>
 
-              {/* Action Buttons with 44px touch targets on mobile */}
+              {/* Action Buttons */}
               <div className="pt-3 border-t border-neutral-800/80 flex items-center justify-between mt-auto">
                 <span className="text-[10px] font-mono text-neutral-500">
                   ID: {item.id ? item.id.toString().slice(-4) : ''}
@@ -1097,7 +1161,7 @@ function GenericTab({ collection }: { collection: string }) {
         </div>
       )}
 
-      {/* Floating Action Button (FAB) on Mobile for fast adding */}
+      {/* Floating Action Button */}
       <button
         onClick={openNew}
         className="fixed bottom-6 right-6 z-30 md:hidden w-14 h-14 rounded-full bg-[#D1FF52] text-black shadow-2xl shadow-[#D1FF52]/30 flex items-center justify-center active:scale-95 cursor-pointer font-bold"
@@ -1106,13 +1170,13 @@ function GenericTab({ collection }: { collection: string }) {
         <Plus className="w-7 h-7" />
       </button>
 
-      {/* Mobile-Friendly Modal with Fixed Footer */}
+      {/* Modal Dialog */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-3 sm:p-4">
           <motion.div 
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            className="bg-neutral-900 border border-neutral-800 rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden flex flex-col max-h-[88vh]"
+            className="bg-neutral-900 border border-neutral-800 rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
           >
             {/* Modal Header */}
             <div className="p-5 border-b border-neutral-800 flex justify-between items-center shrink-0">
@@ -1132,7 +1196,10 @@ function GenericTab({ collection }: { collection: string }) {
               <div className="p-5 space-y-4 overflow-y-auto flex-1 no-scrollbar">
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
-                    {collection === 'experience' ? 'Role / Title' : collection === 'skills' ? 'Skill Name (e.g. Photoshop, Figma)' : 'Title / Name'}
+                    {collection === 'experience' ? 'Company / Studio Name' : 
+                     collection === 'skills' ? 'Skill Name (e.g. Photoshop, Figma)' : 
+                     collection === 'testimonials' ? 'Client Name' : 
+                     'Title / Name'}
                   </label>
                   <input 
                     type="text" 
@@ -1143,25 +1210,44 @@ function GenericTab({ collection }: { collection: string }) {
                   />
                 </div>
 
-                {collection === 'services' && (
+                {(collection === 'services' || collection === 'projects' || collection === 'blog' || collection === 'gallery') && (
                   <div>
                     <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
-                      Service Tagline / Subtitle
+                      {collection === 'projects' ? 'Category (e.g. Brand Identity, UI/UX, Motion Graphics)' : 
+                       collection === 'services' ? 'Tagline / Highlights' : 
+                       'Category / Subtitle'}
                     </label>
                     <input 
                       type="text" 
                       value={formData.tagline}
                       onChange={(e) => setFormData({...formData, tagline: e.target.value})}
-                      placeholder="e.g. Logos, Brand Guidelines, Typography"
+                      placeholder={collection === 'projects' ? 'Brand Identity & UI/UX' : 'e.g. Fast turnaround, high quality'}
                       className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white text-base sm:text-sm focus:outline-none focus:border-[#D1FF52]"
                     />
                   </div>
                 )}
 
-                {collection === 'experience' && (
+                {(collection === 'experience' || collection === 'testimonials') && (
                   <div>
                     <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
-                      Duration / Years
+                      {collection === 'experience' ? 'Job Title / Position' : 'Client Role & Company (e.g. Founder, Acme Co)'}
+                    </label>
+                    <input 
+                      type="text" 
+                      value={formData.role}
+                      onChange={(e) => setFormData({...formData, role: e.target.value})}
+                      placeholder="e.g. Senior Graphic Designer"
+                      className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white text-base sm:text-sm focus:outline-none focus:border-[#D1FF52]"
+                    />
+                  </div>
+                )}
+
+                {(collection === 'experience' || collection === 'projects' || collection === 'services') && (
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
+                      {collection === 'experience' ? 'Duration / Years (e.g. 2022 - Present)' : 
+                       collection === 'services' ? 'Turnaround Timeline (e.g. 1 - 2 Weeks)' : 
+                       'Year / Duration (e.g. 2025)'}
                     </label>
                     <input 
                       type="text" 
@@ -1173,10 +1259,41 @@ function GenericTab({ collection }: { collection: string }) {
                   </div>
                 )}
 
+                {collection === 'projects' && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
+                        Live Project / Behance Link
+                      </label>
+                      <input 
+                        type="url" 
+                        value={formData.link}
+                        onChange={(e) => setFormData({...formData, link: e.target.value})}
+                        placeholder="https://..."
+                        className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-3 py-2.5 text-white text-xs focus:outline-none focus:border-[#D1FF52]"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
+                        Source / Figma Link
+                      </label>
+                      <input 
+                        type="url" 
+                        value={formData.github}
+                        onChange={(e) => setFormData({...formData, github: e.target.value})}
+                        placeholder="https://..."
+                        className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-3 py-2.5 text-white text-xs focus:outline-none focus:border-[#D1FF52]"
+                      />
+                    </div>
+                  </div>
+                )}
+
                 {collection !== 'skills' && (
                   <div>
                     <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
-                      {collection === 'experience' ? 'Company Name / Detailed Description' : 'Description / Content'}
+                      {collection === 'testimonials' ? 'Testimonial Quote' : 
+                       collection === 'experience' ? 'Role Description & Key Accomplishments' : 
+                       'Description / Details'}
                     </label>
                     <textarea 
                       value={formData.description}
@@ -1188,9 +1305,9 @@ function GenericTab({ collection }: { collection: string }) {
 
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
-                    {collection === 'services' ? 'Icon Name (e.g. PenTool, Megaphone, Globe, Video)' : 
-                     collection === 'skills' ? 'Icon Component (e.g. Figma, Scissors) or 2-letter abbreviation' : 
-                     'Image URL / Direct Drive Link (Optional)'}
+                    {collection === 'services' ? 'Icon Name (PenTool, Megaphone, Globe, BookOpen, Zap, Video, Palette)' : 
+                     collection === 'skills' ? 'Icon / 2-Letter Code (Ps, Ai, Figma, Pr, Ae, Id, Xd)' : 
+                     'Image URL / Direct Google Drive Link'}
                   </label>
                   <input 
                     type="text" 
@@ -1202,9 +1319,9 @@ function GenericTab({ collection }: { collection: string }) {
                     }}
                     className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white text-base sm:text-sm focus:outline-none focus:border-[#D1FF52]"
                     placeholder={
-                      collection === 'services' ? 'PenTool, Globe, Zap, etc' : 
-                      collection === 'skills' ? 'Figma, Scissors, Palette, etc' : 
-                      'https://... or paste Google Drive share link'
+                      collection === 'services' ? 'PenTool, Megaphone, Globe, Zap, etc' : 
+                      collection === 'skills' ? 'Ps, Ai, Figma, Pr, Ae, etc' : 
+                      'https://... or Google Drive image link'
                     }
                   />
                   {formData.image && formData.image.startsWith('http') && (
@@ -1234,9 +1351,15 @@ function GenericTab({ collection }: { collection: string }) {
                 </button>
                 <button 
                   type="submit"
-                  className="flex-1 py-3 px-4 bg-[#D1FF52] hover:bg-[#c5f542] text-black rounded-xl font-bold transition-colors flex items-center justify-center gap-2 text-xs cursor-pointer shadow-lg shadow-[#D1FF52]/10"
+                  disabled={saving}
+                  className="flex-1 py-3 px-4 bg-[#D1FF52] hover:bg-[#c5f542] text-black rounded-xl font-bold transition-colors flex items-center justify-center gap-2 text-xs cursor-pointer shadow-lg shadow-[#D1FF52]/10 disabled:opacity-50"
                 >
-                  <Save className="w-4 h-4" /> Save {collection.slice(0, -1)}
+                  {saving ? (
+                    <RefreshCw className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Save className="w-4 h-4" />
+                  )}
+                  <span>Save {collection.slice(0, -1)}</span>
                 </button>
               </div>
             </form>
@@ -1287,19 +1410,20 @@ function AdminCredentialsCard() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           username: username.trim(),
-          password: newPassword ? newPassword.trim() : undefined,
+          newPassword: newPassword ? newPassword.trim() : undefined,
+          password: newPassword ? newPassword.trim() : undefined
         }),
       });
 
       const data = await res.json().catch(() => ({}));
 
       if (res.ok && data.success) {
-        setMsg({ type: 'success', text: 'Admin login credentials updated successfully!' });
+        setMsg({ type: 'success', text: data.message || 'Admin login credentials updated successfully!' });
         localStorage.setItem('nilesh_admin_user', username.trim());
         setNewPassword('');
         setConfirmPassword('');
       } else {
-        setMsg({ type: 'error', text: data.error || 'Failed to update credentials.' });
+        setMsg({ type: 'error', text: data.message || data.error || 'Failed to update credentials.' });
       }
     } catch (err) {
       setMsg({ type: 'error', text: 'Network error updating credentials.' });
