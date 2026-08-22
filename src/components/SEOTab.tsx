@@ -427,6 +427,36 @@ export function SEOTab() {
             </div>
           </div>
 
+          {/* Google Verification File */}
+          <div className="p-4 rounded-xl bg-neutral-950 border border-neutral-800 flex flex-col justify-between gap-3">
+            <div>
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-white font-mono">/google91850d01e3b06185.html</span>
+                <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded">Active</span>
+              </div>
+              <p className="text-[11px] text-neutral-400 mt-1">Google Search Console verification file uploaded to root directory.</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <a 
+                href="/google91850d01e3b06185.html" 
+                target="_blank" 
+                rel="noreferrer"
+                className="flex-1 py-1.5 px-3 bg-neutral-800 hover:bg-neutral-700 text-white rounded-lg text-xs font-semibold flex items-center justify-center gap-1 transition-colors"
+              >
+                <span>Verify File</span>
+                <ExternalLink className="w-3 h-3" />
+              </a>
+              <button
+                type="button"
+                onClick={() => copyToClipboard(`${window.location.origin}/google91850d01e3b06185.html`, 'gver')}
+                className="p-1.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-300 rounded-lg text-xs transition-colors cursor-pointer"
+                title="Copy URL"
+              >
+                {copiedLink === 'gver' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+              </button>
+            </div>
+          </div>
+
           {/* Google Search Console link */}
           <div className="p-4 rounded-xl bg-neutral-950 border border-neutral-800 flex flex-col justify-between gap-3">
             <div>

@@ -158,6 +158,12 @@ Sitemap: ${origin}/sitemap.xml
     res.send(xml);
   });
 
+  // Google Search Console verification HTML file handler
+  app.get("/google91850d01e3b06185.html", (req, res) => {
+    res.header("Content-Type", "text/html; charset=utf-8");
+    res.send("google-site-verification: google91850d01e3b06185.html\n");
+  });
+
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
