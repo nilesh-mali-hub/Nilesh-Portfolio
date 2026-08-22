@@ -10,5 +10,5 @@ Disallow: /admin
 Disallow: /api/
 
 # Sitemap location
-Sitemap: https://nileshmali.com/sitemap.xml
+Sitemap: https://nileshmali2026.netlify.app/sitemap.xml
 

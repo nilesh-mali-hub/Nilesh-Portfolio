@@ -21,7 +21,7 @@ export function SEO({
   const location = useLocation();
   
   // Safely fallback to window origin if available
-  const origin = typeof window !== 'undefined' && window.location.origin ? window.location.origin : 'https://nileshmali.com';
+  const origin = typeof window !== 'undefined' && window.location.origin ? window.location.origin : 'https://nileshmali2026.netlify.app';
   const url = `${origin}${location.pathname}`;
   
   const defaultTitle = "Nilesh Mali | Graphic Designer, Creative Developer & Brand Identity Specialist";

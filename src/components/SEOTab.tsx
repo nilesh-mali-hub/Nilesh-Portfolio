@@ -40,7 +40,7 @@ export function SEOTab() {
     focusKeywords: 'Nilesh Mali, Graphic Designer India, Brand Identity Designer, UI/UX Designer, Creative Developer, Logo Designer, Social Media Graphics, Portfolio Website, Freelance Graphic Designer Rajasthan, Abu Road Designer',
     googleVerificationId: 'h9kB-6SF_IHCD-DKwQmTWZgGhDdt0mZkXLwjzAEsvFg',
     ogImageUrl: 'https://res.cloudinary.com/dfknctbhw/image/upload/v1784198733/nm-logo_achjmg.png',
-    canonicalDomain: typeof window !== 'undefined' ? window.location.origin : 'https://nileshmali.com',
+    canonicalDomain: typeof window !== 'undefined' ? window.location.origin : 'https://nileshmali2026.netlify.app',
     authorName: 'Nilesh Mali',
     isIndexingEnabled: true,
   });

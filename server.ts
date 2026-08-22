@@ -101,7 +101,7 @@ async function startServer() {
 
   app.get("/robots.txt", (req, res) => {
     res.header("Content-Type", "text/plain");
-    const host = req.get('host') || 'nileshmali.com';
+    const host = req.get('host') || 'nileshmali2026.netlify.app';
     const protocol = req.secure || req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http';
     const origin = `${protocol}://${host}`;
 
@@ -123,7 +123,7 @@ Sitemap: ${origin}/sitemap.xml
 
   app.get("/sitemap.xml", (req, res) => {
     res.header("Content-Type", "application/xml");
-    const host = req.get('host') || 'nileshmali.com';
+    const host = req.get('host') || 'nileshmali2026.netlify.app';
     const protocol = req.secure || req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http';
     const origin = `${protocol}://${host}`;
     const today = new Date().toISOString().split('T')[0];
