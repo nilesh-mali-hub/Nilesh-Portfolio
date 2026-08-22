@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { SEO } from '../components/SEO';
 import { NoiseOverlay } from '../components/NoiseOverlay';
+import { RotatingText } from '../components/RotatingText';
 import { Download } from 'lucide-react';
+import { NileshIntroCard, ExperienceGaugeCard } from '../components/NileshIntroCard';
 
 export default function About() {
   const [resumeUrl, setResumeUrl] = useState<string>('https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf');
@@ -51,13 +53,25 @@ export default function About() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="font-sans font-bold text-lg md:text-xl mb-8 flex flex-wrap items-center gap-2 md:gap-3"
+              className="font-sans font-bold text-base sm:text-lg md:text-xl mb-8 flex flex-wrap items-center gap-2"
             >
               <span>Graphic Designer</span>
               <span className="opacity-50 text-sm">/</span>
-              <span>Creative Developer</span>
-              <span className="opacity-50 text-sm">/</span>
-              <span>AI Creative Specialist</span>
+              <RotatingText
+                texts={['Creative Developer', 'AI Specialist', 'Brand Strategist', 'UI/UX Creator']}
+                mainClassName="px-2.5 sm:px-3 bg-black text-[#D1FF52] overflow-hidden py-0.5 sm:py-1 justify-center rounded-lg font-display uppercase tracking-wider text-xs sm:text-sm"
+                staggerFrom="last"
+                initial={{ y: "100%" }}
+                animate={{ y: 0 }}
+                exit={{ y: "-120%" }}
+                staggerDuration={0.025}
+                splitLevelClassName="overflow-hidden pb-0.5"
+                transition={{ type: "spring", damping: 30, stiffness: 400 }}
+                rotationInterval={2200}
+                splitBy="characters"
+                auto
+                loop
+              />
             </motion.div>
 
             <motion.div 
@@ -117,6 +131,25 @@ export default function About() {
             </motion.div>
           </div>
 
+        </div>
+
+        {/* Bento Identity & Experience Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+          <div className="md:col-span-2">
+            <NileshIntroCard 
+              name="Nilesh Mali"
+              avatarUrl="https://res.cloudinary.com/dfknctbhw/image/upload/v1784198733/nm-logo_achjmg.png"
+              bio="Creative designer & developer crafting digital experiences that blend aesthetics with functionality."
+              location="AVAILABLE GLOBALLY"
+            />
+          </div>
+          <div className="md:col-span-1 flex">
+            <ExperienceGaugeCard 
+              years="4+"
+              label="/YEARS EXP."
+              className="w-full"
+            />
+          </div>
         </div>
       </main>
     </div>

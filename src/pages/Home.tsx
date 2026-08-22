@@ -9,12 +9,16 @@ import { SoftwareIcon } from '../components/SoftwareIcon';
 import { FloatingResumeButton } from '../components/FloatingResumeButton';
 import { AIAssistantWidget } from '../components/AIAssistantWidget';
 import { HeroSlideshow } from '../components/HeroSlideshow';
+import { HeroImageCard } from '../components/HeroImageCard';
 import { ProjectCard } from '../components/ProjectCard';
+import { ProjectSkeleton } from '../components/ProjectSkeleton';
+import { RotatingText } from '../components/RotatingText';
 import { ServiceCard } from '../components/ServiceCard';
 import { IntroAnimation } from '../components/IntroAnimation';
 import { Marquee } from '../components/Marquee';
 import { NoiseOverlay } from '../components/NoiseOverlay';
 import { ProfileCard } from '../components/ProfileCard';
+import { NileshIntroCard, ExperienceGaugeCard } from '../components/NileshIntroCard';
 import { TechStackCard } from '../components/TechStackCard';
 import { ExperienceCard } from '../components/ExperienceCard';
 import { Testimonials } from '../components/Testimonials';
@@ -49,9 +53,11 @@ export default function App() {
   const [experience, setExperience] = useState<any[]>(defaultData.experience);
   const [skills, setSkills] = useState<any[]>(defaultData.skills);
   const [projects, setProjects] = useState<any[]>(defaultData.projects);
+  const [isLoadingProjects, setIsLoadingProjects] = useState<boolean>(true);
   const [contact, setContact] = useState<any>(defaultData.contact);
 
   useEffect(() => {
+    setIsLoadingProjects(true);
     Promise.all([
       fetch('/api/hero').then(res => res.ok ? res.json() : null).catch(() => null),
       fetch('/api/experience').then(res => res.ok ? res.json() : null).catch(() => null),
@@ -66,7 +72,10 @@ export default function App() {
       if (Array.isArray(projectsData) && projectsData.length > 0) setProjects(projectsData);
       if (contactData) setContact(contactData);
     })
-    .catch(console.error);
+    .catch(console.error)
+    .finally(() => {
+      setIsLoadingProjects(false);
+    });
   }, []);
 
   return (
@@ -83,12 +92,43 @@ export default function App() {
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 w-full relative z-10">
         
+        {/* Dynamic Focus Tagline */}
+        <motion.div 
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex items-center justify-center md:justify-start mb-2"
+        >
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-neutral-900/90 border border-neutral-800 text-xs text-neutral-300 backdrop-blur-md shadow-lg">
+            <span className="flex h-2 w-2 relative">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#D1FF52] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#D1FF52]"></span>
+            </span>
+            <span className="text-neutral-400 font-medium hidden sm:inline">Specializing in</span>
+            <RotatingText
+              texts={['Brand Identity', 'UI/UX Design', 'Visual Storytelling', 'Motion & Graphics', 'Digital Experiences']}
+              mainClassName="px-2.5 sm:px-3 bg-cyan-300 text-black overflow-hidden py-0.5 sm:py-1 justify-center rounded-lg font-bold text-[11px] sm:text-xs"
+              staggerFrom="last"
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "-120%" }}
+              staggerDuration={0.025}
+              splitLevelClassName="overflow-hidden pb-0.5"
+              transition={{ type: "spring", damping: 30, stiffness: 400 }}
+              rotationInterval={2200}
+              splitBy="characters"
+              auto
+              loop
+            />
+          </div>
+        </motion.div>
+
         {/* Top Hero Section */}
         <motion.div 
           variants={staggerContainer}
           initial="hidden"
           animate="visible"
-          className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4"
+          className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-2"
         >
           
           {/* Left Column */}
@@ -98,7 +138,29 @@ export default function App() {
                 <span className="text-2xl filter drop-shadow-md">🚀</span>
               </div>
               <p className="text-[#D1FF52] uppercase text-[10px] font-bold tracking-[0.2em] mb-4">About Me</p>
-              <h2 className="font-display font-bold text-3xl leading-none mb-4 text-white uppercase tracking-tighter" dangerouslySetInnerHTML={{ __html: hero?.title ? hero.title.replace(/ /g, '<br/>') : 'Graphic<br/>Designer.' }}></h2>
+              
+              <div className="mb-4">
+                <h2 className="font-display font-bold text-3xl leading-none text-white uppercase tracking-tighter" dangerouslySetInnerHTML={{ __html: hero?.title ? hero.title.replace(/ /g, '<br/>') : 'Graphic<br/>Designer.' }}></h2>
+                <div className="mt-2.5 flex items-center gap-1.5 flex-wrap">
+                  <RotatingText
+                    texts={['Branding', 'UI/UX', 'Print', 'Social', 'Concepts']}
+                    mainClassName="px-2 py-0.5 bg-[#D1FF52]/10 border border-[#D1FF52]/30 text-[#D1FF52] overflow-hidden text-[11px] font-mono font-bold uppercase rounded-md tracking-wider"
+                    staggerFrom="last"
+                    initial={{ y: "100%" }}
+                    animate={{ y: 0 }}
+                    exit={{ y: "-120%" }}
+                    staggerDuration={0.02}
+                    splitLevelClassName="overflow-hidden pb-0.5"
+                    transition={{ type: "spring", damping: 30, stiffness: 400 }}
+                    rotationInterval={2000}
+                    splitBy="characters"
+                    auto
+                    loop
+                  />
+                  <span className="text-[11px] text-neutral-400 font-medium">Expert</span>
+                </div>
+              </div>
+
               <p className="text-[12px] text-neutral-400 leading-relaxed">
                 {hero?.subtitle || 'Creative graphic designer blending imagination with strategy. I specialize in branding, digital experiences, and visual storytelling that elevate brands and engage audiences across all platforms.'}
               </p>
@@ -114,53 +176,43 @@ export default function App() {
 
           {/* Center Column - Hero Image */}
           <motion.div 
-            variants={{ hidden: { opacity: 0, scale: 0.95 }, visible: { opacity: 1, scale: 1, transition: { duration: 0.8, ease: "easeOut" } } }} 
-            className="col-span-1 md:col-span-2 relative min-h-[400px] md:min-h-[500px] flex items-center justify-center order-1 md:order-2 mb-8 md:mb-0 group"
+            variants={{ 
+              hidden: { opacity: 0, y: 32, scale: 0.96 }, 
+              visible: { 
+                opacity: 1, 
+                y: 0, 
+                scale: 1, 
+                transition: { 
+                  duration: 0.95, 
+                  ease: [0.16, 1, 0.3, 1],
+                  delay: 0.1 
+                } 
+              } 
+            }} 
+            className="col-span-1 md:col-span-2 relative min-h-[420px] md:min-h-[520px] flex items-center justify-center order-1 md:order-2 mb-8 md:mb-0"
           >
-            {/* Abstract Background Element (from theme) */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0"> 
-              <div className="w-64 h-64 bg-[#D1FF52] opacity-10 blur-[100px] rounded-full"></div>
-            </div>
-            
-            {/* Person Image */}
-            <div className="relative z-10 w-full max-w-sm h-[500px] rounded-[2rem] border border-neutral-800 overflow-hidden">
-              <HeroSlideshow />
-              {/* Inner Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-transparent opacity-80 pointer-events-none"></div>
-            </div>
-            
-            {/* Pill selector below image */}
-            <motion.div 
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.2 }}
-              className="absolute bottom-6 z-20 bg-neutral-900 border border-neutral-800 rounded-full px-5 py-3 flex gap-2 shadow-lg"
-            >
-              <div className="w-2.5 h-2.5 rounded-full bg-[#D1FF52]"></div>
-              <div className="w-2.5 h-2.5 rounded-full bg-neutral-700"></div>
-              <div className="w-2.5 h-2.5 rounded-full bg-neutral-700"></div>
-            </motion.div>
+            {/* 3D Tilt Hero Image Card with smooth entrance */}
+            <HeroImageCard 
+              showLightEffects={false}
+              behindGlowEnabled={false}
+            />
           </motion.div>
 
           {/* Right Column */}
           <div className="col-span-1 flex flex-col gap-4 order-3">
-            <ProfileCard 
-              name="Nilesh Mali"
+            <NileshIntroCard 
+              name={hero?.name || "Nilesh Mali"}
               avatarUrl="https://res.cloudinary.com/dfknctbhw/image/upload/v1784198733/nm-logo_achjmg.png"
               bio="Creative designer & developer crafting digital experiences that blend aesthetics with functionality."
-              location="Available Globally"
+              location="AVAILABLE GLOBALLY"
+              staggered={true}
             />
             
-            <BentoCard className="p-8 flex flex-col items-center justify-center flex-1" staggered={true}>
-              <p className="text-[10px] font-bold text-neutral-500 mb-4 tracking-[0.2em] uppercase self-start">/years exp.</p>
-              <div className="relative w-32 h-32 flex items-center justify-center my-4">
-                <svg className="absolute inset-0 w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                  <circle cx="50" cy="50" r="40" stroke="#171717" strokeWidth="14" fill="none" />
-                  <circle cx="50" cy="50" r="40" stroke="#D1FF52" strokeWidth="14" fill="none" strokeDasharray="251.2" strokeDashoffset="180" strokeLinecap="round" />
-                </svg>
-                <span className="font-display font-bold text-5xl text-white relative z-10 ml-2 tracking-tighter">4+</span>
-              </div>
-            </BentoCard>
+            <ExperienceGaugeCard 
+              years="4+"
+              label="/YEARS EXP."
+              staggered={true}
+            />
           </div>
         </motion.div>
 
@@ -174,10 +226,16 @@ export default function App() {
             viewport={{ once: true, margin: "-100px" }}
             className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-8"
           >
-            {projects.length > 0 ? (
+            {isLoadingProjects ? (
+              <>
+                <ProjectSkeleton className="h-full min-h-[300px]" />
+                <ProjectSkeleton className="h-full min-h-[300px]" />
+                <ProjectSkeleton className="h-full min-h-[300px]" />
+              </>
+            ) : projects.length > 0 ? (
               projects.map((project, idx) => (
                 <ProjectCard
-                  key={project.id}
+                  key={project.id || idx}
                   title={project.title || project.name}
                   category={project.description || project.category || 'Project'}
                   imageUrl={project.image || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop"}

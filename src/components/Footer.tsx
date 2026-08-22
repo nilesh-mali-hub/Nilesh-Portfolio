@@ -96,8 +96,12 @@ export function Footer() {
             <Link to="/" className="text-neutral-400 hover:text-[#D1FF52] font-sans text-sm transition-colors">Home</Link>
             <Link to="/about" className="text-neutral-400 hover:text-[#D1FF52] font-sans text-sm transition-colors">About</Link>
             <a href="/#projects" className="text-neutral-400 hover:text-[#D1FF52] font-sans text-sm transition-colors">Works</a>
-            <a href="/#services" className="text-neutral-400 hover:text-[#D1FF52] font-sans text-sm transition-colors">Services</a>
+            <Link to="/services" className="text-neutral-400 hover:text-[#D1FF52] font-sans text-sm transition-colors">Services</Link>
             <Link to="/contact" className="text-neutral-400 hover:text-[#D1FF52] font-sans text-sm transition-colors">Contact</Link>
+            <Link to="/admin" className="text-neutral-500 hover:text-[#D1FF52] font-sans text-xs flex items-center gap-1.5 transition-colors pt-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#D1FF52]/60"></span>
+              <span>Admin Access</span>
+            </Link>
           </div>
 
           {/* Contact & Socials */}

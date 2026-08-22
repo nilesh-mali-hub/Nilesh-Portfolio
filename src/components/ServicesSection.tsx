@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
+import { Link } from 'react-router-dom';
 import { SectionHeading } from './SectionHeading';
 import { ServiceCard } from './ServiceCard';
 import * as LucideIcons from 'lucide-react';
-import { PenTool, Megaphone, Globe, BookOpen, Zap, Video, FileText, Palette } from 'lucide-react';
+import { PenTool, Megaphone, Globe, BookOpen, Zap, Video, FileText, Palette, ArrowRight } from 'lucide-react';
 import { defaultData } from '../data/defaultData';
 
 interface Service {
@@ -91,6 +92,17 @@ export function ServicesSection() {
           )}
         </motion.div>
       )}
+
+      {/* Link to dedicated Services Page */}
+      <div className="mt-8 flex justify-center">
+        <Link 
+          to="/services" 
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-black hover:bg-[#D1FF52] hover:border-transparent transition-all text-xs font-display font-bold uppercase tracking-wider group"
+        >
+          <span>Explore All Services & Deliverables</span>
+          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+        </Link>
+      </div>
     </div>
   );
 }

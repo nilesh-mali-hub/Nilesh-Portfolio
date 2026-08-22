@@ -1,7 +1,12 @@
-import React, { useEffect, useRef, useCallback, useMemo } from 'react';
+import React, { useEffect, useRef, useCallback, useMemo, useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import './ProfileCard.css';
 
-const DEFAULT_INNER_GRADIENT = 'linear-gradient(145deg, #1f1f1f 0%, #111111 100%)';
+const DEFAULT_IMAGES = [
+  "https://res.cloudinary.com/dfknctbhw/image/upload/v1784199299/nilesh_nvzcmq.jpg",
+  "https://res.cloudinary.com/dfknctbhw/image/upload/v1782624949/Screenshot_2026-06-28_110531_va0txn.png",
+  "https://res.cloudinary.com/dfknctbhw/image/upload/v1784204841/nilesh_rdo57m.webp"
+];
 
 const ANIMATION_CONFIG = {
   INITIAL_DURATION: 1200,
@@ -13,62 +18,51 @@ const ANIMATION_CONFIG = {
 
 const clamp = (v: number, min = 0, max = 100) => Math.min(Math.max(v, min), max);
 const round = (v: number, precision = 3) => parseFloat(v.toFixed(precision));
-const adjust = (v: number, fMin: number, fMax: number, tMin: number, tMax: number) => round(tMin + ((tMax - tMin) * (v - fMin)) / (fMax - fMin));
+const adjust = (v: number, fMin: number, fMax: number, tMin: number, tMax: number) =>
+  round(tMin + ((tMax - tMin) * (v - fMin)) / (fMax - fMin));
 
-export interface ProfileCardProps {
-  avatarUrl?: string;
-  iconUrl?: string;
-  grainUrl?: string;
-  innerGradient?: string;
+export interface HeroImageCardProps {
+  images?: string[];
+  enableTilt?: boolean;
+  enableMobileTilt?: boolean;
+  mobileTiltSensitivity?: number;
+  showLightEffects?: boolean;
   behindGlowEnabled?: boolean;
   behindGlowColor?: string;
   behindGlowSize?: string;
   className?: string;
-  enableTilt?: boolean;
-  enableMobileTilt?: boolean;
-  mobileTiltSensitivity?: number;
-  miniAvatarUrl?: string;
-  name?: string;
-  title?: string;
-  handle?: string;
-  status?: string;
-  contactText?: string;
-  showUserInfo?: boolean;
-  onContactClick?: () => void;
-  // Legacy / fallback props
-  bio?: string;
-  location?: string;
+  autoSlideInterval?: number;
 }
 
-export const ProfileCardComponent: React.FC<ProfileCardProps> = ({
-  avatarUrl = 'https://res.cloudinary.com/dfknctbhw/image/upload/v1784198733/nm-logo_achjmg.png',
-  iconUrl,
-  grainUrl,
-  innerGradient,
-  behindGlowEnabled = true,
-  behindGlowColor = 'rgba(209, 255, 82, 0.45)',
-  behindGlowSize,
-  className = '',
+export const HeroImageCard: React.FC<HeroImageCardProps> = ({
+  images = DEFAULT_IMAGES,
   enableTilt = true,
-  enableMobileTilt = false,
+  enableMobileTilt = true,
   mobileTiltSensitivity = 5,
-  miniAvatarUrl,
-  name = 'Nilesh Mali',
-  title = 'Graphic Designer & Creative Developer',
-  handle = 'nileshmali',
-  status = 'Available for Work',
-  contactText = 'Contact',
-  showUserInfo = true,
-  onContactClick,
-  bio,
-  location
+  showLightEffects = false,
+  behindGlowEnabled = false,
+  behindGlowColor = 'rgba(209, 255, 82, 0.45)',
+  behindGlowSize = '35%',
+  className = '',
+  autoSlideInterval = 4500
 }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
   const wrapRef = useRef<HTMLDivElement>(null);
   const shellRef = useRef<HTMLDivElement>(null);
 
   const enterTimerRef = useRef<number | null>(null);
   const leaveRafRef = useRef<number | null>(null);
 
+  // Slideshow timer
+  useEffect(() => {
+    if (images.length <= 1) return;
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % images.length);
+    }, autoSlideInterval);
+    return () => clearInterval(timer);
+  }, [images.length, autoSlideInterval]);
+
+  // 3D Physics Tilt Engine
   const tiltEngine = useMemo(() => {
     if (!enableTilt) return null;
 
@@ -107,8 +101,8 @@ export const ProfileCardComponent: React.FC<ProfileCardProps> = ({
         '--pointer-from-center': `${clamp(Math.hypot(percentY - 50, percentX - 50) / 50, 0, 1)}`,
         '--pointer-from-top': `${percentY / 100}`,
         '--pointer-from-left': `${percentX / 100}`,
-        '--rotate-x': `${round(-(centerX / 5))}deg`,
-        '--rotate-y': `${round(centerY / 4)}deg`
+        '--rotate-x': `${round(-(centerX / 4.5))}deg`,
+        '--rotate-y': `${round(centerY / 3.5)}deg`
       };
 
       for (const [k, v] of Object.entries(properties)) {
@@ -145,10 +139,11 @@ export const ProfileCardComponent: React.FC<ProfileCardProps> = ({
     };
 
     const start = () => {
-      if (running) return;
-      running = true;
-      lastTs = 0;
-      rafId = requestAnimationFrame(step);
+      if (!running) {
+        running = true;
+        lastTs = 0;
+        rafId = requestAnimationFrame(step);
+      }
     };
 
     return {
@@ -320,84 +315,106 @@ export const ProfileCardComponent: React.FC<ProfileCardProps> = ({
 
   const cardStyle = useMemo(
     () => ({
-      '--icon': iconUrl ? `url(${iconUrl})` : 'none',
-      '--grain': grainUrl ? `url(${grainUrl})` : 'none',
-      '--inner-gradient': innerGradient ?? DEFAULT_INNER_GRADIENT,
-      '--behind-glow-color': behindGlowColor ?? 'rgba(209, 255, 82, 0.45)',
-      '--behind-glow-size': behindGlowSize ?? '50%'
+      '--behind-glow-color': behindGlowColor,
+      '--behind-glow-size': behindGlowSize,
+      '--inner-gradient': 'linear-gradient(145deg, #181818 0%, #0c0c0c 100%)'
     } as React.CSSProperties),
-    [iconUrl, grainUrl, innerGradient, behindGlowColor, behindGlowSize]
+    [behindGlowColor, behindGlowSize]
   );
 
-  const handleContactClick = useCallback(() => {
-    onContactClick?.();
-  }, [onContactClick]);
-
   return (
-    <div ref={wrapRef} className={`pc-card-wrapper ${className}`.trim()} style={cardStyle}>
+    <motion.div
+      initial={{ opacity: 0, y: 28, scale: 0.96 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{
+        duration: 0.95,
+        ease: [0.16, 1, 0.3, 1],
+        delay: 0.15
+      }}
+      ref={wrapRef}
+      className={`pc-card-wrapper hero-tilt-card ${className}`.trim()}
+      style={cardStyle}
+    >
       {behindGlowEnabled && <div className="pc-behind" />}
-      <div ref={shellRef} className="pc-card-shell">
-        <section className="pc-card">
-          <div className="pc-inside">
-            <div className="pc-shine" />
-            <div className="pc-glare" />
-            <div className="pc-content pc-avatar-content">
-              <img
-                className="avatar"
-                src={avatarUrl}
-                alt={`${name || 'User'} avatar`}
-                loading="lazy"
-                onError={e => {
-                  const t = e.target as HTMLElement;
-                  t.style.display = 'none';
-                }}
-              />
-              {showUserInfo && (
-                <div className="pc-user-info">
-                  <div className="pc-user-details">
-                    <div className="pc-mini-avatar">
-                      <img
-                        src={miniAvatarUrl || avatarUrl}
-                        alt={`${name || 'User'} mini avatar`}
-                        loading="lazy"
-                        onError={e => {
-                          const t = e.target as HTMLImageElement;
-                          t.style.opacity = '0.5';
-                          t.src = avatarUrl;
-                        }}
-                      />
-                    </div>
-                    <div className="pc-user-text">
-                      <div className="pc-handle">@{handle}</div>
-                      <div className="pc-status">{status}</div>
-                    </div>
-                  </div>
-                  <button
-                    className="pc-contact-btn"
-                    onClick={handleContactClick}
-                    style={{ pointerEvents: 'auto' }}
-                    type="button"
-                    aria-label={`Contact ${name || 'user'}`}
-                  >
-                    {contactText}
-                  </button>
-                </div>
-              )}
+      
+      <div ref={shellRef} className="pc-card-shell w-full h-full">
+        <section className="pc-card w-full h-full">
+          <div className="pc-inside w-full h-full relative">
+            
+            {/* Image Slideshow with smooth transition */}
+            <div className="pc-avatar-content absolute inset-0 w-full h-full">
+              <AnimatePresence mode="popLayout">
+                <motion.img
+                  key={currentIndex}
+                  src={images[currentIndex]}
+                  alt="Nilesh Mali Hero Graphic Profile"
+                  initial={{ opacity: 0, scale: 1.04, y: 12 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+                  className="hero-avatar-image object-cover w-full h-full transition-all duration-500"
+                  onError={(e) => {
+                    const t = e.target as HTMLImageElement;
+                    t.src = DEFAULT_IMAGES[0];
+                  }}
+                />
+              </AnimatePresence>
+              
+              {/* Clean bottom gradient for contrast */}
+              <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/80 via-transparent to-transparent pointer-events-none z-10" />
             </div>
-            <div className="pc-content">
-              <div className="pc-details">
-                <h3>{name}</h3>
-                <p>{title}</p>
-                {bio && <p className="mt-2 text-xs text-neutral-400">{bio}</p>}
-                {location && <span className="mt-2 inline-block text-[10px] text-neutral-500 uppercase tracking-wider">{location}</span>}
-              </div>
-            </div>
+
+            {/* Optional Light Effects */}
+            {showLightEffects && (
+              <>
+                <div className="pc-shine" />
+                <div className="pc-glare" />
+              </>
+            )}
+
+            {/* Quick Badge / Info on Card */}
+            <motion.div 
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
+              className="absolute top-4 left-4 right-4 z-20 flex justify-between items-center pointer-events-none"
+            >
+              <span className="px-2.5 py-1 bg-black/60 backdrop-blur-md border border-white/10 rounded-full text-[10px] uppercase font-mono font-bold text-[#D1FF52] tracking-wider">
+                Portfolio 2026
+              </span>
+              <span className="w-2 h-2 rounded-full bg-[#D1FF52] animate-pulse" />
+            </motion.div>
+            
           </div>
         </section>
       </div>
-    </div>
+
+      {/* Interactive Pagination Indicators */}
+      <motion.div 
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
+        className="absolute -bottom-5 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 bg-neutral-900/90 border border-neutral-800 backdrop-blur-md rounded-full px-4 py-2 shadow-xl"
+      >
+        {images.map((_, idx) => (
+          <button
+            key={idx}
+            type="button"
+            aria-label={`Slide to image ${idx + 1}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              setCurrentIndex(idx);
+            }}
+            className={`transition-all duration-300 rounded-full ${
+              currentIndex === idx
+                ? 'w-6 h-2 bg-[#D1FF52]'
+                : 'w-2 h-2 bg-neutral-700 hover:bg-neutral-500'
+            }`}
+          />
+        ))}
+      </motion.div>
+    </motion.div>
   );
 };
 
-export const ProfileCard = React.memo(ProfileCardComponent);
-export default ProfileCard;
+export default HeroImageCard;

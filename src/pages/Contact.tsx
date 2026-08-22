@@ -1,17 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MessageCircle } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { SEO } from '../components/SEO';
 import { NoiseOverlay } from '../components/NoiseOverlay';
 
 export default function Contact() {
+  const location = useLocation();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     name: '',
     whatsapp: '',
     message: ''
   });
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const serviceParam = params.get('service');
+    if (serviceParam) {
+      setFormData(prev => ({
+        ...prev,
+        message: prev.message || `Hi Nilesh, I am interested in inquiring about your "${serviceParam}" service.`
+      }));
+    }
+  }, [location.search]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

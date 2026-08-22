@@ -11,6 +11,7 @@ import { AIAssistantWidget } from './components/AIAssistantWidget';
 const Home = lazy(() => import('./pages/Home'));
 const Contact = lazy(() => import('./pages/Contact'));
 const About = lazy(() => import('./pages/About'));
+const Services = lazy(() => import('./pages/Services'));
 const Admin = lazy(() => import('./pages/Admin'));
 
 function AppContent() {
@@ -25,6 +26,7 @@ function AppContent() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/services" element={<Services />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/admin" element={<Admin />} />
         </Routes>
