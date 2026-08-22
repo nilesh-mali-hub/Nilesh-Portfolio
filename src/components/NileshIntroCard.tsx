@@ -92,12 +92,12 @@ export function ExperienceGaugeCard({
             strokeWidth="16"
             fill="none"
           />
-          {/* Vibrant Neon Green Active Arc */}
+          {/* Vibrant Dynamic Accent Active Arc */}
           <motion.circle
             cx="60"
             cy="60"
             r="48"
-            stroke="#D1FF52"
+            stroke="var(--accent-color)"
             strokeWidth="16"
             fill="none"
             strokeDasharray="301.6"

@@ -50,6 +50,16 @@ export const defaultData = {
   },
   gallery: [],
   knowledge: [],
+  theme: {
+    mode: 'dark',
+    accentId: 'cyber-lime',
+    accentColor: '#D1FF52',
+    accentFg: '#000000'
+  },
+  auth: {
+    username: 'nilesh',
+    password: 'nilesh2025'
+  },
   settings: {
     siteName: 'Nilesh Mali',
     email: 'work.nileshmali@gmail.com',

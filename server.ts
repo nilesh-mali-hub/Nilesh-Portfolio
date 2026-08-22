@@ -99,6 +99,28 @@ async function startServer() {
     }
   });
 
+  app.get("/robots.txt", (req, res) => {
+    res.header("Content-Type", "text/plain");
+    const host = req.get('host') || 'nileshmali.com';
+    const protocol = req.secure || req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http';
+    const origin = `${protocol}://${host}`;
+
+    res.send(`# Google & Search Engine Crawler Directives
+User-agent: *
+Allow: /
+Allow: /about
+Allow: /services
+Allow: /contact
+
+# Protect admin dashboard & internal API endpoints
+Disallow: /admin
+Disallow: /api/
+
+# Sitemap location
+Sitemap: ${origin}/sitemap.xml
+`);
+  });
+
   app.get("/sitemap.xml", (req, res) => {
     res.header("Content-Type", "application/xml");
     const host = req.get('host') || 'nileshmali.com';
@@ -119,6 +141,12 @@ async function startServer() {
     <lastmod>${today}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>${origin}/services</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>${origin}/contact</loc>

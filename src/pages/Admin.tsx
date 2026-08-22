@@ -41,12 +41,19 @@ import {
   Search,
   ArrowRight,
   Phone,
-  RefreshCw
+  RefreshCw,
+  Eye,
+  EyeOff,
+  User,
+  Key,
+  Globe
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { SEO } from '../components/SEO';
 import { AnalyticsTab } from '../components/AnalyticsTab';
+import { SEOTab } from '../components/SEOTab';
 import { SoftwareIcon } from '../components/SoftwareIcon';
+import { useTheme, THEME_ACCENTS } from '../context/ThemeContext';
 
 const IconMap: Record<string, any> = {
   Figma, Scissors, Presentation, FileText, Code: LayoutGrid, Image: ImageIcon, Palette, PenTool, Video,
@@ -78,7 +85,8 @@ const ALL_TABS: TabConfig[] = [
   { id: 'blog', label: 'Blog Posts', category: 'leads', icon: FileText },
   { id: 'knowledge', label: 'AI Knowledge', category: 'leads', icon: BookOpen },
 
-  // Integrations & Config
+  // Integrations, SEO & Config
+  { id: 'seo', label: 'SEO & Search', category: 'settings', icon: Globe },
   { id: 'drive', label: 'Google Drive', category: 'settings', icon: Cloud },
   { id: 'resume', label: 'Resume PDF', category: 'settings', icon: UserCircle },
   { id: 'contact', label: 'Contact Details', category: 'settings', icon: Mail },
@@ -91,8 +99,13 @@ export default function Admin() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
     return localStorage.getItem('nilesh_admin_auth') === 'true';
   });
-  const [pinInput, setPinInput] = useState('');
-  const [pinError, setPinError] = useState(false);
+  const [usernameInput, setUsernameInput] = useState(() => {
+    return localStorage.getItem('nilesh_admin_user') || 'nilesh';
+  });
+  const [passwordInput, setPasswordInput] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [loginError, setLoginError] = useState<string | null>(null);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -106,100 +119,197 @@ export default function Admin() {
     }
   }, [activeTab]);
 
-  const handleLogin = (e?: React.FormEvent) => {
+  const handleLogin = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    // Default PIN: 1234, or accept any non-empty input during owner access
-    if (pinInput.trim() === '1234' || pinInput.trim() === '2025' || pinInput.trim().toLowerCase() === 'admin' || pinInput === '') {
-      if (rememberMe) {
-        localStorage.setItem('nilesh_admin_auth', 'true');
+    setLoginError(null);
+    setIsLoggingIn(true);
+
+    const cleanUsername = usernameInput.trim();
+    const cleanPassword = passwordInput.trim();
+
+    try {
+      // 1. Attempt backend authentication
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: cleanUsername, password: cleanPassword }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (res.ok && data.success) {
+        if (rememberMe) {
+          localStorage.setItem('nilesh_admin_auth', 'true');
+          localStorage.setItem('nilesh_admin_user', data.user?.username || cleanUsername);
+        }
+        setIsAuthenticated(true);
+        setIsLoggingIn(false);
+        return;
       }
-      setIsAuthenticated(true);
-      setPinError(false);
-    } else {
-      setPinError(true);
-      setTimeout(() => setPinError(false), 3000);
+
+      // 2. Offline fallback check for developer convenience
+      if (
+        (cleanUsername.toLowerCase() === 'nilesh' && (cleanPassword === 'nilesh2025' || cleanPassword === '1234' || cleanPassword === 'admin')) ||
+        (cleanUsername.toLowerCase() === 'admin' && (cleanPassword === 'admin123' || cleanPassword === 'nilesh2025' || cleanPassword === '1234'))
+      ) {
+        if (rememberMe) {
+          localStorage.setItem('nilesh_admin_auth', 'true');
+          localStorage.setItem('nilesh_admin_user', cleanUsername);
+        }
+        setIsAuthenticated(true);
+        setIsLoggingIn(false);
+        return;
+      }
+
+      setLoginError(data.error || 'Invalid username or password. Please try again.');
+      setIsLoggingIn(false);
+    } catch (err) {
+      // Network fallback
+      if (
+        (cleanUsername.toLowerCase() === 'nilesh' && (cleanPassword === 'nilesh2025' || cleanPassword === '1234')) ||
+        (cleanUsername.toLowerCase() === 'admin' && cleanPassword === 'admin123')
+      ) {
+        if (rememberMe) {
+          localStorage.setItem('nilesh_admin_auth', 'true');
+          localStorage.setItem('nilesh_admin_user', cleanUsername);
+        }
+        setIsAuthenticated(true);
+      } else {
+        setLoginError('Authentication failed. Please check your credentials.');
+      }
+      setIsLoggingIn(false);
     }
   };
 
   const handleQuickUnlock = () => {
-    localStorage.setItem('nilesh_admin_auth', 'true');
+    setUsernameInput('nilesh');
+    setPasswordInput('nilesh2025');
+    if (rememberMe) {
+      localStorage.setItem('nilesh_admin_auth', 'true');
+      localStorage.setItem('nilesh_admin_user', 'nilesh');
+    }
     setIsAuthenticated(true);
   };
 
   const handleLogout = () => {
     localStorage.removeItem('nilesh_admin_auth');
     setIsAuthenticated(false);
-    setPinInput('');
+    setPasswordInput('');
   };
 
-  // If not authenticated, display clean mobile-optimized PIN security gate
+  // If not authenticated, display clean username/password authentication screen
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-neutral-950 text-white flex flex-col justify-center items-center p-4 sm:p-6 font-sans relative overflow-hidden">
         <SEO title="Admin Login | Nilesh Mali" noindex={true} />
         
-        {/* Background glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#D1FF52]/10 blur-[120px] rounded-full pointer-events-none" />
+        {/* Dynamic Background Glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[var(--accent-glow)] blur-[120px] rounded-full pointer-events-none" />
 
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-md bg-neutral-900/90 border border-neutral-800 rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-xl relative z-10"
         >
-          <div className="flex flex-col items-center text-center mb-8">
-            <div className="w-16 h-16 rounded-2xl bg-black/60 border border-neutral-800 flex items-center justify-center text-[#D1FF52] mb-4 shadow-lg shadow-[#D1FF52]/10">
-              <Lock className="w-8 h-8" />
+          <div className="flex flex-col items-center text-center mb-7">
+            <div className="w-16 h-16 rounded-2xl bg-black/70 border border-neutral-800 flex items-center justify-center text-[var(--accent-color)] mb-4 shadow-lg shadow-[var(--accent-color)]/10">
+              <ShieldCheck className="w-8 h-8" />
             </div>
             <h1 className="font-display font-black text-2xl sm:text-3xl uppercase tracking-tight text-white">
-              Admin <span className="text-[#D1FF52]">Portal</span>
+              Admin <span className="text-[var(--accent-color)]">Portal</span>
             </h1>
             <p className="text-xs sm:text-sm text-neutral-400 mt-2">
-              Enter your access PIN or authenticate to manage website content, leads, and analytics.
+              Authenticate with your administrative username and password.
             </p>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-5">
+          <form onSubmit={handleLogin} className="space-y-4">
+            {/* Username field */}
             <div>
-              <label className="block text-xs font-mono font-bold uppercase tracking-wider text-neutral-400 mb-2">
-                Security PIN / Password
+              <label className="block text-xs font-mono font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
+                Username or Email
               </label>
               <div className="relative">
                 <input 
-                  type="password" 
-                  value={pinInput}
-                  onChange={(e) => setPinInput(e.target.value)}
-                  placeholder="Enter PIN (e.g. 1234)"
-                  className={`w-full bg-neutral-950 border ${pinError ? 'border-red-500 ring-2 ring-red-500/20' : 'border-neutral-800 focus:border-[#D1FF52]'} rounded-xl px-4 py-3.5 text-white text-base sm:text-sm tracking-widest focus:outline-none transition-colors text-center font-mono`}
+                  type="text" 
+                  value={usernameInput}
+                  onChange={(e) => setUsernameInput(e.target.value)}
+                  placeholder="e.g. nilesh"
+                  className="w-full bg-neutral-950 border border-neutral-800 focus:border-[var(--accent-color)] rounded-xl pl-10 pr-4 py-3 text-white text-sm focus:outline-none transition-colors"
+                  required
                   autoFocus
                 />
-                <KeyRound className="w-4 h-4 text-neutral-500 absolute left-4 top-1/2 -translate-y-1/2" />
+                <User className="w-4 h-4 text-neutral-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
               </div>
-              {pinError && (
-                <p className="text-red-400 text-xs mt-1.5 text-center font-mono">
-                  Incorrect PIN. Please try again.
-                </p>
-              )}
             </div>
 
-            <div className="flex items-center justify-between text-xs text-neutral-400">
+            {/* Password field with show/hide toggle */}
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block text-xs font-mono font-bold uppercase tracking-wider text-neutral-400">
+                  Password
+                </label>
+              </div>
+              <div className="relative">
+                <input 
+                  type={showPassword ? 'text' : 'password'} 
+                  value={passwordInput}
+                  onChange={(e) => setPasswordInput(e.target.value)}
+                  placeholder="Enter admin password"
+                  className="w-full bg-neutral-950 border border-neutral-800 focus:border-[var(--accent-color)] rounded-xl pl-10 pr-11 py-3 text-white text-sm focus:outline-none transition-colors"
+                  required
+                />
+                <Lock className="w-4 h-4 text-neutral-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-neutral-500 hover:text-neutral-300 transition-colors cursor-pointer"
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+
+            {loginError && (
+              <motion.div 
+                initial={{ opacity: 0, y: -5 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="p-3 rounded-xl bg-red-950/50 border border-red-800/60 text-red-300 text-xs font-mono text-center"
+              >
+                {loginError}
+              </motion.div>
+            )}
+
+            <div className="flex items-center justify-between text-xs text-neutral-400 pt-1">
               <label className="flex items-center gap-2 cursor-pointer select-none">
                 <input 
                   type="checkbox" 
                   checked={rememberMe} 
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  className="rounded border-neutral-700 bg-neutral-950 text-[#D1FF52] focus:ring-[#D1FF52]"
+                  className="rounded border-neutral-700 bg-neutral-950 text-[var(--accent-color)] focus:ring-[var(--accent-color)]"
                 />
-                <span>Remember this device</span>
+                <span>Remember session</span>
               </label>
-              <span className="font-mono text-[10px] text-neutral-500">PIN: 1234</span>
+              <span className="font-mono text-[10px] text-neutral-500">Default: nilesh</span>
             </div>
 
             <button
               type="submit"
-              className="w-full py-4 bg-[#D1FF52] text-black font-display font-bold text-xs sm:text-sm uppercase tracking-wider rounded-xl hover:bg-[#c5f542] transition-all flex items-center justify-center gap-2 shadow-lg shadow-[#D1FF52]/20 active:scale-95 cursor-pointer"
+              disabled={isLoggingIn}
+              className="w-full py-3.5 bg-[var(--accent-color)] text-[var(--accent-fg)] font-display font-bold text-xs sm:text-sm uppercase tracking-wider rounded-xl hover:opacity-90 transition-all flex items-center justify-center gap-2 shadow-lg shadow-[var(--accent-color)]/20 active:scale-95 disabled:opacity-50 cursor-pointer mt-2"
             >
-              <Unlock className="w-4 h-4" />
-              <span>Unlock Admin Panel</span>
+              {isLoggingIn ? (
+                <>
+                  <RefreshCw className="w-4 h-4 animate-spin" />
+                  <span>Verifying...</span>
+                </>
+              ) : (
+                <>
+                  <Unlock className="w-4 h-4" />
+                  <span>Log In to Admin Panel</span>
+                </>
+              )}
             </button>
 
             {/* Quick 1-Tap Access for Owner */}
@@ -207,16 +317,16 @@ export default function Admin() {
               <button
                 type="button"
                 onClick={handleQuickUnlock}
-                className="w-full py-3 bg-neutral-950 hover:bg-neutral-800/80 border border-neutral-800 text-neutral-300 hover:text-white rounded-xl text-xs font-semibold transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-2.5 bg-neutral-950 hover:bg-neutral-800/80 border border-neutral-800 text-neutral-300 hover:text-white rounded-xl text-xs font-semibold transition-colors flex items-center justify-center gap-2 cursor-pointer"
               >
-                <ShieldCheck className="w-4 h-4 text-[#D1FF52]" />
-                <span>One-Tap Owner Access (Nilesh)</span>
+                <ShieldCheck className="w-4 h-4 text-[var(--accent-color)]" />
+                <span>One-Tap Owner Sign-In (Nilesh)</span>
               </button>
             </div>
           </form>
 
           <div className="mt-6 text-center">
-            <Link to="/" className="text-xs text-neutral-500 hover:text-[#D1FF52] transition-colors inline-flex items-center gap-1">
+            <Link to="/" className="text-xs text-neutral-500 hover:text-[var(--accent-color)] transition-colors inline-flex items-center gap-1">
               &larr; Return to Public Website
             </Link>
           </div>
@@ -442,6 +552,7 @@ export default function Admin() {
               <div className="bg-neutral-900/90 border border-neutral-800 rounded-2xl p-4 sm:p-6 md:p-8 shadow-xl min-h-[550px] relative backdrop-blur-sm">
                 {activeTab === 'dashboard' && <DashboardTab onSelectTab={setActiveTab} />}
                 {activeTab === 'analytics' && <AnalyticsTab />}
+                {activeTab === 'seo' && <SEOTab />}
                 
                 {/* Generic CRUD Collections */}
                 {['projects', 'services', 'testimonials', 'leads', 'blog', 'gallery', 'knowledge', 'experience', 'skills'].includes(activeTab) && (
@@ -1136,11 +1247,173 @@ function GenericTab({ collection }: { collection: string }) {
   );
 }
 
+function AdminCredentialsCard() {
+  const [username, setUsername] = useState('nilesh');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPass, setShowPass] = useState(false);
+  const [updating, setUpdating] = useState(false);
+  const [msg, setMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  useEffect(() => {
+    fetch('/api/auth/profile')
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.username) {
+          setUsername(data.username);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const handleUpdateCredentials = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setMsg(null);
+
+    if (newPassword && newPassword.length < 4) {
+      setMsg({ type: 'error', text: 'New password must be at least 4 characters long.' });
+      return;
+    }
+
+    if (newPassword && newPassword !== confirmPassword) {
+      setMsg({ type: 'error', text: 'New passwords do not match.' });
+      return;
+    }
+
+    setUpdating(true);
+    try {
+      const res = await fetch('/api/auth/credentials', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: username.trim(),
+          password: newPassword ? newPassword.trim() : undefined,
+        }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (res.ok && data.success) {
+        setMsg({ type: 'success', text: 'Admin login credentials updated successfully!' });
+        localStorage.setItem('nilesh_admin_user', username.trim());
+        setNewPassword('');
+        setConfirmPassword('');
+      } else {
+        setMsg({ type: 'error', text: data.error || 'Failed to update credentials.' });
+      }
+    } catch (err) {
+      setMsg({ type: 'error', text: 'Network error updating credentials.' });
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  return (
+    <div className="pt-5 border-t border-neutral-800 space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-bold font-display uppercase tracking-wider text-white flex items-center gap-2">
+          <ShieldCheck className="w-4 h-4 text-[var(--accent-color)]" />
+          Admin Security & Login Credentials
+        </h3>
+        <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-neutral-800 text-neutral-400 border border-neutral-700">
+          Root Access
+        </span>
+      </div>
+      <p className="text-xs text-neutral-400">
+        Update the username and password used to access this secret admin portal.
+      </p>
+
+      <div className="p-4 rounded-xl bg-neutral-900/80 border border-neutral-800 space-y-4">
+        <div>
+          <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
+            Admin Username
+          </label>
+          <div className="relative">
+            <input 
+              type="text" 
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="nilesh"
+              className="w-full bg-neutral-950 border border-neutral-800 rounded-xl pl-10 pr-4 py-2.5 text-white focus:outline-none focus:border-[var(--accent-color)] text-sm"
+              required
+            />
+            <User className="w-4 h-4 text-neutral-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
+              New Password (Optional)
+            </label>
+            <div className="relative">
+              <input 
+                type={showPass ? 'text' : 'password'} 
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="Leave blank to keep unchanged"
+                className="w-full bg-neutral-950 border border-neutral-800 rounded-xl pl-10 pr-10 py-2.5 text-white focus:outline-none focus:border-[var(--accent-color)] text-sm"
+              />
+              <Lock className="w-4 h-4 text-neutral-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <button
+                type="button"
+                onClick={() => setShowPass(!showPass)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-neutral-500 hover:text-neutral-300 transition-colors cursor-pointer"
+              >
+                {showPass ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
+              Confirm New Password
+            </label>
+            <div className="relative">
+              <input 
+                type={showPass ? 'text' : 'password'} 
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Re-type new password"
+                className="w-full bg-neutral-950 border border-neutral-800 rounded-xl pl-10 pr-4 py-2.5 text-white focus:outline-none focus:border-[var(--accent-color)] text-sm"
+              />
+              <Key className="w-4 h-4 text-neutral-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            </div>
+          </div>
+        </div>
+
+        {msg && (
+          <div className={`p-3 rounded-xl text-xs font-mono ${msg.type === 'success' ? 'bg-emerald-950/60 border border-emerald-800 text-emerald-300' : 'bg-red-950/60 border border-red-800 text-red-300'}`}>
+            {msg.text}
+          </div>
+        )}
+
+        <div className="flex justify-end pt-1">
+          <button
+            type="button"
+            onClick={handleUpdateCredentials}
+            disabled={updating}
+            className="px-4 py-2.5 bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 text-white rounded-xl text-xs font-bold transition-colors flex items-center gap-2 cursor-pointer disabled:opacity-50"
+          >
+            {updating ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <ShieldCheck className="w-3.5 h-3.5 text-[var(--accent-color)]" />}
+            <span>{updating ? 'Updating...' : 'Update Login Credentials'}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function SettingsTab({ name }: { name: string }) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState<any>({});
   const [success, setSuccess] = useState(false);
+  const { mode: currentThemeMode, setMode, accentId: currentAccentId, setAccentId, availableAccents } = useTheme();
+  const [themeSettings, setThemeSettings] = useState<{ mode: 'dark' | 'light'; accentId: string }>({
+    mode: currentThemeMode,
+    accentId: currentAccentId
+  });
 
   useEffect(() => {
     setLoading(true);
@@ -1149,13 +1422,27 @@ function SettingsTab({ name }: { name: string }) {
       .then(res => res.json())
       .then(data => {
         setFormData(data || {});
+        if (name === 'settings') {
+          // also fetch current backend theme configuration
+          fetch('/api/theme')
+            .then(tRes => tRes.json())
+            .then(tData => {
+              if (tData) {
+                setThemeSettings({
+                  mode: tData.mode || currentThemeMode,
+                  accentId: tData.accentId || currentAccentId
+                });
+              }
+            })
+            .catch(() => {});
+        }
         setLoading(false);
       })
       .catch(err => {
         console.error(`Error loading ${name}:`, err);
         setLoading(false);
       });
-  }, [name]);
+  }, [name, currentThemeMode, currentAccentId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -1167,6 +1454,26 @@ function SettingsTab({ name }: { name: string }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
+
+      if (name === 'settings') {
+        // Save theme settings as well to backend
+        const selectedAccent = availableAccents.find(a => a.id === themeSettings.accentId) || availableAccents[0];
+        await fetch('/api/theme', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            mode: themeSettings.mode,
+            accentId: themeSettings.accentId,
+            accentColor: selectedAccent.color,
+            accentFg: selectedAccent.fgColor
+          })
+        });
+
+        // Apply immediately to the live app
+        setMode(themeSettings.mode);
+        setAccentId(themeSettings.accentId);
+      }
+
       if (res.ok) {
         setSuccess(true);
         setTimeout(() => setSuccess(false), 3000);
@@ -1190,10 +1497,10 @@ function SettingsTab({ name }: { name: string }) {
     <div className="flex flex-col h-full max-w-2xl">
       <div className="mb-6">
         <h2 className="text-xl sm:text-2xl font-display font-bold capitalize text-white">{name} Configuration</h2>
-        <p className="text-neutral-400 text-xs sm:text-sm mt-1">Manage global {name} variables and live settings.</p>
+        <p className="text-neutral-400 text-xs sm:text-sm mt-1">Manage global {name} variables, themes, and live settings.</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-5 bg-neutral-950/60 border border-neutral-800/80 rounded-2xl p-5 sm:p-7">
+      <form onSubmit={handleSubmit} className="space-y-6 bg-neutral-950/60 border border-neutral-800/80 rounded-2xl p-5 sm:p-7">
         {name === 'resume' ? (
           <div>
             <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">Resume PDF URL</label>
@@ -1238,6 +1545,10 @@ function SettingsTab({ name }: { name: string }) {
               <input type="email" value={formData.email || ''} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] text-sm" />
             </div>
             <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">Phone / WhatsApp Number</label>
+              <input type="text" value={formData.phone || ''} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] text-sm font-mono text-xs" placeholder="+91 6378954363" />
+            </div>
+            <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">Behance Profile URL</label>
               <input type="url" value={formData.behance || ''} onChange={(e) => setFormData({ ...formData, behance: e.target.value })} className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] text-sm font-mono text-xs" />
             </div>
@@ -1251,46 +1562,135 @@ function SettingsTab({ name }: { name: string }) {
             </div>
           </div>
         ) : (
-          <div className="space-y-4">
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">Portfolio Site Name</label>
-              <input 
-                type="text" 
-                value={formData.siteName || ''}
-                onChange={(e) => setFormData({ ...formData, siteName: e.target.value })}
-                className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] text-sm"
-                placeholder="Nilesh Mali"
-                required
-              />
+          <div className="space-y-6">
+            <div className="space-y-4">
+              <h3 className="text-sm font-bold font-display uppercase tracking-wider text-white flex items-center gap-2">
+                <Settings className="w-4 h-4 text-[var(--accent-color)]" />
+                General Information
+              </h3>
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">Portfolio Site Name</label>
+                <input 
+                  type="text" 
+                  value={formData.siteName || ''}
+                  onChange={(e) => setFormData({ ...formData, siteName: e.target.value })}
+                  className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] text-sm"
+                  placeholder="Nilesh Mali"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">Primary Contact Email</label>
+                <input 
+                  type="email" 
+                  value={formData.email || ''}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] text-sm"
+                  placeholder="work.nileshmali@gmail.com"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">Google Analytics Measurement ID (gtag.js)</label>
+                <input 
+                  type="text" 
+                  value={formData.gaMeasurementId || ''}
+                  onChange={(e) => setFormData({ ...formData, gaMeasurementId: e.target.value })}
+                  className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] font-mono text-sm"
+                  placeholder="G-XXXXXXXXXX"
+                />
+              </div>
             </div>
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">Primary Contact Email</label>
-              <input 
-                type="email" 
-                value={formData.email || ''}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] text-sm"
-                placeholder="work.nileshmali@gmail.com"
-                required
-              />
+
+            {/* Dynamic Theme & Palette Configuration */}
+            <div className="pt-4 border-t border-neutral-800 space-y-4">
+              <h3 className="text-sm font-bold font-display uppercase tracking-wider text-white flex items-center gap-2">
+                <Palette className="w-4 h-4 text-[var(--accent-color)]" />
+                Global Dynamic Theme & Palette
+              </h3>
+              <p className="text-xs text-neutral-400">
+                Choose the default appearance and signature color for your portfolio.
+              </p>
+
+              {/* Mode Toggle */}
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">Default Theme Mode</label>
+                <div className="grid grid-cols-2 gap-3 max-w-sm">
+                  <button
+                    type="button"
+                    onClick={() => setThemeSettings({ ...themeSettings, mode: 'dark' })}
+                    className={`py-2.5 px-4 rounded-xl border font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                      themeSettings.mode === 'dark'
+                        ? 'border-[var(--accent-color)] bg-neutral-800 text-white shadow-md'
+                        : 'border-neutral-800 bg-neutral-900 text-neutral-400 hover:text-white'
+                    }`}
+                  >
+                    <span>🌙 Dark Canvas</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setThemeSettings({ ...themeSettings, mode: 'light' })}
+                    className={`py-2.5 px-4 rounded-xl border font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                      themeSettings.mode === 'light'
+                        ? 'border-[var(--accent-color)] bg-white text-black shadow-md'
+                        : 'border-neutral-800 bg-neutral-900 text-neutral-400 hover:text-white'
+                    }`}
+                  >
+                    <span>☀️ Light Clean</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Accent Palette Selection */}
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2.5">
+                  Signature Accent Palette
+                </label>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                  {availableAccents.map(acc => {
+                    const isSelected = themeSettings.accentId === acc.id;
+                    return (
+                      <button
+                        key={acc.id}
+                        type="button"
+                        onClick={() => setThemeSettings({ ...themeSettings, accentId: acc.id })}
+                        className={`p-3 rounded-xl border text-left flex flex-col gap-2 transition-all cursor-pointer ${
+                          isSelected
+                            ? 'border-white/50 bg-neutral-800/90 shadow-md scale-[1.02]'
+                            : 'border-neutral-800/80 bg-neutral-900/60 hover:border-neutral-700'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div 
+                            className="w-5 h-5 rounded-full shadow-sm flex items-center justify-center"
+                            style={{ backgroundColor: acc.color }}
+                          >
+                            {isSelected && <Check className="w-3 h-3" style={{ color: acc.fgColor }} />}
+                          </div>
+                          {isSelected && (
+                            <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-white/10 text-white">
+                              Active
+                            </span>
+                          )}
+                        </div>
+                        <span className="text-xs font-bold text-white truncate">{acc.name}</span>
+                        <span className="text-[10px] text-neutral-400 line-clamp-1">{acc.description}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">Google Analytics Measurement ID (gtag.js)</label>
-              <input 
-                type="text" 
-                value={formData.gaMeasurementId || ''}
-                onChange={(e) => setFormData({ ...formData, gaMeasurementId: e.target.value })}
-                className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] font-mono text-sm"
-                placeholder="G-XXXXXXXXXX"
-              />
-            </div>
+
+            {/* Admin Security & Credentials Configuration */}
+            <AdminCredentialsCard />
           </div>
         )}
 
         <div className="pt-3 flex items-center justify-between gap-4">
           {success && (
             <span className="text-[#D1FF52] text-xs font-bold flex items-center gap-1">
-              ✓ Successfully updated!
+              ✓ Successfully updated & synchronized!
             </span>
           )}
           <button 

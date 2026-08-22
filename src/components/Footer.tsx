@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Instagram, Linkedin, Twitter, Youtube, ArrowRight, Mail } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Instagram, Linkedin, Twitter, Youtube, ArrowRight, Mail, Lock } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 
 export function Footer() {
   const [resumeUrl, setResumeUrl] = useState<string>('https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf');
+  const [secretClicks, setSecretClicks] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch('/api/resume')
@@ -15,6 +17,15 @@ export function Footer() {
       })
       .catch(err => console.error('Error fetching resume in footer:', err));
   }, []);
+
+  const handleSecretTrigger = () => {
+    const next = secretClicks + 1;
+    setSecretClicks(next);
+    if (next >= 3) {
+      setSecretClicks(0);
+      navigate('/admin');
+    }
+  };
 
   return (
     <footer className="mt-20 w-full flex flex-col items-center">
@@ -93,15 +104,11 @@ export function Footer() {
           {/* Quick Links */}
           <div className="flex flex-col gap-4">
             <h3 className="font-display font-bold text-xs uppercase tracking-[0.2em] text-white mb-2">Quick Links</h3>
-            <Link to="/" className="text-neutral-400 hover:text-[#D1FF52] font-sans text-sm transition-colors">Home</Link>
-            <Link to="/about" className="text-neutral-400 hover:text-[#D1FF52] font-sans text-sm transition-colors">About</Link>
-            <a href="/#projects" className="text-neutral-400 hover:text-[#D1FF52] font-sans text-sm transition-colors">Works</a>
-            <Link to="/services" className="text-neutral-400 hover:text-[#D1FF52] font-sans text-sm transition-colors">Services</Link>
-            <Link to="/contact" className="text-neutral-400 hover:text-[#D1FF52] font-sans text-sm transition-colors">Contact</Link>
-            <Link to="/admin" className="text-neutral-500 hover:text-[#D1FF52] font-sans text-xs flex items-center gap-1.5 transition-colors pt-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#D1FF52]/60"></span>
-              <span>Admin Access</span>
-            </Link>
+            <Link to="/" className="text-neutral-400 hover:text-[var(--accent-color)] font-sans text-sm transition-colors">Home</Link>
+            <Link to="/about" className="text-neutral-400 hover:text-[var(--accent-color)] font-sans text-sm transition-colors">About</Link>
+            <a href="/#projects" className="text-neutral-400 hover:text-[var(--accent-color)] font-sans text-sm transition-colors">Works</a>
+            <Link to="/services" className="text-neutral-400 hover:text-[var(--accent-color)] font-sans text-sm transition-colors">Services</Link>
+            <Link to="/contact" className="text-neutral-400 hover:text-[var(--accent-color)] font-sans text-sm transition-colors">Contact</Link>
           </div>
 
           {/* Contact & Socials */}
@@ -135,8 +142,37 @@ export function Footer() {
         </div>
 
         <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-neutral-900 flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-sans text-neutral-500">
-          <p>&copy; {new Date().getFullYear()} Nilesh Mali. All rights reserved.</p>
-          <p className="tracking-widest uppercase">Built with Passion</p>
+          <p className="flex items-center gap-1.5 select-none">
+            <span>&copy; {new Date().getFullYear()} Nilesh Mali.</span>
+            {/* Discrete hidden access point: subtle dot trigger */}
+            <button 
+              type="button"
+              onClick={() => navigate('/admin')}
+              className="inline-block w-1.5 h-1.5 rounded-full bg-neutral-800 hover:bg-[var(--accent-color)] transition-colors cursor-pointer"
+              title="System Node"
+              aria-label="Admin Node"
+            />
+            <span>All rights reserved.</span>
+          </p>
+          <div className="flex items-center gap-3">
+            <button 
+              type="button"
+              onClick={handleSecretTrigger}
+              className="tracking-widest uppercase text-[11px] text-neutral-500 hover:text-neutral-400 transition-colors select-none cursor-pointer"
+              title="Press 3 times for Admin"
+            >
+              Built with Passion
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate('/admin')}
+              className="opacity-0 hover:opacity-40 transition-opacity p-1 text-neutral-600 hover:text-neutral-400 cursor-pointer"
+              title="Admin Portal"
+              aria-label="Admin Portal"
+            >
+              <Lock className="w-3 h-3" />
+            </button>
+          </div>
         </div>
       </div>
     </footer>

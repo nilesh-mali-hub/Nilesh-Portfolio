@@ -1,13 +1,15 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Link } from 'react-router-dom';
-import { Menu, X, ArrowUpRight, Github, Linkedin, MessageCircle, Sun, Moon } from 'lucide-react';
-import { useTheme } from '../context/ThemeContext';
+import { Link, useNavigate } from 'react-router-dom';
+import { X, ArrowUpRight, Linkedin, MessageCircle } from 'lucide-react';
 import { HeaderProfileAvatar } from './HeaderProfileAvatar';
+import { ThemeSelector } from './ThemeSelector';
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const { theme, toggleTheme } = useTheme();
+  const clickCountRef = useRef(0);
+  const timerRef = useRef<any>(null);
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -17,17 +19,33 @@ export function Header() {
     setIsOpen(false);
   };
 
+  const handleLogoSecretClick = (e: React.MouseEvent) => {
+    clickCountRef.current += 1;
+    if (timerRef.current) clearTimeout(timerRef.current);
+    
+    if (clickCountRef.current >= 3) {
+      e.preventDefault();
+      clickCountRef.current = 0;
+      closeMenu();
+      navigate('/admin');
+    } else {
+      timerRef.current = setTimeout(() => {
+        clickCountRef.current = 0;
+      }, 1200);
+    }
+  };
+
   return (
     <>
       <header className="fixed top-0 left-0 w-full z-[100] bg-[#111111] border-b border-neutral-900 transition-all duration-300 shadow-sm">
         <div className="flex justify-between items-center py-5 px-6 md:px-12 w-full max-w-[1400px] mx-auto">
-          <Link to="/" className="flex items-center hover:opacity-95 transition-opacity" onClick={closeMenu}>
+          <Link to="/" className="flex items-center hover:opacity-95 transition-opacity select-none" onClick={handleLogoSecretClick}>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="flex items-center gap-3">
               <HeaderProfileAvatar
                 avatarUrl="https://res.cloudinary.com/dfknctbhw/image/upload/v1784198733/nm-logo_achjmg.png"
                 alt="Nilesh Mali"
                 sizeClassName="w-8 h-8 md:w-10 md:h-10"
-                behindGlowColor="rgba(209, 255, 82, 0.55)"
+                behindGlowColor="var(--accent-glow)"
               />
               <div className="flex items-center font-display font-black text-[18px] md:text-[22px] uppercase text-white tracking-tight">
                 <span>Nilesh Mali</span>
@@ -42,28 +60,14 @@ export function Header() {
             <Link to="/services" className="hover:text-[#D1FF52] transition-colors">Services</Link>
             <Link to="/contact" className="px-6 py-3 bg-[#D1FF52] text-black rounded-[0.25rem] hover:bg-[#c5f542] transition-all font-display font-bold text-xs uppercase tracking-wider ml-4">Contact</Link>
             
-            {/* Desktop Theme Switcher */}
-            <button
-              onClick={toggleTheme}
-              aria-label="Toggle Theme"
-              className="w-10 h-10 rounded-full border border-neutral-800 flex items-center justify-center text-neutral-400 hover:text-[#D1FF52] hover:border-neutral-700 transition-colors bg-neutral-900/40 relative overflow-hidden active:scale-95 cursor-pointer ml-2"
-            >
-              <Sun className={`w-4 h-4 transition-all duration-500 absolute ${theme === 'light' ? 'rotate-0 scale-100 opacity-100' : 'rotate-90 scale-0 opacity-0'}`} />
-              <Moon className={`w-4 h-4 transition-all duration-500 absolute ${theme === 'dark' ? 'rotate-0 scale-100 opacity-100' : '-rotate-90 scale-0 opacity-0'}`} />
-            </button>
+            {/* Desktop Dynamic Theme & Accent Selector */}
+            <ThemeSelector className="ml-2" />
           </motion.nav>
 
           {/* Right Section for Mobile */}
           <div className="flex md:hidden items-center gap-3">
             {/* Mobile Theme Switcher */}
-            <button
-              onClick={toggleTheme}
-              aria-label="Toggle Theme"
-              className="w-9 h-9 rounded-full border border-neutral-800 flex items-center justify-center text-neutral-400 hover:text-[#D1FF52] hover:border-neutral-700 transition-colors bg-neutral-900/40 relative overflow-hidden active:scale-95 cursor-pointer"
-            >
-              <Sun className={`w-3.5 h-3.5 transition-all duration-500 absolute ${theme === 'light' ? 'rotate-0 scale-100 opacity-100' : 'rotate-90 scale-0 opacity-0'}`} />
-              <Moon className={`w-3.5 h-3.5 transition-all duration-500 absolute ${theme === 'dark' ? 'rotate-0 scale-100 opacity-100' : '-rotate-90 scale-0 opacity-0'}`} />
-            </button>
+            <ThemeSelector />
 
             {/* Mobile Nav toggle button */}
             <motion.button 
@@ -140,26 +144,6 @@ export function Header() {
                   <ArrowUpRight className="w-6 h-6 text-[#D1FF52]" />
                 </Link>
               </nav>
-
-              {/* Mobile Admin Portal Access */}
-              <div className="pt-2">
-                <Link
-                  to="/admin"
-                  onClick={closeMenu}
-                  className="flex items-center justify-between p-3.5 rounded-2xl bg-neutral-900/90 border border-neutral-800 hover:border-[#D1FF52]/50 text-neutral-300 hover:text-white transition-all group"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-xl bg-black/80 border border-neutral-800 flex items-center justify-center text-[#D1FF52] group-hover:scale-105 transition-transform">
-                      <span className="text-xs font-mono font-bold">⚡</span>
-                    </div>
-                    <div>
-                      <p className="text-xs font-display font-bold uppercase tracking-wider text-white group-hover:text-[#D1FF52] transition-colors">Admin Dashboard</p>
-                      <p className="text-[10px] text-neutral-500 font-sans">Manage content, leads & analytics</p>
-                    </div>
-                  </div>
-                  <span className="text-[11px] font-mono text-neutral-500 group-hover:text-[#D1FF52] transition-colors">&rarr;</span>
-                </Link>
-              </div>
             </div>
 
             <div className="flex flex-col gap-6 pt-12 border-t border-neutral-900 mt-auto">

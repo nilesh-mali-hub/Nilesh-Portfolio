@@ -2,11 +2,13 @@
 User-agent: *
 Allow: /
 Allow: /about
+Allow: /services
 Allow: /contact
 
-# Prevent search engines from crawling the admin dashboard
+# Prevent search engines from crawling administrative and internal API paths
 Disallow: /admin
 Disallow: /api/
 
 # Sitemap location
 Sitemap: https://nileshmali.com/sitemap.xml
+
