@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
-import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { SectionHeading } from './SectionHeading';
-import { ServiceCard } from './ServiceCard';
+import GlassIcons, { GlassIconItem } from './GlassIcons';
 import * as LucideIcons from 'lucide-react';
-import { PenTool, Megaphone, Globe, BookOpen, Zap, Video, FileText, Palette, ArrowRight } from 'lucide-react';
+import { PenTool, Megaphone, Globe, BookOpen, Zap, Video, FileText, ArrowRight } from 'lucide-react';
 import { defaultData } from '../data/defaultData';
 
 interface Service {
@@ -13,17 +12,6 @@ interface Service {
   description: string;
   image: string;
 }
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.1
-    }
-  }
-};
 
 // Map string names to Lucide components
 const IconMap: Record<string, any> = {
@@ -34,6 +22,8 @@ const IconMap: Record<string, any> = {
   Zap,
   Video
 };
+
+const serviceColors = ['lime', 'cyan', 'indigo', 'orange', 'yellow', 'purple', 'green', 'rose'];
 
 export function ServicesSection() {
   const [services, setServices] = useState<Service[]>(defaultData.services);
@@ -56,6 +46,20 @@ export function ServicesSection() {
     return <IconComponent className="w-6 h-6" />;
   };
 
+  const glassItems: GlassIconItem[] = services.length > 0 ? services.map((service, index) => ({
+    icon: renderIcon(service.image),
+    color: serviceColors[index % serviceColors.length],
+    title: service.title,
+    description: service.description,
+  })) : [
+    { icon: <PenTool className="w-6 h-6" />, color: 'lime', title: "Brand Identity", description: "Crafting distinctive and memorable visual identities that capture the essence of your business." },
+    { icon: <Megaphone className="w-6 h-6" />, color: 'cyan', title: "Social Media Design", description: "Engaging social media graphics and templates tailored for your digital presence." },
+    { icon: <Globe className="w-6 h-6" />, color: 'indigo', title: "Website UI", description: "Designing intuitive, user-centric interfaces for web that deliver seamless digital experiences." },
+    { icon: <BookOpen className="w-6 h-6" />, color: 'orange', title: "Brochure", description: "Professional and elegant print and digital brochure designs to showcase your products." },
+    { icon: <Zap className="w-6 h-6" />, color: 'yellow', title: "Motion Graphics", description: "Bringing ideas to life through dynamic and captivating motion graphics." },
+    { icon: <Video className="w-6 h-6" />, color: 'rose', title: "Video Editing", description: "Compelling video edits that tell your story and engage your audience." }
+  ];
+
   return (
     <div className="mt-28" id="services">
       <SectionHeading delay={0.1}>Services</SectionHeading>
@@ -65,32 +69,13 @@ export function ServicesSection() {
           <div className="w-8 h-8 border-4 border-neutral-800 border-t-[#D1FF52] rounded-full animate-spin"></div>
         </div>
       ) : (
-        <motion.div 
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8"
-        >
-          {services.length > 0 ? services.map(service => (
-            <ServiceCard 
-              key={service.id}
-              title={service.title}
-              description={service.description}
-              icon={renderIcon(service.image)}
-              staggered={true}
-            />
-          )) : (
-            <>
-              <ServiceCard title="Brand Identity" description="Crafting distinctive and memorable visual identities that capture the essence of your business." icon={<PenTool className="w-6 h-6" />} staggered={true} />
-              <ServiceCard title="Social Media Design" description="Engaging social media graphics and templates tailored for your digital presence." icon={<Megaphone className="w-6 h-6" />} staggered={true} />
-              <ServiceCard title="Website UI" description="Designing intuitive, user-centric interfaces for web that deliver seamless digital experiences." icon={<Globe className="w-6 h-6" />} staggered={true} />
-              <ServiceCard title="Brochure" description="Professional and elegant print and digital brochure designs to showcase your products." icon={<BookOpen className="w-6 h-6" />} staggered={true} />
-              <ServiceCard title="Motion Graphics" description="Bringing ideas to life through dynamic and captivating motion graphics." icon={<Zap className="w-6 h-6" />} staggered={true} />
-              <ServiceCard title="Video Editing" description="Compelling video edits that tell your story and engage your audience." icon={<Video className="w-6 h-6" />} staggered={true} />
-            </>
-          )}
-        </motion.div>
+        <div className="mt-8 relative">
+          <GlassIcons 
+            items={glassItems} 
+            colorful={true}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+          />
+        </div>
       )}
 
       {/* Link to dedicated Services Page */}
@@ -106,3 +91,4 @@ export function ServicesSection() {
     </div>
   );
 }
+

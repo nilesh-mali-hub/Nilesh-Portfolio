@@ -54,10 +54,10 @@ export function Header() {
           </Link>
           
           {/* Desktop Navigation */}
-          <motion.nav initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="hidden md:flex items-center gap-8 text-[11px] font-bold uppercase tracking-[0.1em] text-white">
-            <Link to="/about" className="hover:text-[#D1FF52] transition-colors">About</Link>
-            <a href="/#projects" className="text-[#D1FF52] hover:text-white transition-colors">Works</a>
-            <Link to="/services" className="hover:text-[#D1FF52] transition-colors">Services</Link>
+          <motion.nav initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="hidden md:flex items-center gap-8 text-[11px] font-bold uppercase tracking-[0.1em]">
+            <Link to="/about" className="text-white hover:text-[#D1FF52] transition-colors">About</Link>
+            <a href="/#projects" className="text-white hover:text-[#D1FF52] transition-colors">Works</a>
+            <Link to="/services" className="text-white hover:text-[#D1FF52] transition-colors">Services</Link>
             <Link to="/contact" className="px-6 py-3 bg-[#D1FF52] text-black rounded-[0.25rem] hover:bg-[#c5f542] transition-all font-display font-bold text-xs uppercase tracking-wider ml-4">Contact</Link>
             
             {/* Desktop Dynamic Theme & Accent Selector */}

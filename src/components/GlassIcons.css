@@ -1,0 +1,126 @@
+/* GlassIcons.css - 3D Multi-Layered Frosted Glass Effect */
+
+.glass-icons-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+  perspective: 1000px;
+}
+
+.glass-icon-card {
+  position: relative;
+  background: rgba(23, 23, 23, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1.75rem;
+  padding: 2rem;
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Subtle glass gradient sheen */
+.glass-icon-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.02) 40%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 1;
+  transition: opacity 0.4s ease;
+}
+
+/* Light specular diagonal shine effect on hover */
+.glass-icon-card::after {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background: linear-gradient(
+    45deg,
+    transparent 45%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(209, 255, 82, 0.15) 52%,
+    transparent 58%
+  );
+  transform: rotate(-45deg);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease, transform 0.8s ease;
+  z-index: 2;
+}
+
+.glass-icon-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  border-color: rgba(209, 255, 82, 0.35);
+  box-shadow: 
+    0 20px 40px -15px rgba(0, 0, 0, 0.7),
+    0 0 25px -5px var(--glow-color, rgba(209, 255, 82, 0.18)),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.glass-icon-card:hover::after {
+  opacity: 1;
+  transform: rotate(-45deg) translate(20%, 20%);
+}
+
+/* 3D Glass Icon Bubble */
+.glass-icon-bubble {
+  position: relative;
+  width: 3.75rem;
+  height: 3.75rem;
+  border-radius: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03));
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 
+    0 8px 16px -4px rgba(0, 0, 0, 0.5),
+    inset 0 1px 1px rgba(255, 255, 255, 0.25);
+  margin-bottom: 1.5rem;
+  transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 3;
+}
+
+.glass-icon-card:hover .glass-icon-bubble {
+  transform: scale(1.08) rotate(3deg);
+  background: var(--bubble-bg, rgba(209, 255, 82, 0.15));
+  border-color: var(--bubble-border, rgba(209, 255, 82, 0.5));
+  color: var(--bubble-color, #D1FF52);
+  box-shadow: 
+    0 12px 24px -6px var(--glow-color, rgba(209, 255, 82, 0.3)),
+    inset 0 1px 2px rgba(255, 255, 255, 0.4);
+}
+
+/* Ambient glow spot behind the icon */
+.glass-icon-glow {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.15;
+  pointer-events: none;
+  top: -20px;
+  left: -20px;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  z-index: 0;
+}
+
+.glass-icon-card:hover .glass-icon-glow {
+  opacity: 0.35;
+  transform: scale(1.2);
+}
