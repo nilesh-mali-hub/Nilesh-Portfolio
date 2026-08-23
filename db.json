@@ -1,5 +1,89 @@
 {
-  "projects": [],
+  "hero": {
+    "title": "Graphic Designer",
+    "subtitle": "Creative graphic designer blending imagination with strategy. I specialize in branding, digital experiences, and visual storytelling that elevate brands and engage audiences across all platforms."
+  },
+  "experience": [
+    {
+      "id": "exp-1",
+      "company": "Design Studio X",
+      "role": "Senior Graphic Designer",
+      "duration": "2020 - Present",
+      "description": "Led branding and UI/UX design for premium clients.",
+      "icon": "graduation-cap"
+    },
+    {
+      "id": "exp-2",
+      "company": "Creative Agency Co.",
+      "role": "Visual Designer",
+      "duration": "2018 - 2020",
+      "description": "Developed marketing campaigns and brand guidelines.",
+      "icon": "briefcase"
+    }
+  ],
+  "skills": [
+    {
+      "id": "sk-1",
+      "name": "Ps",
+      "icon": "Ps"
+    },
+    {
+      "id": "sk-2",
+      "name": "Ai",
+      "icon": "Ai"
+    },
+    {
+      "id": "sk-3",
+      "name": "Xd",
+      "icon": "Xd"
+    },
+    {
+      "id": "sk-4",
+      "name": "Id",
+      "icon": "Id"
+    },
+    {
+      "id": "sk-5",
+      "name": "Figma",
+      "icon": "Figma"
+    },
+    {
+      "id": "sk-6",
+      "name": "Pr",
+      "icon": "Scissors"
+    },
+    {
+      "id": "sk-7",
+      "name": "Ae",
+      "icon": "Presentation"
+    }
+  ],
+  "projects": [
+    {
+      "id": "proj-1",
+      "title": "Aether OS",
+      "description": "UI/UX Concept & Design System",
+      "image": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop",
+      "link": "https://behance.net/nileshmali25",
+      "tagline": "UI/UX Concept"
+    },
+    {
+      "id": "proj-2",
+      "title": "Lumina Brand",
+      "description": "Minimalist Identity System & Guidelines",
+      "image": "https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?q=80&w=800&auto=format&fit=crop",
+      "link": "https://behance.net/nileshmali25",
+      "tagline": "Brand Identity"
+    },
+    {
+      "id": "proj-3",
+      "title": "Nexus 3D",
+      "description": "Visual Campaign & Motion Graphics",
+      "image": "https://images.unsplash.com/photo-1633167606207-d840b5070fc2?q=80&w=800&auto=format&fit=crop",
+      "link": "https://behance.net/nileshmali25",
+      "tagline": "3D Motion"
+    }
+  ],
   "services": [
     {
       "id": "1784485000004",
@@ -60,13 +144,6 @@
   ],
   "leads": [],
   "blog": [],
-  "resume": {
-    "experience": [],
-    "education": [],
-    "pdfUrl": "https://drive.google.com/file/d/1sN8nxXk8lKggF4AD8B2875OVB9lbcpYz/view?usp=drivesdk"
-  },
-  "gallery": [],
-  "knowledge": [],
   "analytics": [
     {
       "id": "1784482064712",
@@ -743,48 +820,136 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
       "ip": "103.126.140.40",
       "timestamp": "2026-07-20T11:20:36.235Z"
+    },
+    {
+      "id": "1787490245477",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+      "ip": "2402:8100:24ef:8e89:40f3:2d30:3f4c:10b5",
+      "timestamp": "2026-08-23T13:04:05.477Z"
+    },
+    {
+      "id": "1787490245523",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+      "ip": "2402:8100:24ef:8e89:40f3:2d30:3f4c:10b5",
+      "timestamp": "2026-08-23T13:04:05.523Z"
+    },
+    {
+      "id": "1787490313618",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+      "ip": "2402:8100:24ef:8e89:40f3:2d30:3f4c:10b5",
+      "timestamp": "2026-08-23T13:05:13.618Z"
+    },
+    {
+      "id": "1787490313649",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+      "ip": "2402:8100:24ef:8e89:40f3:2d30:3f4c:10b5",
+      "timestamp": "2026-08-23T13:05:13.649Z"
+    },
+    {
+      "id": "1787490420670",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+      "ip": "2402:8100:24ef:8e89:40f3:2d30:3f4c:10b5",
+      "timestamp": "2026-08-23T13:07:00.670Z"
+    },
+    {
+      "id": "1787490565436",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+      "ip": "49.15.119.196",
+      "timestamp": "2026-08-23T13:09:25.436Z"
+    },
+    {
+      "id": "1787490565496",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+      "ip": "49.15.119.196",
+      "timestamp": "2026-08-23T13:09:25.496Z"
     }
   ],
+  "resume": {
+    "experience": [],
+    "education": [],
+    "pdfUrl": "https://drive.google.com/file/d/1sN8nxXk8lKggF4AD8B2875OVB9lbcpYz/view?usp=drivesdk"
+  },
+  "gallery": [],
+  "knowledge": [],
+  "theme": {
+    "mode": "dark",
+    "accentId": "cyber-lime",
+    "accentColor": "#D1FF52",
+    "accentFg": "#000000"
+  },
+  "auth": {
+    "username": "nilesh",
+    "password": "nilesh2025"
+  },
   "settings": {
     "siteName": "Nilesh Mali",
     "email": "work.nileshmali@gmail.com",
     "gaMeasurementId": ""
   },
-  "skills": [
-    {
-      "id": "sk-1",
-      "name": "Ps",
-      "icon": "Ps"
-    },
-    {
-      "id": "sk-2",
-      "name": "Ai",
-      "icon": "Ai"
-    },
-    {
-      "id": "sk-3",
-      "name": "Xd",
-      "icon": "Xd"
-    },
-    {
-      "id": "sk-4",
-      "name": "Id",
-      "icon": "Id"
-    },
-    {
-      "id": "sk-5",
-      "name": "Figma",
-      "icon": "Figma"
-    },
-    {
-      "id": "sk-6",
-      "name": "Pr",
-      "icon": "Scissors"
-    },
-    {
-      "id": "sk-7",
-      "name": "Ae",
-      "icon": "Presentation"
-    }
-  ]
+  "contact": {
+    "email": "work.nileshmali@gmail.com",
+    "phone": "+91 9876543210",
+    "instagram": "https://instagram.com/nileshmali",
+    "linkedin": "https://linkedin.com/in/nileshmali",
+    "behance": "https://behance.net/nileshmali25"
+  },
+  "seo": {
+    "siteTitle": "Nilesh Mali | Graphic Designer, Creative Developer & Brand Identity Specialist",
+    "metaDescription": "Nilesh Mali is a professional Graphic Designer & Creative Developer based in India. Specializing in Brand Identity, Social Media Creatives, UI/UX Design, Custom Websites, and AI-powered Visual Content.",
+    "focusKeywords": "Nilesh Mali, Graphic Designer India, Brand Identity Designer, UI/UX Designer, Creative Developer, Logo Designer, Social Media Graphics, Portfolio Website, Freelance Graphic Designer Rajasthan, Abu Road Designer",
+    "googleVerificationId": "h9kB-6SF_IHCD-DKwQmTWZgGhDdt0mZkXLwjzAEsvFg",
+    "ogImageUrl": "https://res.cloudinary.com/dfknctbhw/image/upload/v1784198733/nm-logo_achjmg.png",
+    "canonicalDomain": "https://nileshmali2026.netlify.app",
+    "authorName": "Nilesh Mali",
+    "isIndexingEnabled": true
+  }
 }

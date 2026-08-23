@@ -78,6 +78,8 @@ export default function App() {
     });
   }, []);
 
+  const heroImages = [hero?.image1, hero?.image2, hero?.image3, ...(hero?.images || [])].filter(Boolean);
+
   return (
     <div className="min-h-screen bg-neutral-950 text-white pt-[100px] pb-20 overflow-x-hidden font-sans relative">
       <SEO 
@@ -193,6 +195,7 @@ export default function App() {
           >
             {/* 3D Tilt Hero Image Card with smooth entrance */}
             <HeroImageCard 
+              images={heroImages.length > 0 ? heroImages : undefined}
               showLightEffects={false}
               behindGlowEnabled={false}
             />
@@ -202,14 +205,14 @@ export default function App() {
           <div className="col-span-1 flex flex-col gap-4 order-3">
             <NileshIntroCard 
               name={hero?.name || "Nilesh Mali"}
-              avatarUrl="https://res.cloudinary.com/dfknctbhw/image/upload/v1784198733/nm-logo_achjmg.png"
-              bio="Creative designer & developer crafting digital experiences that blend aesthetics with functionality."
-              location="AVAILABLE GLOBALLY"
+              avatarUrl={hero?.avatar || contact?.avatar || "https://res.cloudinary.com/dfknctbhw/image/upload/v1784198733/nm-logo_achjmg.png"}
+              bio={hero?.bio || hero?.subtitle || "Creative designer & developer crafting digital experiences that blend aesthetics with functionality."}
+              location={hero?.location || contact?.availability || contact?.location || "AVAILABLE GLOBALLY"}
               staggered={true}
             />
             
             <ExperienceGaugeCard 
-              years="4+"
+              years={hero?.experienceYears || "4+"}
               label="/YEARS EXP."
               staggered={true}
             />
@@ -354,7 +357,7 @@ export default function App() {
           >
             
             {/* Tech Stack */}
-            <TechStackCard className="md:col-start-1 md:row-start-1 md:row-span-3 min-h-[300px] md:min-h-[400px]" />
+            <TechStackCard skills={skills} className="md:col-start-1 md:row-start-1 md:row-span-3 min-h-[300px] md:min-h-[400px]" />
 
             {/* Email */}
             <BentoCard className="md:col-start-2 md:col-span-2 md:row-start-1 p-8 flex items-center justify-between group hover:border-[#D1FF52] transition-colors cursor-pointer" staggered={true}>

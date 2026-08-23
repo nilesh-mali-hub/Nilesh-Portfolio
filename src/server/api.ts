@@ -4,6 +4,20 @@ import { google } from 'googleapis';
 
 const router = Router();
 
+// Helper to safely clean and format Google Service Account private keys from environment variables
+function cleanPrivateKey(raw?: string): string | null {
+  if (!raw || typeof raw !== 'string') return null;
+  let key = raw.trim();
+  if ((key.startsWith('"') && key.endsWith('"')) || (key.startsWith("'") && key.endsWith("'"))) {
+    key = key.slice(1, -1);
+  }
+  key = key.replace(/\\n/g, '\n').replace(/\\r/g, '').trim();
+  if (!key.includes('BEGIN PRIVATE KEY') && !key.includes('BEGIN RSA PRIVATE KEY')) {
+    return null;
+  }
+  return key;
+}
+
 // Helper to convert Google Drive share links into direct, high-performance embed links
 function convertDriveUrl(url: string): string {
   if (!url || typeof url !== 'string') return url;
@@ -295,8 +309,114 @@ collections.forEach(collection => {
   });
 });
 
+// Dedicated Contact form submission endpoint (Website visitor inquiries & leads)
+router.post('/contact', async (req, res) => {
+  try {
+    const { name, whatsapp, message, email } = req.body || {};
+    
+    // If it's an admin profile update (has social fields like behance/instagram/phone etc and no direct visitor inquiry)
+    if (req.body && (req.body.behance || req.body.instagram || req.body.linkedin || req.body.phone) && !message) {
+      const db = await readDB();
+      const processed = convertDriveLinks(req.body);
+      db.contact = { ...(db.contact || {}), ...processed };
+      await writeDB(db);
+      return res.json({ success: true, contact: db.contact });
+    }
+
+    // Visitor Inquiry submission
+    if (!name && !whatsapp && !message) {
+      return res.status(400).json({ error: 'Please enter your name, whatsapp number or message.' });
+    }
+
+    const db = await readDB();
+    if (!db.leads) db.leads = [];
+    
+    const newLead = {
+      id: Date.now().toString(),
+      name: name || 'Website Visitor',
+      whatsapp: whatsapp || '',
+      email: email || '',
+      message: message || '',
+      timestamp: new Date().toISOString()
+    };
+    
+    db.leads.unshift(newLead);
+    await writeDB(db);
+
+    // Try Google Sheets sync in background if credentials exist
+    try {
+      const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL?.trim();
+      const privateKey = cleanPrivateKey(process.env.GOOGLE_PRIVATE_KEY);
+
+      if (clientEmail && privateKey) {
+        const authClient = new google.auth.GoogleAuth({
+          credentials: {
+            client_email: clientEmail,
+            private_key: privateKey
+          },
+          scopes: ['https://www.googleapis.com/auth/spreadsheets']
+        });
+
+        const sheets = google.sheets({ version: 'v4', auth: authClient });
+        const spreadsheetId = '1TrM1rht74OkhXzJPyjME1_bB4cPJiaiFdwPZwt030NE';
+        
+        sheets.spreadsheets.values.append({
+          spreadsheetId,
+          range: 'A:D',
+          valueInputOption: 'USER_ENTERED',
+          requestBody: {
+            values: [[new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }), name, whatsapp, message]]
+          }
+        }).catch(err => {
+          // Log only non-fatal info or ignore invalid key formats gracefully
+          if (process.env.NODE_ENV !== 'production') {
+            console.info("Optional Google Sheets sync note:", err?.message || err);
+          }
+        });
+      }
+    } catch (sheetErr: any) {
+      // Gracefully prevent background sync errors from breaking visitor requests
+      if (process.env.NODE_ENV !== 'production') {
+        console.info("Optional Google Sheets background setup note:", sheetErr?.message || sheetErr);
+      }
+    }
+
+    return res.status(200).json({ 
+      success: true, 
+      message: 'Your message has been sent successfully!', 
+      lead: newLead 
+    });
+  } catch (err: any) {
+    console.error('Error submitting contact form:', err);
+    return res.status(500).json({ error: err.message || 'Failed to submit contact message' });
+  }
+});
+
+// Leads management endpoint for admin
+router.get('/leads', async (req, res) => {
+  try {
+    const db = await readDB();
+    res.json(db.leads || []);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.delete('/leads/:id', async (req, res) => {
+  try {
+    const db = await readDB();
+    db.leads = (db.leads || []).filter((l: any) => l.id !== req.params.id);
+    await writeDB(db);
+    res.json({ success: true });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Singletons (Settings, Resume, Hero, Contact, Theme, SEO)
-['settings', 'resume', 'hero', 'contact', 'theme', 'seo'].forEach(singleton => {
+const singletons = ['settings', 'resume', 'hero', 'contact', 'theme', 'seo'];
+
+singletons.forEach(singleton => {
   router.get(`/${singleton}`, async (req, res) => {
     try {
       const db = await readDB();
@@ -309,7 +429,8 @@ collections.forEach(collection => {
   router.put(`/${singleton}`, async (req, res) => {
     try {
       const db = await readDB();
-      db[singleton] = { ...db[singleton], ...req.body };
+      const processedBody = convertDriveLinks(req.body);
+      db[singleton] = { ...(db[singleton] || {}), ...processedBody };
       await writeDB(db);
       res.json(db[singleton]);
     } catch (err: any) {

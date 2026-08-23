@@ -347,7 +347,8 @@ export const HeroImageCard: React.FC<HeroImageCardProps> = ({
                 <motion.img
                   key={currentIndex}
                   src={images[currentIndex]}
-                  alt="Nilesh Mali Hero Graphic Profile"
+                  alt="Nilesh Mali brand identity design and visual strategy showcase"
+                  title="Nilesh Mali brand identity design project"
                   initial={{ opacity: 0, scale: 1.04, y: 12 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.98 }}

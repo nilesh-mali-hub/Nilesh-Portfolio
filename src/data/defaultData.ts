@@ -30,7 +30,32 @@ export const defaultData = {
     { id: "sk-6", icon: "Scissors", name: "Pr" },
     { id: "sk-7", icon: "Presentation", name: "Ae" }
   ],
-  projects: [],
+  projects: [
+    {
+      id: "proj-1",
+      title: "Aether OS",
+      description: "UI/UX Concept & Design System",
+      image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop",
+      link: "https://behance.net/nileshmali25",
+      tagline: "UI/UX Concept"
+    },
+    {
+      id: "proj-2",
+      title: "Lumina Brand",
+      description: "Minimalist Identity System & Guidelines",
+      image: "https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?q=80&w=800&auto=format&fit=crop",
+      link: "https://behance.net/nileshmali25",
+      tagline: "Brand Identity"
+    },
+    {
+      id: "proj-3",
+      title: "Nexus 3D",
+      description: "Visual Campaign & Motion Graphics",
+      image: "https://images.unsplash.com/photo-1633167606207-d840b5070fc2?q=80&w=800&auto=format&fit=crop",
+      link: "https://behance.net/nileshmali25",
+      tagline: "3D Motion"
+    }
+  ],
   services: [
     { id: "svc-1", title: "Brand Identity", description: "Crafting distinctive and memorable visual identities that capture the essence of your business.", image: "PenTool" },
     { id: "svc-2", title: "Social Media Design", description: "Engaging social media graphics and templates tailored for your digital presence.", image: "Megaphone" },

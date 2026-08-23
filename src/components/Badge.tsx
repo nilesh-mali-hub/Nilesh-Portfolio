@@ -30,7 +30,11 @@ export function Badge({ children, icon, colorClass, delay = 0, staggered = false
       initial={staggered ? undefined : "hidden"}
       whileInView={staggered ? undefined : "visible"}
       viewport={{ once: true, margin: "-50px" }}
-      className={`flex flex-col items-center justify-center p-3 rounded-[1.5rem] w-[90px] h-[90px] text-center gap-2 bg-neutral-900 border border-neutral-800 text-white hover:border-[#D1FF52] transition-colors`}
+      whileHover={{ 
+        scale: 1.04,
+        transition: { duration: 0.25, ease: [0.22, 1, 0.36, 1] }
+      }}
+      className={`flex flex-col items-center justify-center p-3 rounded-[1.5rem] w-[90px] h-[90px] text-center gap-2 bg-neutral-900 border border-neutral-800 text-white hover:border-[#D1FF52] transition-colors cursor-default`}
     >
       {icon && <div className="text-[#D1FF52]">{icon}</div>}
       <span className="text-[10px] font-bold leading-tight uppercase tracking-widest">{children}</span>

@@ -8,16 +8,19 @@ import { NileshIntroCard, ExperienceGaugeCard } from '../components/NileshIntroC
 
 export default function About() {
   const [resumeUrl, setResumeUrl] = useState<string>('https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf');
+  const [hero, setHero] = useState<any>(null);
+  const [contact, setContact] = useState<any>(null);
 
   useEffect(() => {
-    fetch('/api/resume')
-      .then(res => res.json())
-      .then(data => {
-        if (data && data.pdfUrl) {
-          setResumeUrl(data.pdfUrl);
-        }
-      })
-      .catch(err => console.error('Error fetching resume:', err));
+    Promise.all([
+      fetch('/api/resume').then(res => res.ok ? res.json() : null).catch(() => null),
+      fetch('/api/hero').then(res => res.ok ? res.json() : null).catch(() => null),
+      fetch('/api/contact').then(res => res.ok ? res.json() : null).catch(() => null),
+    ]).then(([resumeData, heroData, contactData]) => {
+      if (resumeData && resumeData.pdfUrl) setResumeUrl(resumeData.pdfUrl);
+      if (heroData) setHero(heroData);
+      if (contactData) setContact(contactData);
+    });
   }, []);
 
   return (
@@ -46,7 +49,7 @@ export default function About() {
               animate={{ opacity: 1, y: 0 }}
               className="font-display font-bold text-5xl md:text-7xl leading-none tracking-tighter mb-6"
             >
-              Nilesh Mali
+              {hero?.name || 'Nilesh Mali'}
             </motion.h1>
             
             <motion.div 
@@ -55,7 +58,7 @@ export default function About() {
               transition={{ delay: 0.1 }}
               className="font-sans font-bold text-base sm:text-lg md:text-xl mb-8 flex flex-wrap items-center gap-2"
             >
-              <span>Graphic Designer</span>
+              <span>{hero?.title || 'Graphic Designer'}</span>
               <span className="opacity-50 text-sm">/</span>
               <RotatingText
                 texts={['Creative Developer', 'AI Specialist', 'Brand Strategist', 'UI/UX Creator']}
@@ -81,7 +84,7 @@ export default function About() {
               className="font-medium text-black/80 max-w-xl mb-8 space-y-6 leading-relaxed"
             >
               <p>
-                I create modern brands, high-converting social media creatives, premium websites, and AI-powered visual experiences that help businesses grow.
+                {hero?.subtitle || 'I create modern brands, high-converting social media creatives, premium websites, and AI-powered visual experiences that help businesses grow.'}
               </p>
               <p>
                 I combine creativity, technology, and strategy to deliver impactful design solutions for startups, local businesses, hotels, healthcare, education, and corporate brands.
@@ -125,7 +128,8 @@ export default function About() {
             >
               <img 
                 src="https://images.unsplash.com/photo-1600861194942-f883de0dfe96?q=80&w=1200&auto=format&fit=crop" 
-                alt="Nilesh Mali" 
+                alt="Nilesh Mali brand identity designer and creative developer workspace" 
+                title="Nilesh Mali — Brand Identity & Design Workspace"
                 className="w-full h-full object-cover"
               />
             </motion.div>
@@ -137,15 +141,15 @@ export default function About() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
           <div className="md:col-span-2">
             <NileshIntroCard 
-              name="Nilesh Mali"
-              avatarUrl="https://res.cloudinary.com/dfknctbhw/image/upload/v1784198733/nm-logo_achjmg.png"
-              bio="Creative designer & developer crafting digital experiences that blend aesthetics with functionality."
-              location="AVAILABLE GLOBALLY"
+              name={hero?.name || "Nilesh Mali"}
+              avatarUrl={hero?.avatar || contact?.avatar || "https://res.cloudinary.com/dfknctbhw/image/upload/v1784198733/nm-logo_achjmg.png"}
+              bio={hero?.bio || hero?.subtitle || "Creative designer & developer crafting digital experiences that blend aesthetics with functionality."}
+              location={hero?.location || contact?.availability || contact?.location || "AVAILABLE GLOBALLY"}
             />
           </div>
           <div className="md:col-span-1 flex">
             <ExperienceGaugeCard 
-              years="4+"
+              years={hero?.experienceYears || "4+"}
               label="/YEARS EXP."
               className="w-full"
             />

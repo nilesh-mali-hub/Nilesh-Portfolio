@@ -29,7 +29,11 @@ export function BentoCard({ children, className = '', delay = 0, staggered = fal
       initial={staggered ? undefined : "hidden"}
       whileInView={staggered ? undefined : "visible"}
       viewport={{ once: true, margin: "-100px" }}
-      className={`bg-neutral-900 border border-neutral-800 rounded-[2rem] overflow-hidden ${className}`}
+      whileHover={{ 
+        scale: 1.02,
+        transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] }
+      }}
+      className={`bg-neutral-900 border border-neutral-800 rounded-[2rem] overflow-hidden transition-colors duration-300 ${className}`}
     >
       {children}
     </motion.div>

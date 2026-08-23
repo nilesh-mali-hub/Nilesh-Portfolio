@@ -24,7 +24,8 @@ export function ProjectCard({ title, category, imageUrl, link = "#", delay = 0, 
       <div className="absolute inset-0 overflow-hidden rounded-[2rem]">
         <img 
           src={imageUrl} 
-          alt={title} 
+          alt={`Nilesh Mali brand identity design project - ${title} (${category})`} 
+          title={`Nilesh Mali — ${title} (${category})`}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 grayscale group-hover:grayscale-0 opacity-80 group-hover:opacity-100" 
         />
         <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/40 to-transparent opacity-90"></div>

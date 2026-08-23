@@ -29,7 +29,8 @@ export function NileshIntroCard({
         <div className="w-12 h-12 rounded-full overflow-hidden border border-neutral-800 bg-black shadow-md flex items-center justify-center shrink-0">
           <img
             src={avatarUrl}
-            alt={name}
+            alt="Nilesh Mali brand identity monogram and creative designer logo"
+            title="Nilesh Mali — Graphic Designer & Creative Developer"
             className="w-full h-full object-cover"
             onError={(e) => {
               // Graceful fallback to styled monogram badge

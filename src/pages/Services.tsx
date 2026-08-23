@@ -189,19 +189,30 @@ export default function Services() {
       .then(res => res.ok ? res.json() : null)
       .then(data => {
         if (Array.isArray(data) && data.length > 0) {
-          // Merge API data with extended details
-          const merged = EXTENDED_SERVICES.map(localSvc => {
-            const remote = data.find((d: any) => d.id === localSvc.id || d.title.toLowerCase() === localSvc.title.toLowerCase());
-            if (remote) {
-              return {
-                ...localSvc,
-                title: remote.title || localSvc.title,
-                description: remote.description || localSvc.description
-              };
-            }
-            return localSvc;
+          // Map all backend services and merge with extended defaults if available
+          const dynamicServices = data.map((remote: any) => {
+            const matchedLocal = EXTENDED_SERVICES.find(localSvc => 
+              localSvc.id === remote.id || localSvc.title.toLowerCase() === (remote.title || '').toLowerCase()
+            );
+            return {
+              id: remote.id,
+              title: remote.title || 'Untitled Service',
+              description: remote.description || 'Professional design solution tailored to your brand.',
+              image: remote.image || matchedLocal?.image || 'PenTool',
+              tagline: remote.tagline || matchedLocal?.tagline || 'Custom Design & Production',
+              deliverables: remote.deliverables || matchedLocal?.deliverables || [
+                'Discovery & aesthetic conceptualization',
+                'High-resolution vector master exports',
+                'Source files (Figma / Adobe / Assets)'
+              ],
+              timeline: remote.timeline || matchedLocal?.timeline || '3 - 7 Days',
+              tools: remote.tools || matchedLocal?.tools || ['Photoshop', 'Illustrator', 'Figma']
+            };
           });
-          setServicesData(merged);
+          setServicesData(dynamicServices);
+          if (dynamicServices.length > 0) {
+            setSelectedService(dynamicServices[0]);
+          }
         }
       })
       .catch(err => console.error('Error fetching services:', err));
@@ -298,8 +309,10 @@ export default function Services() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ duration: 0.5, delay: idx * 0.08 }}
+                  whileHover={{ scale: 1.02, transition: { duration: 0.25, ease: [0.22, 1, 0.36, 1] } }}
+                  whileTap={{ scale: 0.99 }}
                   onClick={() => setSelectedService(svc)}
-                  className={`cursor-pointer rounded-[1.75rem] border p-8 flex flex-col justify-between transition-all duration-300 relative group overflow-hidden ${
+                  className={`cursor-pointer rounded-[1.75rem] border p-8 flex flex-col justify-between transition-colors duration-300 relative group overflow-hidden ${
                     isSelected 
                       ? 'bg-neutral-900 border-[#D1FF52] shadow-[0_0_30px_rgba(209,255,82,0.12)]' 
                       : 'bg-neutral-900/60 border-neutral-800 hover:border-neutral-700 hover:bg-neutral-900'

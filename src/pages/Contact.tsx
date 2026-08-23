@@ -45,6 +45,8 @@ export default function Contact() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!formData.name || !formData.whatsapp || !formData.message) return;
+    
     setIsSubmitting(true);
     setError(null);
     try {
@@ -56,16 +58,24 @@ export default function Contact() {
         body: JSON.stringify(formData),
       });
       
-      const data = await response.json();
+      let data: any = {};
+      try {
+        const text = await response.text();
+        if (text) {
+          data = JSON.parse(text);
+        }
+      } catch (parseErr) {
+        console.warn('Response was not json, treating based on status code:', parseErr);
+      }
       
-      if (response.ok) {
+      if (response.ok || data.success) {
         setSuccess(true);
         setFormData({ name: '', whatsapp: '', message: '' });
       } else {
-        setError(data.error || 'Failed to submit the form');
+        setError(data.error || 'Failed to submit the message. Please try again or reach out on WhatsApp.');
       }
     } catch (err: any) {
-      setError(err.message || 'An error occurred. Please try again later.');
+      setError('An error occurred. You can also message Nilesh directly via WhatsApp below.');
     } finally {
       setIsSubmitting(false);
     }
@@ -99,7 +109,46 @@ export default function Contact() {
         {/* Form Container */}
         <div className="w-full relative min-h-[260px] bg-neutral-900/20 border border-neutral-900 rounded-2xl p-6 sm:p-8">
           <AnimatePresence mode="wait">
-            {step === 1 && (
+            {success ? (
+              <motion.div
+                key="success"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0 }}
+                className="w-full flex flex-col items-center justify-center py-6 text-center"
+              >
+                <div className="w-14 h-14 rounded-full bg-[#D1FF52]/10 border border-[#D1FF52]/30 flex items-center justify-center text-[#D1FF52] mb-4">
+                  <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <h3 className="font-display font-bold text-2xl text-white mb-2">Message Sent!</h3>
+                <p className="text-neutral-400 text-sm max-w-xs mb-6">
+                  Thank you! Nilesh will review your message and get back to you shortly.
+                </p>
+                <div className="flex gap-3 w-full">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSuccess(false);
+                      setStep(1);
+                      setFormData({ name: '', whatsapp: '', message: '' });
+                    }}
+                    className="flex-1 bg-neutral-800 hover:bg-neutral-700 text-white font-bold py-3.5 rounded-xl text-xs transition-colors"
+                  >
+                    Send Another
+                  </button>
+                  <a
+                    href="https://api.whatsapp.com/send/?phone=916378954363&text=Hello+Nilesh+Mali%21&type=phone_number&app_absent=0"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 bg-[#D1FF52] hover:bg-[#b8e83b] text-black font-bold py-3.5 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-colors"
+                  >
+                    <MessageCircle className="w-4 h-4" /> Open WhatsApp
+                  </a>
+                </div>
+              </motion.div>
+            ) : step === 1 ? (
               <motion.form 
                 key="step1"
                 initial={{ opacity: 0, y: 10 }}
@@ -135,9 +184,7 @@ export default function Contact() {
                   Next
                 </button>
               </motion.form>
-            )}
-
-            {step === 2 && (
+            ) : (
               <motion.form 
                 key="step2"
                 initial={{ opacity: 0, y: 10 }}
@@ -160,21 +207,20 @@ export default function Contact() {
                   <button 
                     type="button"
                     onClick={prevStep}
-                    disabled={isSubmitting || success}
+                    disabled={isSubmitting}
                     className="w-1/3 bg-neutral-850 hover:bg-neutral-800 disabled:opacity-50 text-white font-bold py-4 rounded-xl transition-colors cursor-pointer select-none"
                   >
                     Back
                   </button>
                   <button 
                     type="submit"
-                    disabled={!formData.message || isSubmitting || success}
+                    disabled={!formData.message || isSubmitting}
                     className="w-2/3 bg-blue-600 hover:bg-blue-500 disabled:bg-neutral-800 disabled:text-neutral-500 text-white font-bold py-4 rounded-xl transition-colors flex items-center justify-center gap-2 cursor-pointer select-none"
                   >
-                    {isSubmitting ? 'Sending...' : success ? 'Sent!' : 'Send'}
+                    {isSubmitting ? 'Sending...' : 'Send'}
                   </button>
                 </div>
-                {error && <p className="text-red-500 text-sm mt-2 text-center">{error}</p>}
-                {success && <p className="text-[#D1FF52] text-sm mt-2 text-center">Your message has been saved successfully!</p>}
+                {error && <p className="text-red-500 text-xs mt-2 text-center bg-red-500/10 border border-red-500/20 py-2 px-3 rounded-lg">{error}</p>}
               </motion.form>
             )}
           </AnimatePresence>

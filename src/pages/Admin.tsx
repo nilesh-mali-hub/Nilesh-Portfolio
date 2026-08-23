@@ -1626,63 +1626,172 @@ function SettingsTab({ name }: { name: string }) {
 
       <form onSubmit={handleSubmit} className="space-y-6 bg-neutral-950/60 border border-neutral-800/80 rounded-2xl p-5 sm:p-7">
         {name === 'resume' ? (
-          <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">Resume PDF URL</label>
-            <input 
-              type="text" 
-              value={formData.pdfUrl || ''}
-              onChange={(e) => setFormData({ ...formData, pdfUrl: e.target.value })}
-              className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] font-mono text-sm"
-              placeholder="https://drive.google.com/... or direct PDF link"
-              required
-            />
-            <p className="text-[11px] text-neutral-500 mt-2 leading-relaxed">
-              This direct PDF link is used when users click "Download Resume" across the portfolio and about pages.
-            </p>
-          </div>
-        ) : name === 'hero' ? (
           <div className="space-y-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">Hero Headline</label>
+              <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">Resume PDF URL</label>
+              <input 
+                type="text" 
+                value={formData.pdfUrl || ''}
+                onChange={(e) => setFormData({ ...formData, pdfUrl: e.target.value })}
+                className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] font-mono text-sm"
+                placeholder="https://drive.google.com/... or direct PDF link"
+                required
+              />
+              <p className="text-[11px] text-neutral-500 mt-2 leading-relaxed">
+                This direct PDF link is used when users click "Download Resume" across the portfolio and about pages. Google Drive sharing links are automatically converted to direct viewable links.
+              </p>
+            </div>
+            {formData.pdfUrl && (
+              <div className="pt-2 flex items-center gap-3">
+                <a
+                  href={formData.pdfUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-4 py-2 bg-neutral-800 hover:bg-neutral-700 text-white rounded-xl text-xs font-bold flex items-center gap-2 transition-colors"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" /> Test PDF Link
+                </a>
+              </div>
+            )}
+          </div>
+        ) : name === 'hero' ? (
+          <div className="space-y-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">Full Name</label>
+                <input 
+                  type="text" 
+                  value={formData.name || ''}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] text-sm"
+                  placeholder="Nilesh Mali"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">Years of Experience</label>
+                <input 
+                  type="text" 
+                  value={formData.experienceYears || ''}
+                  onChange={(e) => setFormData({ ...formData, experienceYears: e.target.value })}
+                  className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] text-sm font-mono"
+                  placeholder="4+"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">Hero Headline / Specialization</label>
               <input 
                 type="text" 
                 value={formData.title || ''}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] text-sm"
-                placeholder="Graphic Designer & UI/UX"
+                placeholder="Graphic Designer & Creative Developer"
               />
             </div>
+
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">Hero Subtitle & Bio</label>
+              <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">Hero Subtitle & Bio</label>
               <textarea 
                 value={formData.subtitle || ''}
                 onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
                 className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] text-sm min-h-[90px]"
-                placeholder="Creative designer crafting high-impact brand identities..."
+                placeholder="Creative graphic designer blending imagination with strategy. Specializing in branding, digital experiences, and visual storytelling."
               />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">Location / Base</label>
+                <input 
+                  type="text" 
+                  value={formData.location || ''}
+                  onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                  className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] text-sm"
+                  placeholder="Rajasthan, India"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">Avatar / Monogram Logo URL</label>
+                <input 
+                  type="text" 
+                  value={formData.avatar || ''}
+                  onChange={(e) => setFormData({ ...formData, avatar: e.target.value })}
+                  className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] text-sm font-mono text-xs"
+                  placeholder="https://..."
+                />
+              </div>
+            </div>
+
+            <div className="pt-2 border-t border-neutral-800">
+              <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">Showcase Gallery Images (Hero Carousel)</label>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <input 
+                  type="text" 
+                  value={formData.image1 || ''} 
+                  onChange={(e) => setFormData({ ...formData, image1: e.target.value })}
+                  className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#D1FF52] font-mono text-xs" 
+                  placeholder="Image 1 URL" 
+                />
+                <input 
+                  type="text" 
+                  value={formData.image2 || ''} 
+                  onChange={(e) => setFormData({ ...formData, image2: e.target.value })}
+                  className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#D1FF52] font-mono text-xs" 
+                  placeholder="Image 2 URL" 
+                />
+                <input 
+                  type="text" 
+                  value={formData.image3 || ''} 
+                  onChange={(e) => setFormData({ ...formData, image3: e.target.value })}
+                  className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#D1FF52] font-mono text-xs" 
+                  placeholder="Image 3 URL" 
+                />
+              </div>
             </div>
           </div>
         ) : name === 'contact' ? (
           <div className="space-y-4">
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">Official Email</label>
-              <input type="email" value={formData.email || ''} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] text-sm" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">Official Email</label>
+                <input type="email" value={formData.email || ''} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] text-sm" placeholder="work.nileshmali@gmail.com" />
+              </div>
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">Phone / WhatsApp Number</label>
+                <input type="text" value={formData.phone || ''} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] text-sm font-mono" placeholder="+91 6378954363" />
+              </div>
             </div>
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">Phone / WhatsApp Number</label>
-              <input type="text" value={formData.phone || ''} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] text-sm font-mono text-xs" placeholder="+91 6378954363" />
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">Location / City</label>
+                <input type="text" value={formData.location || ''} onChange={(e) => setFormData({ ...formData, location: e.target.value })} className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] text-sm" placeholder="Abu Road, Rajasthan, India" />
+              </div>
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">Availability Status</label>
+                <input type="text" value={formData.availability || ''} onChange={(e) => setFormData({ ...formData, availability: e.target.value })} className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] text-sm" placeholder="AVAILABLE GLOBALLY" />
+              </div>
             </div>
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">Behance Profile URL</label>
-              <input type="url" value={formData.behance || ''} onChange={(e) => setFormData({ ...formData, behance: e.target.value })} className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] text-sm font-mono text-xs" />
-            </div>
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">Instagram Profile URL</label>
-              <input type="url" value={formData.instagram || ''} onChange={(e) => setFormData({ ...formData, instagram: e.target.value })} className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] text-sm font-mono text-xs" />
-            </div>
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">LinkedIn Profile URL</label>
-              <input type="url" value={formData.linkedin || ''} onChange={(e) => setFormData({ ...formData, linkedin: e.target.value })} className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] text-sm font-mono text-xs" />
+
+            <div className="pt-2 border-t border-neutral-800 space-y-3">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-neutral-400">Social & Portfolio Profiles</h4>
+              <div>
+                <label className="block text-[11px] font-mono text-neutral-400 mb-1">Behance Profile URL</label>
+                <input type="url" value={formData.behance || ''} onChange={(e) => setFormData({ ...formData, behance: e.target.value })} className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-[#D1FF52] text-xs font-mono" placeholder="https://www.behance.net/nileshmali25" />
+              </div>
+              <div>
+                <label className="block text-[11px] font-mono text-neutral-400 mb-1">Instagram Profile URL</label>
+                <input type="url" value={formData.instagram || ''} onChange={(e) => setFormData({ ...formData, instagram: e.target.value })} className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-[#D1FF52] text-xs font-mono" placeholder="https://instagram.com/nileshmalidesign" />
+              </div>
+              <div>
+                <label className="block text-[11px] font-mono text-neutral-400 mb-1">LinkedIn Profile URL</label>
+                <input type="url" value={formData.linkedin || ''} onChange={(e) => setFormData({ ...formData, linkedin: e.target.value })} className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-[#D1FF52] text-xs font-mono" placeholder="https://www.linkedin.com/in/nilesh-mali" />
+              </div>
+              <div>
+                <label className="block text-[11px] font-mono text-neutral-400 mb-1">GitHub / Dribbble URL</label>
+                <input type="url" value={formData.github || ''} onChange={(e) => setFormData({ ...formData, github: e.target.value })} className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-[#D1FF52] text-xs font-mono" placeholder="https://github.com/..." />
+              </div>
             </div>
           </div>
         ) : (
