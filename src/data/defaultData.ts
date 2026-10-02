@@ -1,7 +1,8 @@
 export const defaultData = {
   hero: {
     title: "Graphic Designer",
-    subtitle: "Creative graphic designer blending imagination with strategy. I specialize in branding, digital experiences, and visual storytelling that elevate brands and engage audiences across all platforms."
+    subtitle: "Creative graphic designer blending imagination with strategy. I specialize in branding, digital experiences, and visual storytelling that elevate brands and engage audiences across all platforms.",
+    experienceYears: "1.5"
   },
   experience: [
     {

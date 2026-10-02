@@ -149,7 +149,7 @@ export default function About() {
           </div>
           <div className="md:col-span-1 flex">
             <ExperienceGaugeCard 
-              years={hero?.experienceYears || "4+"}
+              years={hero?.experienceYears || "1.5"}
               label="/YEARS EXP."
               className="w-full"
             />

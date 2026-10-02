@@ -19,6 +19,7 @@ import { Marquee } from '../components/Marquee';
 import { NoiseOverlay } from '../components/NoiseOverlay';
 import { ProfileCard } from '../components/ProfileCard';
 import { NileshIntroCard, ExperienceGaugeCard } from '../components/NileshIntroCard';
+import { HeroLoopMarquee } from '../components/HeroLoopMarquee';
 import { TechStackCard } from '../components/TechStackCard';
 import { ExperienceCard } from '../components/ExperienceCard';
 import { Testimonials } from '../components/Testimonials';
@@ -108,7 +109,7 @@ export default function App() {
             </span>
             <span className="text-neutral-400 font-medium hidden sm:inline">Specializing in</span>
             <RotatingText
-              texts={['Brand Identity', 'UI/UX Design', 'Visual Storytelling', 'Motion & Graphics', 'Digital Experiences']}
+              texts={['Brand Identity', 'UI/UX Design', 'Video Editing', 'Visual Storytelling', 'Motion & Graphics', 'Digital Experiences']}
               mainClassName="px-2.5 sm:px-3 bg-cyan-300 text-black overflow-hidden py-0.5 sm:py-1 justify-center rounded-lg font-bold text-[11px] sm:text-xs"
               staggerFrom="last"
               initial={{ y: "100%" }}
@@ -117,7 +118,7 @@ export default function App() {
               staggerDuration={0.025}
               splitLevelClassName="overflow-hidden pb-0.5"
               transition={{ type: "spring", damping: 30, stiffness: 400 }}
-              rotationInterval={2200}
+              rotationInterval={3000}
               splitBy="characters"
               auto
               loop
@@ -145,7 +146,7 @@ export default function App() {
                 <h2 className="font-display font-bold text-3xl leading-none text-white uppercase tracking-tighter" dangerouslySetInnerHTML={{ __html: hero?.title ? hero.title.replace(/ /g, '<br/>') : 'Graphic<br/>Designer.' }}></h2>
                 <div className="mt-2.5 flex items-center gap-1.5 flex-wrap">
                   <RotatingText
-                    texts={['Branding', 'UI/UX', 'Print', 'Social', 'Concepts']}
+                    texts={['Branding', 'UI/UX', 'Video', 'Print', 'Social', 'Concepts']}
                     mainClassName="px-2 py-0.5 bg-[#D1FF52]/10 border border-[#D1FF52]/30 text-[#D1FF52] overflow-hidden text-[11px] font-mono font-bold uppercase rounded-md tracking-wider"
                     staggerFrom="last"
                     initial={{ y: "100%" }}
@@ -154,7 +155,7 @@ export default function App() {
                     staggerDuration={0.02}
                     splitLevelClassName="overflow-hidden pb-0.5"
                     transition={{ type: "spring", damping: 30, stiffness: 400 }}
-                    rotationInterval={2000}
+                    rotationInterval={3000}
                     splitBy="characters"
                     auto
                     loop
@@ -212,15 +213,21 @@ export default function App() {
             />
             
             <ExperienceGaugeCard 
-              years={hero?.experienceYears || "4+"}
+              years={hero?.experienceYears || "1.5"}
               label="/YEARS EXP."
               staggered={true}
             />
           </div>
         </motion.div>
 
+        {/* Continuous Right-to-Left Skills & Experience Loop Marquee */}
+        <HeroLoopMarquee 
+          years={hero?.experienceYears || "1.5"}
+          label="/YEARS EXP."
+        />
+
         {/* Projects Section */}
-        <div className="mt-28" id="projects">
+        <div className="mt-20 sm:mt-24" id="projects">
           <SectionHeading delay={0.1}>Projects</SectionHeading>
           <motion.div 
             variants={staggerContainer}

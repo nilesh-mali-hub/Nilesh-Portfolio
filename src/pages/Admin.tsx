@@ -1674,7 +1674,7 @@ function SettingsTab({ name }: { name: string }) {
                   value={formData.experienceYears || ''}
                   onChange={(e) => setFormData({ ...formData, experienceYears: e.target.value })}
                   className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] text-sm font-mono"
-                  placeholder="4+"
+                  placeholder="1.5"
                 />
               </div>
             </div>
