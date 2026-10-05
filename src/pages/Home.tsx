@@ -233,7 +233,7 @@ export default function App() {
               name={hero?.name || "Nilesh Mali"}
               avatarUrl={hero?.avatar || contact?.avatar || "https://res.cloudinary.com/dfknctbhw/image/upload/v1784198733/nm-logo_achjmg.png"}
               bio={hero?.bio || hero?.subtitle || "Creative designer & developer crafting digital experiences that blend aesthetics with functionality."}
-              location={hero?.location || contact?.availability || contact?.location || "AVAILABLE GLOBALLY"}
+              location={hero?.location || contact?.availability || contact?.location || "ABU ROAD, RAJASTHAN • AVAILABLE GLOBALLY"}
               staggered={true}
             />
             

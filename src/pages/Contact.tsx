@@ -239,6 +239,17 @@ export default function Contact() {
               <MessageCircle className="w-5 h-5" /> Say hello!
             </a>
           </p>
+
+          {/* Local Studio Location & Geo Presence */}
+          <div className="mt-8 pt-6 border-t border-neutral-900 flex flex-col items-center gap-1.5 text-center">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-xs text-neutral-300">
+              <span className="w-2 h-2 rounded-full bg-[#D1FF52] animate-pulse"></span>
+              <span>Based in <strong className="text-white">Abu Road, Sirohi, Rajasthan (307026)</strong></span>
+            </div>
+            <p className="text-[11px] text-neutral-500 mt-1 max-w-sm">
+              Providing freelance graphic design, branding, UI/UX & video editing services for businesses in Abu Road, Mount Abu, Palanpur, and clients worldwide.
+            </p>
+          </div>
         </div>
       </div>
     </div>

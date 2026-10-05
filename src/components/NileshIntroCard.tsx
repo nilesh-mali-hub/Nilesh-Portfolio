@@ -16,7 +16,7 @@ export function NileshIntroCard({
   name = 'Nilesh Mali',
   avatarUrl = 'https://res.cloudinary.com/dfknctbhw/image/upload/v1784198733/nm-logo_achjmg.png',
   bio = 'Creative designer & developer crafting digital experiences that blend aesthetics with functionality.',
-  location = 'AVAILABLE GLOBALLY',
+  location = 'ABU ROAD, RAJASTHAN • AVAILABLE GLOBALLY',
   className = '',
   staggered = true,
 }: NileshIntroCardProps) {

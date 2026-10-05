@@ -91,7 +91,7 @@ export function Footer() {
               <span>Nilesh Mali</span>
             </div>
             <p className="text-neutral-400 font-sans text-sm md:text-base leading-relaxed">
-              Creative Developer & Graphic Designer crafting modern brands and high-converting digital experiences.
+              Graphic Designer & Creative Specialist based in Abu Road, Rajasthan. Crafting modern brands, impactful social creatives, and premium digital experiences.
             </p>
             <Link 
               to="/contact"
@@ -142,8 +142,8 @@ export function Footer() {
         </div>
 
         <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-neutral-900 flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-sans text-neutral-500">
-          <p className="flex items-center gap-1.5 select-none">
-            <span>&copy; {new Date().getFullYear()} Nilesh Mali.</span>
+          <p className="flex items-center gap-1.5 select-none flex-wrap justify-center md:justify-start">
+            <span>&copy; {new Date().getFullYear()} Nilesh Mali • Abu Road, Rajasthan, India.</span>
             {/* Discrete hidden access point: subtle dot trigger */}
             <button 
               type="button"

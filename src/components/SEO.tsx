@@ -12,8 +12,8 @@ interface SEOProps {
 
 export function SEO({
   title,
-  description = "Nilesh Mali – Professional Graphic Designer, Creative Developer, and AI Creative Specialist based in India. Creating modern brands, high-converting social media creatives, premium custom websites, and stunning AI-powered visual designs.",
-  keywords = "Nilesh Mali, Graphic Designer, Creative Developer, AI Specialist, Brand Identity, UI/UX Design, Web Developer, Portfolio, Freelance Designer, Logo Designer, Social Media Creatives, Website Designer, Abu Road Rajasthan",
+  description = "Nilesh Mali is a top Graphic Designer & Creative Specialist based in Abu Road (Sirohi, Rajasthan). Specializing in Brand Identity, Social Media Creatives, UI/UX Design, and Custom Visual Experiences.",
+  keywords = "Nilesh Mali, Nilesh Mali Abu Road, Nilesh Mali Aburoad, Nilesh Mali Designer, Graphic Designer in Abu Road, Graphic Designer Abu Road, Freelance Graphic Designer Abu Road, Logo Designer Abu Road, UI UX Designer Abu Road, Video Editor Abu Road, Sirohi Designer, Rajasthan Graphic Designer, Nilesh Mali Portfolio",
   image = "https://res.cloudinary.com/dfknctbhw/image/upload/v1784198733/nm-logo_achjmg.png",
   type = "website",
   noindex = false
@@ -24,7 +24,7 @@ export function SEO({
   const origin = typeof window !== 'undefined' && window.location.origin ? window.location.origin : 'https://nileshmali2026.netlify.app';
   const url = `${origin}${location.pathname}`;
   
-  const defaultTitle = "Nilesh Mali | Graphic Designer, Creative Developer & Brand Identity Specialist";
+  const defaultTitle = "Nilesh Mali | Graphic Designer in Abu Road & Creative Specialist";
   const finalTitle = title ? (title.includes('Nilesh Mali') ? title : `${title} | Nilesh Mali`) : defaultTitle;
 
   // Schema 1: Person Structured Data
@@ -33,6 +33,12 @@ export function SEO({
     "@type": "Person",
     "@id": `${origin}/#person`,
     "name": "Nilesh Mali",
+    "alternateName": [
+      "Nilesh Mali Abu Road",
+      "Nilesh Mali Aburoad",
+      "Nilesh Mali Designer",
+      "Nilesh Mali Graphic Designer Abu Road"
+    ],
     "url": origin,
     "image": image,
     "jobTitle": "Graphic Designer & Creative Developer",
@@ -41,7 +47,12 @@ export function SEO({
       "@type": "PostalAddress",
       "addressLocality": "Abu Road",
       "addressRegion": "Rajasthan",
+      "postalCode": "307026",
       "addressCountry": "IN"
+    },
+    "homeLocation": {
+      "@type": "Place",
+      "name": "Abu Road, Sirohi, Rajasthan, India"
     },
     "sameAs": [
       "https://www.linkedin.com/in/nilesh-mali-a5997b28a/",
@@ -54,11 +65,10 @@ export function SEO({
       "Brand Identity Design",
       "UI/UX Design",
       "Creative Web Development",
-      "Front-End Engineering",
       "Social Media Marketing Graphics",
       "Video Editing & Motion Graphics",
-      "AI Image & Video Generation",
-      "Print Collateral & Editorial Design"
+      "Logo Design",
+      "Brochure & Print Collateral Design"
     ],
     "knowsLanguage": ["English", "Hindi"]
   };
@@ -68,7 +78,8 @@ export function SEO({
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
     "@id": `${origin}/#business`,
-    "name": "Nilesh Mali - Design & Creative Studio",
+    "name": "Nilesh Mali — Graphic Designer Abu Road",
+    "alternateName": ["Nilesh Mali Design Studio Abu Road", "Nilesh Mali Aburoad"],
     "url": origin,
     "logo": "https://res.cloudinary.com/dfknctbhw/image/upload/v1784198733/nm-logo_achjmg.png",
     "image": image,
@@ -78,9 +89,11 @@ export function SEO({
     "priceRange": "$$",
     "address": {
       "@type": "PostalAddress",
+      "streetAddress": "Abu Road",
       "addressLocality": "Abu Road",
       "addressRegion": "Rajasthan",
-      "addressCountry": "India"
+      "postalCode": "307026",
+      "addressCountry": "IN"
     },
     "geo": {
       "@type": "GeoCoordinates",
@@ -88,6 +101,10 @@ export function SEO({
       "longitude": "72.7836"
     },
     "areaServed": [
+      { "@type": "City", "name": "Abu Road" },
+      { "@type": "AdministrativeArea", "name": "Sirohi" },
+      { "@type": "AdministrativeArea", "name": "Mount Abu" },
+      { "@type": "AdministrativeArea", "name": "Rajasthan" },
       { "@type": "Country", "name": "India" },
       { "@type": "AdministrativeArea", "name": "Worldwide" }
     ],

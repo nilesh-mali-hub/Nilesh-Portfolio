@@ -113,7 +113,7 @@ export default function About() {
                 {hero?.subtitle || 'I create modern brands, high-converting social media creatives, premium websites, and AI-powered visual experiences that help businesses grow.'}
               </p>
               <p>
-                I combine creativity, technology, and strategy to deliver impactful design solutions for startups, local businesses, hotels, healthcare, education, and corporate brands.
+                Based in Abu Road (Sirohi, Rajasthan), I combine creativity, technology, and strategy to deliver impactful design solutions for startups, local businesses, hotels, healthcare, education, and corporate brands across India and globally.
               </p>
             </motion.div>
 
@@ -172,7 +172,7 @@ export default function About() {
               name={hero?.name || "Nilesh Mali"}
               avatarUrl={hero?.avatar || contact?.avatar || "https://res.cloudinary.com/dfknctbhw/image/upload/v1784198733/nm-logo_achjmg.png"}
               bio={hero?.bio || hero?.subtitle || "Creative designer & developer crafting digital experiences that blend aesthetics with functionality."}
-              location={hero?.location || contact?.availability || contact?.location || "AVAILABLE GLOBALLY"}
+              location={hero?.location || contact?.availability || contact?.location || "ABU ROAD, RAJASTHAN • AVAILABLE GLOBALLY"}
             />
           </div>
           <div className="md:col-span-1 flex">
