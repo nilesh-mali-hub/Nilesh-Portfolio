@@ -1,34 +1,61 @@
 import { motion } from 'motion/react';
 
-interface TimelineItemProps {
+export interface TimelineItemProps {
   year: string;
   title: string;
-  subtitle: string;
+  description?: string;
+  subtitle?: string;
+  highlight?: boolean;
+  highlightColor?: 'lime' | 'cyan' | string;
   delay?: number;
 }
 
-export function TimelineItem({ year, title, subtitle, delay = 0 }: TimelineItemProps) {
+export function TimelineItem({
+  year,
+  title,
+  description,
+  subtitle,
+  highlight = false,
+  highlightColor = 'lime',
+  delay = 0,
+}: TimelineItemProps) {
+  const desc = description || subtitle;
+  const isCyan = highlightColor === 'cyan';
+
+  // Left vertical accent indicator line
+  const accentBorderClass = highlight
+    ? (isCyan ? 'border-l-2 border-[#38bdf8]' : 'border-l-2 border-[#D1FF52]')
+    : 'border-l-2 border-neutral-800/90';
+
+  // Year text styling
+  const yearColorClass = highlight
+    ? (isCyan ? 'text-[#38bdf8]' : 'text-[#D1FF52]')
+    : 'text-neutral-500';
+
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20, filter: "blur(5px)" }}
-      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
-      className="flex flex-col sm:flex-row gap-2 sm:gap-6 group"
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-30px' }}
+      transition={{ duration: 0.5, delay, ease: [0.16, 1, 0.3, 1] }}
+      className={`pl-4 sm:pl-5 ${accentBorderClass} transition-colors duration-200 group`}
     >
-      <div className="sm:w-24 flex-shrink-0 font-display font-bold text-[#D1FF52] pt-1 leading-tight text-lg tracking-tighter uppercase">
-        {year.split('-').map((part, i) => (
-          <span key={i}>
-            {part}
-            {i === 0 && <span className="hidden sm:inline">-</span>}
-            {i === 0 && <br className="hidden sm:block" />}
-          </span>
-        ))}
-      </div>
-      <div>
-        <h4 className="font-display font-bold text-xl text-white group-hover:text-[#D1FF52] transition-colors uppercase tracking-tight">{title}</h4>
-        <p className="text-[10px] uppercase tracking-widest text-neutral-400 mt-2">{subtitle}</p>
-      </div>
+      {/* Year */}
+      <p className={`font-mono text-xs font-bold tracking-wider uppercase ${yearColorClass}`}>
+        {year}
+      </p>
+
+      {/* Role / Degree Title */}
+      <h4 className="font-display font-bold text-xl sm:text-[22px] text-white tracking-tight mt-1 leading-snug">
+        {title}
+      </h4>
+
+      {/* Company / Institution & Description */}
+      {desc && (
+        <p className="text-neutral-400 font-sans text-xs sm:text-sm mt-1.5 leading-relaxed font-normal">
+          {desc}
+        </p>
+      )}
     </motion.div>
   );
 }

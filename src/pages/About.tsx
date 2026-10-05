@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { SEO } from '../components/SEO';
 import { NoiseOverlay } from '../components/NoiseOverlay';
 import { RotatingText } from '../components/RotatingText';
-import { Download } from 'lucide-react';
+import { Download, Eye } from 'lucide-react';
 import { NileshIntroCard, ExperienceGaugeCard } from '../components/NileshIntroCard';
 
 export default function About() {
-  const [resumeUrl, setResumeUrl] = useState<string>('https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf');
+  const [resumeUrl, setResumeUrl] = useState<string>('/resume.pdf');
   const [hero, setHero] = useState<any>(null);
   const [contact, setContact] = useState<any>(null);
 
@@ -22,6 +23,31 @@ export default function About() {
       if (contactData) setContact(contactData);
     });
   }, []);
+
+  const [downloading, setDownloading] = useState(false);
+
+  const handleDownload = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    setDownloading(true);
+    const pdfPath = '/Nilesh_Mali_Resume.pdf';
+    try {
+      const response = await fetch(pdfPath);
+      if (!response.ok) throw new Error('File not found');
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = 'Nilesh_Mali_Resume.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch {
+      window.open(pdfPath, '_blank');
+    } finally {
+      setTimeout(() => setDownloading(false), 800);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-neutral-950 text-white pt-24 pb-20 overflow-x-hidden font-sans relative">
@@ -98,23 +124,25 @@ export default function About() {
               className="flex flex-col sm:flex-row gap-4"
             >
               <a 
-                href={resumeUrl}
+                href="/Nilesh_Mali_Resume.pdf"
+                download="Nilesh_Mali_Resume.pdf"
+                onClick={handleDownload}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-3 bg-black text-[#D1FF52] hover:bg-neutral-900 px-6 py-4 rounded-xl font-bold transition-all duration-200 shadow-xl hover:scale-105 active:scale-95 group w-full sm:w-auto"
+                className="inline-flex items-center justify-center gap-3 bg-black text-[#D1FF52] hover:bg-neutral-900 px-6 py-4 rounded-xl font-bold transition-all duration-200 shadow-xl hover:scale-105 active:scale-95 group w-full sm:w-auto cursor-pointer"
+                title="Download Nilesh Mali Resume PDF"
               >
-                <Download className="w-5 h-5 transition-transform group-hover:translate-y-0.5" />
-                Download Resume
+                <Download className={`w-5 h-5 transition-transform ${downloading ? 'animate-bounce text-white' : 'group-hover:translate-y-0.5'}`} />
+                <span>{downloading ? 'Downloading...' : 'Download Resume'}</span>
               </a>
-              <a 
-                href={resumeUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-3 bg-transparent text-white hover:text-[#D1FF52] border border-neutral-850 hover:border-[#D1FF52]/50 hover:bg-black/30 px-6 py-4 rounded-xl font-bold transition-all duration-200 shadow-xl hover:scale-105 active:scale-95 group w-full sm:w-auto"
+              <Link 
+                to="/resume"
+                className="inline-flex items-center justify-center gap-3 bg-neutral-950 text-white hover:bg-black hover:text-[#D1FF52] border border-black/30 px-6 py-4 rounded-xl font-bold transition-all duration-200 shadow-xl hover:scale-105 active:scale-95 group w-full sm:w-auto cursor-pointer"
+                title="View Full Interactive Resume"
               >
-                <Download className="w-5 h-5 text-[#D1FF52] transition-transform group-hover:translate-y-0.5" />
-                Download CV
-              </a>
+                <Eye className="w-5 h-5 text-[#D1FF52] group-hover:scale-110 transition-transform" />
+                <span>View Full Resume</span>
+              </Link>
             </motion.div>
           </div>
 

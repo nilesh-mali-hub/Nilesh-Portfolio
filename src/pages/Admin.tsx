@@ -75,7 +75,8 @@ const ALL_TABS: TabConfig[] = [
   { id: 'hero', label: 'Hero Section', category: 'content', icon: Zap },
   { id: 'projects', label: 'Projects', category: 'content', icon: Briefcase },
   { id: 'services', label: 'Services', category: 'content', icon: FileText },
-  { id: 'experience', label: 'Journey & Exp.', category: 'content', icon: GraduationCap },
+  { id: 'experience', label: 'Experience', category: 'content', icon: Briefcase },
+  { id: 'education', label: 'Education', category: 'content', icon: GraduationCap },
   { id: 'skills', label: 'Software Skills', category: 'content', icon: LayoutGrid },
   { id: 'gallery', label: 'Gallery Showcase', category: 'content', icon: ImageIcon },
 
@@ -555,7 +556,7 @@ export default function Admin() {
                 {activeTab === 'seo' && <SEOTab />}
                 
                 {/* Generic CRUD Collections */}
-                {['projects', 'services', 'testimonials', 'leads', 'blog', 'gallery', 'knowledge', 'experience', 'skills'].includes(activeTab) && (
+                {['projects', 'services', 'testimonials', 'leads', 'blog', 'gallery', 'knowledge', 'experience', 'education', 'skills'].includes(activeTab) && (
                   <GenericTab collection={activeTab} />
                 )}
                 

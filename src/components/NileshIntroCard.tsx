@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { BentoCard } from './BentoCard';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -54,9 +55,18 @@ export function NileshIntroCard({
       </div>
 
       {/* Meta Footer */}
-      <p className="text-[10px] font-mono font-bold tracking-[0.22em] text-neutral-500 uppercase mt-6 sm:mt-8">
-        {location}
-      </p>
+      <div className="flex items-center justify-between mt-6 sm:mt-8 pt-4 border-t border-neutral-800/60">
+        <p className="text-[10px] font-mono font-bold tracking-[0.22em] text-neutral-500 uppercase">
+          {location}
+        </p>
+        <Link
+          to="/resume"
+          className="inline-flex items-center gap-1 text-[10px] font-mono font-bold tracking-wider text-[#D1FF52] hover:text-white uppercase transition-colors"
+        >
+          <span>Resume</span>
+          <span>↗</span>
+        </Link>
+      </div>
     </BentoCard>
   );
 }

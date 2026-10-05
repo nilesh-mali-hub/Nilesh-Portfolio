@@ -13,6 +13,7 @@ const Contact = lazy(() => import('./pages/Contact'));
 const About = lazy(() => import('./pages/About'));
 const Services = lazy(() => import('./pages/Services'));
 const Admin = lazy(() => import('./pages/Admin'));
+const Resume = lazy(() => import('./pages/Resume'));
 
 function AppContent() {
   const location = useLocation();
@@ -42,6 +43,7 @@ function AppContent() {
           <Route path="/services" element={<Services />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/resume" element={<Resume />} />
         </Routes>
       </Suspense>
       {!isAdmin && <Footer />}

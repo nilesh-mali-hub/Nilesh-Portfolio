@@ -4,7 +4,6 @@ import { SEO } from '../components/SEO';
 import { BentoCard } from '../components/BentoCard';
 import { SectionHeading } from '../components/SectionHeading';
 import { Badge } from '../components/Badge';
-import { TimelineItem } from '../components/TimelineItem';
 import { SoftwareIcon } from '../components/SoftwareIcon';
 import { FloatingResumeButton } from '../components/FloatingResumeButton';
 import { AIAssistantWidget } from '../components/AIAssistantWidget';
@@ -29,7 +28,7 @@ import {
   Smartphone, User, Mail, Instagram, Linkedin, 
   Pin, Figma, Fingerprint, Search, Eye, Lightbulb, LayoutGrid,
   PenTool, MonitorPlay, Layers, Zap, ArrowUpRight, Megaphone, Globe, BookOpen, Video, Palette,
-  Scissors, Presentation, FileText, Image as ImageIcon
+  Scissors, Presentation, FileText, Image as ImageIcon, Download
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { defaultData } from '../data/defaultData';
@@ -52,6 +51,7 @@ const IconMap: Record<string, any> = {
 export default function App() {
   const [hero, setHero] = useState<any>(defaultData.hero);
   const [experience, setExperience] = useState<any[]>(defaultData.experience);
+  const [education, setEducation] = useState<any[]>((defaultData as any).education || []);
   const [skills, setSkills] = useState<any[]>(defaultData.skills);
   const [projects, setProjects] = useState<any[]>(defaultData.projects);
   const [isLoadingProjects, setIsLoadingProjects] = useState<boolean>(true);
@@ -62,13 +62,15 @@ export default function App() {
     Promise.all([
       fetch('/api/hero').then(res => res.ok ? res.json() : null).catch(() => null),
       fetch('/api/experience').then(res => res.ok ? res.json() : null).catch(() => null),
+      fetch('/api/education').then(res => res.ok ? res.json() : null).catch(() => null),
       fetch('/api/skills').then(res => res.ok ? res.json() : null).catch(() => null),
       fetch('/api/projects').then(res => res.ok ? res.json() : null).catch(() => null),
       fetch('/api/contact').then(res => res.ok ? res.json() : null).catch(() => null),
     ])
-    .then(([heroData, expData, skillsData, projectsData, contactData]) => {
+    .then(([heroData, expData, eduData, skillsData, projectsData, contactData]) => {
       if (heroData) setHero(heroData);
       if (Array.isArray(expData) && expData.length > 0) setExperience(expData);
+      if (Array.isArray(eduData) && eduData.length > 0) setEducation(eduData);
       if (Array.isArray(skillsData) && skillsData.length > 0) setSkills(skillsData);
       if (Array.isArray(projectsData) && projectsData.length > 0) setProjects(projectsData);
       if (contactData) setContact(contactData);
@@ -167,6 +169,29 @@ export default function App() {
               <p className="text-[12px] text-neutral-400 leading-relaxed">
                 {hero?.subtitle || 'Creative graphic designer blending imagination with strategy. I specialize in branding, digital experiences, and visual storytelling that elevate brands and engage audiences across all platforms.'}
               </p>
+
+              {/* Resume Quick Action */}
+              <div className="mt-5 pt-4 border-t border-neutral-800/80 flex items-center justify-between gap-2">
+                <Link
+                  to="/resume"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#D1FF52] hover:text-white transition-colors group cursor-pointer"
+                >
+                  <FileText className="w-3.5 h-3.5 transition-transform group-hover:scale-110" />
+                  <span>View Resume</span>
+                  <span className="text-[10px] opacity-70 group-hover:translate-x-0.5 transition-transform">→</span>
+                </Link>
+                <a
+                  href="/Nilesh_Mali_Resume.pdf"
+                  download="Nilesh_Mali_Resume.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-neutral-400 hover:text-[#D1FF52] transition-colors py-1 px-2.5 rounded-lg bg-neutral-900 border border-neutral-800 hover:border-[#D1FF52]/40"
+                  title="Download Nilesh Mali Resume PDF"
+                >
+                  <Download className="w-3 h-3" />
+                  <span>PDF</span>
+                </a>
+              </div>
             </BentoCard>
             <div className="flex flex-wrap gap-2 justify-start">
               <Badge colorClass="" icon={<Fingerprint className="w-5 h-5"/>} staggered={true}>Brand<br/>Identity</Badge>
@@ -293,23 +318,61 @@ export default function App() {
           <SectionHeading delay={0.1}>Journey</SectionHeading>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
             <ExperienceCard 
-              title="Experience"
-              items={experience.length > 0 ? experience.map((exp: any) => ({
-                year: exp.year || exp.duration || exp.image,
-                title: exp.role || exp.title,
-                subtitle: exp.company || exp.description
+              title="EXPERIENCE"
+              highlightTheme="lime"
+              items={experience.length > 0 ? experience.map((exp: any, idx: number) => ({
+                year: exp.year || exp.duration,
+                title: exp.title || exp.role,
+                description: exp.description || exp.company,
+                highlight: exp.highlight !== undefined ? exp.highlight : idx === 0,
+                highlightColor: 'lime'
               })) : [
-                { year: "2025-Now", title: "Graphic Designer", subtitle: "Redes Creation" },
-                { year: "2025", title: "Graphic Design Intern", subtitle: "Redes Creation" },
-                { year: "2024-Now", title: "Founder", subtitle: "BM Graphics & Media" }
+                { 
+                  year: "2025 - PRESENT", 
+                  title: "Graphic Designer", 
+                  description: "Redes Creation — Spearheading client branding, social campaigns & UI design.",
+                  highlight: true,
+                  highlightColor: "lime"
+                },
+                { 
+                  year: "2025", 
+                  title: "Graphic Design Intern", 
+                  description: "Redes Creation — Worked on marketing creatives, logo drafting, and brand collateral.",
+                  highlight: false
+                },
+                { 
+                  year: "2024 - PRESENT", 
+                  title: "Founder & Lead Creative", 
+                  description: "BM Graphics & Media — Full-service freelance studio delivering brand design globally.",
+                  highlight: false
+                }
               ]} 
             />
             <ExperienceCard 
-              title="Education"
-              icon={<GraduationCap className="w-5 h-5" />}
-              items={[
-                { year: "2022-2025", title: "Bachelor of Arts", subtitle: "" },
-                { year: "2023-2024", title: "UI/UX", subtitle: "Design Academy" }
+              title="EDUCATION"
+              icon={<GraduationCap className="w-5 h-5 text-cyan-400" />}
+              highlightTheme="cyan"
+              borderHighlight={true}
+              items={education.length > 0 ? education.map((edu: any, idx: number) => ({
+                year: edu.year || edu.duration,
+                title: edu.title || edu.degree,
+                description: edu.description || edu.institution,
+                highlight: edu.highlight !== undefined ? edu.highlight : idx === 0,
+                highlightColor: 'cyan'
+              })) : [
+                { 
+                  year: "2022 - 2025", 
+                  title: "Bachelor of Arts", 
+                  description: "Graduated with foundational knowledge in visual arts, media and communication.",
+                  highlight: true,
+                  highlightColor: "cyan"
+                },
+                { 
+                  year: "2023 - 2024", 
+                  title: "UI/UX Design Certification", 
+                  description: "Design Academy — Intensive hands-on training in Figma, wireframing & interaction design.",
+                  highlight: false
+                }
               ]} 
             />
           </div>

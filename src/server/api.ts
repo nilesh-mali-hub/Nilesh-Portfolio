@@ -254,7 +254,7 @@ router.get('/analytics/summary', async (req, res) => {
   }
 });
 
-const collections = ['projects', 'services', 'testimonials', 'leads', 'blog', 'gallery', 'knowledge', 'experience', 'skills'];
+const collections = ['projects', 'services', 'testimonials', 'leads', 'blog', 'gallery', 'knowledge', 'experience', 'education', 'skills'];
 
 // Generic CRUD for collections
 collections.forEach(collection => {

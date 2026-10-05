@@ -7,19 +7,55 @@ export const defaultData = {
   experience: [
     {
       id: "exp-1",
-      company: "Design Studio X",
-      role: "Senior Graphic Designer",
-      duration: "2020 - Present",
-      description: "Led branding and UI/UX design for premium clients.",
-      icon: "graduation-cap"
+      company: "Redes Creation",
+      role: "Graphic Designer",
+      duration: "2025 - PRESENT",
+      year: "2025 - PRESENT",
+      title: "Graphic Designer",
+      description: "Redes Creation — Spearheading client branding, social campaigns & UI design.",
+      highlight: true
     },
     {
       id: "exp-2",
-      company: "Creative Agency Co.",
-      role: "Visual Designer",
-      duration: "2018 - 2020",
-      description: "Developed marketing campaigns and brand guidelines.",
-      icon: "briefcase"
+      company: "Redes Creation",
+      role: "Graphic Design Intern",
+      duration: "2025",
+      year: "2025",
+      title: "Graphic Design Intern",
+      description: "Redes Creation — Worked on marketing creatives, logo drafting, and brand collateral.",
+      highlight: false
+    },
+    {
+      id: "exp-3",
+      company: "BM Graphics & Media",
+      role: "Founder & Lead Creative",
+      duration: "2024 - PRESENT",
+      year: "2024 - PRESENT",
+      title: "Founder & Lead Creative",
+      description: "BM Graphics & Media — Full-service freelance studio delivering brand design globally.",
+      highlight: false
+    }
+  ],
+  education: [
+    {
+      id: "edu-1",
+      institution: "Bachelor of Arts",
+      degree: "Bachelor of Arts",
+      duration: "2022 - 2025",
+      year: "2022 - 2025",
+      title: "Bachelor of Arts",
+      description: "Graduated with foundational knowledge in visual arts, media and communication.",
+      highlight: true
+    },
+    {
+      id: "edu-2",
+      institution: "Design Academy",
+      degree: "UI/UX Design Certification",
+      duration: "2023 - 2024",
+      year: "2023 - 2024",
+      title: "UI/UX Design Certification",
+      description: "Design Academy — Intensive hands-on training in Figma, wireframing & interaction design.",
+      highlight: false
     }
   ],
   skills: [
@@ -72,7 +108,7 @@ export const defaultData = {
   resume: {
     experience: [],
     education: [],
-    pdfUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'
+    pdfUrl: '/Nilesh_Mali_Resume.pdf'
   },
   gallery: [],
   knowledge: [],

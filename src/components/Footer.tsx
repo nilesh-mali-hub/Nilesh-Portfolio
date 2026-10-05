@@ -3,7 +3,7 @@ import { Instagram, Linkedin, Twitter, Youtube, ArrowRight, Mail, Lock } from 'l
 import { Link, useNavigate } from 'react-router-dom';
 
 export function Footer() {
-  const [resumeUrl, setResumeUrl] = useState<string>('https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf');
+  const [resumeUrl, setResumeUrl] = useState<string>('/resume.pdf');
   const [secretClicks, setSecretClicks] = useState(0);
   const navigate = useNavigate();
 
