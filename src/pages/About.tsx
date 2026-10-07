@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { SEO } from '../components/SEO';
 import { NoiseOverlay } from '../components/NoiseOverlay';
 import { RotatingText } from '../components/RotatingText';
-import { Download, Eye } from 'lucide-react';
+import { Eye, ExternalLink } from 'lucide-react';
 import { NileshIntroCard, ExperienceGaugeCard } from '../components/NileshIntroCard';
 
 export default function About() {
-  const [resumeUrl, setResumeUrl] = useState<string>('/resume.pdf');
+  const [resumeUrl, setResumeUrl] = useState<string>('https://drive.google.com/file/d/1M-KDhvdXRdCUPmwFN6gi616c6ds8Snp0/view?usp=sharing');
   const [hero, setHero] = useState<any>(null);
   const [contact, setContact] = useState<any>(null);
 
@@ -23,31 +22,6 @@ export default function About() {
       if (contactData) setContact(contactData);
     });
   }, []);
-
-  const [downloading, setDownloading] = useState(false);
-
-  const handleDownload = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    setDownloading(true);
-    const pdfPath = '/Nilesh_Mali_Resume.pdf';
-    try {
-      const response = await fetch(pdfPath);
-      if (!response.ok) throw new Error('File not found');
-      const blob = await response.blob();
-      const blobUrl = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = blobUrl;
-      link.download = 'Nilesh_Mali_Resume.pdf';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(blobUrl);
-    } catch {
-      window.open(pdfPath, '_blank');
-    } finally {
-      setTimeout(() => setDownloading(false), 800);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-neutral-950 text-white pt-24 pb-20 overflow-x-hidden font-sans relative">
@@ -124,25 +98,16 @@ export default function About() {
               className="flex flex-col sm:flex-row gap-4"
             >
               <a 
-                href="/Nilesh_Mali_Resume.pdf"
-                download="Nilesh_Mali_Resume.pdf"
-                onClick={handleDownload}
+                href={resumeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-3 bg-black text-[#D1FF52] hover:bg-neutral-900 px-6 py-4 rounded-xl font-bold transition-all duration-200 shadow-xl hover:scale-105 active:scale-95 group w-full sm:w-auto cursor-pointer"
-                title="Download Nilesh Mali Resume PDF"
-              >
-                <Download className={`w-5 h-5 transition-transform ${downloading ? 'animate-bounce text-white' : 'group-hover:translate-y-0.5'}`} />
-                <span>{downloading ? 'Downloading...' : 'Download Resume'}</span>
-              </a>
-              <Link 
-                to="/resume"
-                className="inline-flex items-center justify-center gap-3 bg-neutral-950 text-white hover:bg-black hover:text-[#D1FF52] border border-black/30 px-6 py-4 rounded-xl font-bold transition-all duration-200 shadow-xl hover:scale-105 active:scale-95 group w-full sm:w-auto cursor-pointer"
-                title="View Full Interactive Resume"
+                className="inline-flex items-center justify-center gap-3 bg-black text-[#D1FF52] hover:bg-neutral-900 px-8 py-4 rounded-xl font-bold transition-all duration-200 shadow-xl hover:scale-105 active:scale-95 group w-full sm:w-auto cursor-pointer"
+                title="View Nilesh Mali Resume on Google Drive"
               >
                 <Eye className="w-5 h-5 text-[#D1FF52] group-hover:scale-110 transition-transform" />
-                <span>View Full Resume</span>
-              </Link>
+                <span>View Resume</span>
+                <ExternalLink className="w-4 h-4 opacity-75 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </a>
             </motion.div>
           </div>
 

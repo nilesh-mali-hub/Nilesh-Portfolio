@@ -1629,17 +1629,17 @@ function SettingsTab({ name }: { name: string }) {
         {name === 'resume' ? (
           <div className="space-y-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">Resume PDF URL</label>
+              <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">Resume Google Drive / URL</label>
               <input 
                 type="text" 
                 value={formData.pdfUrl || ''}
                 onChange={(e) => setFormData({ ...formData, pdfUrl: e.target.value })}
                 className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] font-mono text-sm"
-                placeholder="https://drive.google.com/... or direct PDF link"
+                placeholder="https://drive.google.com/file/d/.../view?usp=sharing"
                 required
               />
               <p className="text-[11px] text-neutral-500 mt-2 leading-relaxed">
-                This direct PDF link is used when users click "Download Resume" across the portfolio and about pages. Google Drive sharing links are automatically converted to direct viewable links.
+                This link opens when visitors click "View Resume" across the portfolio and about pages. Google Drive links are preserved and open directly in Drive.
               </p>
             </div>
             {formData.pdfUrl && (
@@ -1783,7 +1783,7 @@ function SettingsTab({ name }: { name: string }) {
               </div>
               <div>
                 <label className="block text-[11px] font-mono text-neutral-400 mb-1">Instagram Profile URL</label>
-                <input type="url" value={formData.instagram || ''} onChange={(e) => setFormData({ ...formData, instagram: e.target.value })} className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-[#D1FF52] text-xs font-mono" placeholder="https://instagram.com/nileshmalidesign" />
+                <input type="url" value={formData.instagram || ''} onChange={(e) => setFormData({ ...formData, instagram: e.target.value })} className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-[#D1FF52] text-xs font-mono" placeholder="https://www.instagram.com/_nilesh._.mali_/" />
               </div>
               <div>
                 <label className="block text-[11px] font-mono text-neutral-400 mb-1">LinkedIn Profile URL</label>

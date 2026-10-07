@@ -57,7 +57,7 @@ export function SEO({
     "sameAs": [
       "https://www.linkedin.com/in/nilesh-mali-a5997b28a/",
       "https://www.behance.net/nileshmali25",
-      "https://www.instagram.com/_nilesh._.mali_?",
+      "https://www.instagram.com/_nilesh._.mali_/",
       "https://api.whatsapp.com/send/?phone=916378954363&text=Hello+Nilesh+Mali%21"
     ],
     "knowsAbout": [

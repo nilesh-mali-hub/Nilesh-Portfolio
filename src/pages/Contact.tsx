@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { MessageCircle } from 'lucide-react';
+import { MessageCircle, Instagram } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { SEO } from '../components/SEO';
 import { NoiseOverlay } from '../components/NoiseOverlay';
@@ -226,17 +226,26 @@ export default function Contact() {
           </AnimatePresence>
         </div>
 
-        {/* WhatsApp Link */}
+        {/* WhatsApp & Instagram Direct Channels */}
         <div className="mt-16 pt-8 border-t border-neutral-800 w-full text-center">
-          <p className="text-neutral-400 text-lg flex items-center justify-center gap-2">
-            or send me hello on WhatsApp 
+          <p className="text-neutral-400 text-base sm:text-lg flex flex-wrap items-center justify-center gap-2">
+            <span>or connect directly via</span>
             <a 
               href="https://api.whatsapp.com/send/?phone=916378954363&text=Hello+Nilesh+Mali%21&type=phone_number&app_absent=0"
               target="_blank"
               rel="noopener noreferrer"
               className="text-white border-b-2 border-[#D1FF52] hover:text-[#D1FF52] transition-colors inline-flex items-center gap-1 font-medium"
             >
-              <MessageCircle className="w-5 h-5" /> Say hello!
+              <MessageCircle className="w-4 h-4 text-[#D1FF52]" /> WhatsApp
+            </a>
+            <span className="text-neutral-600">•</span>
+            <a 
+              href="https://www.instagram.com/_nilesh._.mali_/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white border-b-2 border-[#D1FF52] hover:text-[#D1FF52] transition-colors inline-flex items-center gap-1 font-medium"
+            >
+              <Instagram className="w-4 h-4 text-[#E1306C]" /> Instagram (@_nilesh._.mali_)
             </a>
           </p>
 

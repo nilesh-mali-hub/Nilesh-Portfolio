@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { BentoCard } from './BentoCard';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -59,13 +58,16 @@ export function NileshIntroCard({
         <p className="text-[10px] font-mono font-bold tracking-[0.22em] text-neutral-500 uppercase">
           {location}
         </p>
-        <Link
-          to="/resume"
+        <a
+          href="https://drive.google.com/file/d/1M-KDhvdXRdCUPmwFN6gi616c6ds8Snp0/view?usp=sharing"
+          target="_blank"
+          rel="noopener noreferrer"
           className="inline-flex items-center gap-1 text-[10px] font-mono font-bold tracking-wider text-[#D1FF52] hover:text-white uppercase transition-colors"
+          title="View Nilesh Mali Resume on Google Drive"
         >
-          <span>Resume</span>
+          <span>View Resume</span>
           <span>↗</span>
-        </Link>
+        </a>
       </div>
     </BentoCard>
   );

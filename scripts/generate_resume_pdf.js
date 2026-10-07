@@ -89,7 +89,11 @@ ly += 14;
 
 doc.font('Helvetica-Bold').fontSize(8.5).fillColor('#D1FF52').text('■ ', lx, ly, { continued: true });
 doc.font('Helvetica').fontSize(8.5).fillColor('#FFFFFF').text('LinkedIn  (/in/nileshmali)', { link: 'https://www.linkedin.com/in/nilesh-mali-a5997b28a/', underline: true });
-ly += 24;
+ly += 14;
+
+doc.font('Helvetica-Bold').fontSize(8.5).fillColor('#D1FF52').text('■ ', lx, ly, { continued: true });
+doc.font('Helvetica').fontSize(8.5).fillColor('#FFFFFF').text('Instagram  (@_nilesh._.mali_)', { link: 'https://www.instagram.com/_nilesh._.mali_/', underline: true });
+ly += 22;
 
 // EDUCATION
 ly = drawLeftSectionHeading('EDUCATION', ly);

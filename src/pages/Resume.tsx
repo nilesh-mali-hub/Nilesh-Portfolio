@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { SEO } from '../components/SEO';
-import { Download, ExternalLink, ArrowLeft, Phone, Mail, Globe, Linkedin, CheckCircle2 } from 'lucide-react';
+import { ExternalLink, ArrowLeft, Phone, Mail, Globe, Linkedin, CheckCircle2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function ResumePage() {
-  const [pdfUrl, setPdfUrl] = useState<string>('/resume.pdf');
+  const [pdfUrl, setPdfUrl] = useState<string>('https://drive.google.com/file/d/1M-KDhvdXRdCUPmwFN6gi616c6ds8Snp0/view?usp=sharing');
 
   useEffect(() => {
     fetch('/api/resume')
@@ -38,17 +38,9 @@ export default function ResumePage() {
               href={pdfUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-neutral-700 bg-neutral-800 text-xs font-bold text-white hover:bg-neutral-700 transition-colors"
-            >
-              <ExternalLink className="w-4 h-4" /> Open Fullscreen
-            </a>
-
-            <a
-              href={pdfUrl}
-              download="Nilesh_Mali_Resume.pdf"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#D1FF52] text-black text-xs font-bold hover:bg-[#bbf03e] shadow-lg transition-transform hover:scale-105 active:scale-95"
             >
-              <Download className="w-4 h-4" /> Download PDF
+              <ExternalLink className="w-4 h-4" /> View in Google Drive
             </a>
           </div>
         </div>
@@ -99,6 +91,10 @@ export default function ResumePage() {
                   <p className="flex items-center gap-2">
                     <span className="text-[#D1FF52]">■</span>
                     <a href="https://www.linkedin.com/in/nilesh-mali-a5997b28a/" target="_blank" rel="noopener noreferrer" className="hover:text-[#D1FF52] underline transition-colors">LinkedIn (/in/nileshmali)</a>
+                  </p>
+                  <p className="flex items-center gap-2">
+                    <span className="text-[#D1FF52]">■</span>
+                    <a href="https://www.instagram.com/_nilesh._.mali_/" target="_blank" rel="noopener noreferrer" className="hover:text-[#D1FF52] underline transition-colors">Instagram (@_nilesh._.mali_)</a>
                   </p>
                 </div>
               </div>

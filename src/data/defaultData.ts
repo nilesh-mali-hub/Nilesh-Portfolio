@@ -108,7 +108,7 @@ export const defaultData = {
   resume: {
     experience: [],
     education: [],
-    pdfUrl: '/Nilesh_Mali_Resume.pdf'
+    pdfUrl: 'https://drive.google.com/file/d/1M-KDhvdXRdCUPmwFN6gi616c6ds8Snp0/view?usp=sharing'
   },
   gallery: [],
   knowledge: [],
@@ -130,7 +130,7 @@ export const defaultData = {
   contact: {
     email: 'work.nileshmali@gmail.com',
     phone: '+91 9876543210',
-    instagram: 'https://instagram.com/nileshmali',
+    instagram: 'https://www.instagram.com/_nilesh._.mali_/',
     linkedin: 'https://linkedin.com/in/nileshmali',
     behance: 'https://behance.net/nileshmali25'
   },

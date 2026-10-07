@@ -56,6 +56,7 @@ export default function App() {
   const [projects, setProjects] = useState<any[]>(defaultData.projects);
   const [isLoadingProjects, setIsLoadingProjects] = useState<boolean>(true);
   const [contact, setContact] = useState<any>(defaultData.contact);
+  const [resumeUrl, setResumeUrl] = useState<string>('https://drive.google.com/file/d/1M-KDhvdXRdCUPmwFN6gi616c6ds8Snp0/view?usp=sharing');
 
   useEffect(() => {
     setIsLoadingProjects(true);
@@ -66,14 +67,16 @@ export default function App() {
       fetch('/api/skills').then(res => res.ok ? res.json() : null).catch(() => null),
       fetch('/api/projects').then(res => res.ok ? res.json() : null).catch(() => null),
       fetch('/api/contact').then(res => res.ok ? res.json() : null).catch(() => null),
+      fetch('/api/resume').then(res => res.ok ? res.json() : null).catch(() => null),
     ])
-    .then(([heroData, expData, eduData, skillsData, projectsData, contactData]) => {
+    .then(([heroData, expData, eduData, skillsData, projectsData, contactData, resumeData]) => {
       if (heroData) setHero(heroData);
       if (Array.isArray(expData) && expData.length > 0) setExperience(expData);
       if (Array.isArray(eduData) && eduData.length > 0) setEducation(eduData);
       if (Array.isArray(skillsData) && skillsData.length > 0) setSkills(skillsData);
       if (Array.isArray(projectsData) && projectsData.length > 0) setProjects(projectsData);
       if (contactData) setContact(contactData);
+      if (resumeData?.pdfUrl) setResumeUrl(resumeData.pdfUrl);
     })
     .catch(console.error)
     .finally(() => {
@@ -172,24 +175,16 @@ export default function App() {
 
               {/* Resume Quick Action */}
               <div className="mt-5 pt-4 border-t border-neutral-800/80 flex items-center justify-between gap-2">
-                <Link
-                  to="/resume"
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#D1FF52] hover:text-white transition-colors group cursor-pointer"
+                <a
+                  href={resumeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-xs font-bold text-[#D1FF52] hover:text-white transition-colors group cursor-pointer"
+                  title="View Nilesh Mali Resume on Google Drive"
                 >
                   <FileText className="w-3.5 h-3.5 transition-transform group-hover:scale-110" />
                   <span>View Resume</span>
-                  <span className="text-[10px] opacity-70 group-hover:translate-x-0.5 transition-transform">→</span>
-                </Link>
-                <a
-                  href="/Nilesh_Mali_Resume.pdf"
-                  download="Nilesh_Mali_Resume.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-neutral-400 hover:text-[#D1FF52] transition-colors py-1 px-2.5 rounded-lg bg-neutral-900 border border-neutral-800 hover:border-[#D1FF52]/40"
-                  title="Download Nilesh Mali Resume PDF"
-                >
-                  <Download className="w-3 h-3" />
-                  <span>PDF</span>
+                  <span className="text-[10px] opacity-70 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">↗</span>
                 </a>
               </div>
             </BentoCard>
@@ -463,12 +458,12 @@ export default function App() {
 
             {/* Instagram */}
             <BentoCard className="md:col-start-4 md:row-start-3 p-8 flex flex-col justify-center h-full min-h-[160px] group hover:border-[#D1FF52] transition-colors relative" staggered={true}>
-              <a href={contact?.instagram || "https://instagram.com"} target="_blank" rel="noopener noreferrer" className="absolute inset-0 z-10"><span className="sr-only">Instagram</span></a>
+              <a href={contact?.instagram || "https://www.instagram.com/_nilesh._.mali_/"} target="_blank" rel="noopener noreferrer" className="absolute inset-0 z-10"><span className="sr-only">Instagram @_nilesh._.mali_</span></a>
               <div className="w-10 h-10 rounded-lg bg-gradient-to-tr from-[#FD1D1D] via-[#E1306C] to-[#C13584] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                 <Instagram className="w-5 h-5 text-white" />
               </div>
               <h3 className="font-display font-bold text-xl text-white uppercase tracking-tighter">Visuals</h3>
-              <p className="text-[10px] font-bold text-neutral-500 mt-1 uppercase tracking-widest">Instagram</p>
+              <p className="text-[10px] font-bold text-neutral-400 group-hover:text-[#D1FF52] transition-colors mt-1 font-mono">@_nilesh._.mali_</p>
             </BentoCard>
             
           </motion.div>

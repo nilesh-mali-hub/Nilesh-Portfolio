@@ -44,12 +44,15 @@ function convertDriveUrl(url: string): string {
   return url;
 }
 
-// Recursively search and convert any Google Drive URLs in an object
 function convertDriveLinks(body: any): any {
   if (!body || typeof body !== 'object') return body;
   const newBody = { ...body };
   
   for (const key in newBody) {
+    if (key === 'pdfUrl') {
+      // Preserve exact Google Drive URL for resume without modification
+      continue;
+    }
     if (typeof newBody[key] === 'string') {
       newBody[key] = convertDriveUrl(newBody[key]);
     } else if (typeof newBody[key] === 'object' && newBody[key] !== null) {
@@ -429,7 +432,7 @@ singletons.forEach(singleton => {
   router.put(`/${singleton}`, async (req, res) => {
     try {
       const db = await readDB();
-      const processedBody = convertDriveLinks(req.body);
+      const processedBody = singleton === 'resume' ? req.body : convertDriveLinks(req.body);
       db[singleton] = { ...(db[singleton] || {}), ...processedBody };
       await writeDB(db);
       res.json(db[singleton]);

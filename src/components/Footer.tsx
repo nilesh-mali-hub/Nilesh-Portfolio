@@ -3,7 +3,7 @@ import { Instagram, Linkedin, Twitter, Youtube, ArrowRight, Mail, Lock } from 'l
 import { Link, useNavigate } from 'react-router-dom';
 
 export function Footer() {
-  const [resumeUrl, setResumeUrl] = useState<string>('/resume.pdf');
+  const [resumeUrl, setResumeUrl] = useState<string>('https://drive.google.com/file/d/1M-KDhvdXRdCUPmwFN6gi616c6ds8Snp0/view?usp=sharing');
   const [secretClicks, setSecretClicks] = useState(0);
   const navigate = useNavigate();
 
@@ -65,7 +65,7 @@ export function Footer() {
             </span>
           </a>
           <div className="md:w-1/3 border border-neutral-800 rounded-full min-h-[5rem] py-4 px-6 flex items-center justify-center gap-6 text-white">
-            <a href="https://www.instagram.com/_nilesh._.mali_?" target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-[#D1FF52] transition-colors">
+            <a href="https://www.instagram.com/_nilesh._.mali_/" target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-[#D1FF52] transition-colors" title="Instagram @_nilesh._.mali_">
               <Instagram className="w-5 h-5" />
             </a>
             <a href="#" className="text-neutral-400 hover:text-[#D1FF52] transition-colors">
@@ -126,11 +126,11 @@ export function Footer() {
               </div>
               YouTube
             </a>
-            <a href="https://www.instagram.com/_nilesh._.mali_?" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-neutral-400 hover:text-[#D1FF52] font-sans text-sm transition-colors group">
+            <a href="https://www.instagram.com/_nilesh._.mali_/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-neutral-400 hover:text-[#D1FF52] font-sans text-sm transition-colors group">
               <div className="w-8 h-8 rounded-full border border-neutral-800 flex items-center justify-center group-hover:border-[#D1FF52] transition-colors">
                 <Instagram className="w-4 h-4" />
               </div>
-              Instagram
+              Instagram (@_nilesh._.mali_)
             </a>
             <a href="https://www.linkedin.com/in/nilesh-mali-a5997b28a/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-neutral-400 hover:text-[#D1FF52] font-sans text-sm transition-colors group">
               <div className="w-8 h-8 rounded-full border border-neutral-800 flex items-center justify-center group-hover:border-[#D1FF52] transition-colors">

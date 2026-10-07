@@ -162,11 +162,103 @@
   "testimonials": [],
   "leads": [],
   "blog": [],
-  "analytics": [],
+  "analytics": [
+    {
+      "id": "1791397566424",
+      "path": "/about",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+      "ip": "49.15.123.152",
+      "timestamp": "2026-10-07T18:26:06.424Z"
+    },
+    {
+      "id": "1791397616762",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+      "ip": "49.15.117.154",
+      "timestamp": "2026-10-07T18:26:56.762Z"
+    },
+    {
+      "id": "1791397616788",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+      "ip": "49.15.117.154",
+      "timestamp": "2026-10-07T18:26:56.788Z"
+    },
+    {
+      "id": "1791398033233",
+      "path": "/about",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+      "ip": "49.15.123.152",
+      "timestamp": "2026-10-07T18:33:53.233Z"
+    },
+    {
+      "id": "1791398069262",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+      "ip": "49.15.117.154",
+      "timestamp": "2026-10-07T18:34:29.262Z"
+    },
+    {
+      "id": "1791398069282",
+      "path": "/",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+      "ip": "49.15.117.154",
+      "timestamp": "2026-10-07T18:34:29.282Z"
+    },
+    {
+      "id": "1791398093423",
+      "path": "/about",
+      "referrer": "https://aistudio.google.com/",
+      "utmSource": "",
+      "utmMedium": "",
+      "utmCampaign": "",
+      "utmTerm": "",
+      "device": "desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+      "ip": "49.15.117.154",
+      "timestamp": "2026-10-07T18:34:53.423Z"
+    }
+  ],
   "resume": {
     "experience": [],
     "education": [],
-    "pdfUrl": "/Nilesh_Mali_Resume.pdf"
+    "pdfUrl": "https://drive.google.com/file/d/1M-KDhvdXRdCUPmwFN6gi616c6ds8Snp0/view?usp=sharing"
   },
   "gallery": [],
   "knowledge": [],
@@ -188,7 +280,7 @@
   "contact": {
     "email": "work.nileshmali@gmail.com",
     "phone": "+91 9876543210",
-    "instagram": "https://instagram.com/nileshmali",
+    "instagram": "https://www.instagram.com/_nilesh._.mali_/",
     "linkedin": "https://linkedin.com/in/nileshmali",
     "behance": "https://behance.net/nileshmali25"
   },
