@@ -130,7 +130,7 @@ export function Footer() {
               <div className="w-8 h-8 rounded-full border border-neutral-800 flex items-center justify-center group-hover:border-[#D1FF52] transition-colors">
                 <Instagram className="w-4 h-4" />
               </div>
-              Instagram (@_nilesh._.mali_)
+              Instagram
             </a>
             <a href="https://www.linkedin.com/in/nilesh-mali-a5997b28a/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-neutral-400 hover:text-[#D1FF52] font-sans text-sm transition-colors group">
               <div className="w-8 h-8 rounded-full border border-neutral-800 flex items-center justify-center group-hover:border-[#D1FF52] transition-colors">

@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence, Variants } from 'motion/react';
-import { Quote, Star, User, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Quote, Star, User, ChevronLeft, ChevronRight, CheckCircle2 } from 'lucide-react';
 import { SectionHeading } from './SectionHeading';
 
 interface Testimonial {
@@ -10,7 +10,7 @@ interface Testimonial {
   image?: string; // Avatar URL
 }
 
-// Fallback items in case API is empty or offline
+// High-fidelity fallback items in case API is empty or offline
 const fallbackTestimonials: Testimonial[] = [
   {
     id: "f1",
@@ -34,9 +34,9 @@ const fallbackTestimonials: Testimonial[] = [
 
 const slideVariants: Variants = {
   enter: (direction: number) => ({
-    x: direction > 0 ? 1000 : -1000,
+    x: direction > 0 ? 50 : -50,
     opacity: 0,
-    scale: 0.9,
+    scale: 0.98,
   }),
   center: {
     zIndex: 1,
@@ -46,15 +46,10 @@ const slideVariants: Variants = {
   },
   exit: (direction: number) => ({
     zIndex: 0,
-    x: direction < 0 ? 1000 : -1000,
+    x: direction < 0 ? 50 : -50,
     opacity: 0,
-    scale: 0.9,
+    scale: 0.98,
   })
-};
-
-const swipeConfidenceThreshold = 10000;
-const swipePower = (offset: number, velocity: number) => {
-  return Math.abs(offset) * velocity;
 };
 
 export function Testimonials() {
@@ -62,6 +57,7 @@ export function Testimonials() {
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
     fetch('/api/testimonials')
@@ -81,7 +77,7 @@ export function Testimonials() {
       });
   }, []);
 
-  const paginate = (newDirection: number) => {
+  const paginate = useCallback((newDirection: number) => {
     setDirection(newDirection);
     setCurrentIndex((prev) => {
       let nextIndex = prev + newDirection;
@@ -89,7 +85,16 @@ export function Testimonials() {
       if (nextIndex >= list.length) nextIndex = 0;
       return nextIndex;
     });
-  };
+  }, [list.length]);
+
+  // Optional subtle auto-advance (pauses when hovering)
+  useEffect(() => {
+    if (loading || list.length <= 1 || isPaused) return;
+    const timer = setInterval(() => {
+      paginate(1);
+    }, 7000);
+    return () => clearInterval(timer);
+  }, [loading, list.length, isPaused, paginate]);
 
   // Helper to split "Name – Position, Company" for typographic hierarchy
   const parseClientTitle = (titleStr: string) => {
@@ -106,153 +111,192 @@ export function Testimonials() {
     return { name: titleStr, role: '' };
   };
 
-  const activeTestimonial = list[currentIndex];
+  const activeTestimonial = list[currentIndex] || fallbackTestimonials[0];
   const { name, role } = activeTestimonial ? parseClientTitle(activeTestimonial.title) : { name: '', role: '' };
 
   return (
-    <div className="mt-28 relative" id="testimonials">
+    <section className="mt-28 relative scroll-mt-24" id="testimonials">
       {/* Background Ambient Glows */}
-      <div className="absolute top-10 left-1/4 w-80 h-80 bg-[#D1FF52] opacity-[0.03] blur-[120px] rounded-full pointer-events-none"></div>
-      <div className="absolute bottom-10 right-1/4 w-80 h-80 bg-purple-500 opacity-[0.03] blur-[120px] rounded-full pointer-events-none"></div>
+      <div className="absolute top-1/2 left-1/3 -translate-y-1/2 w-96 h-96 bg-[#D1FF52]/[0.025] blur-[140px] rounded-full pointer-events-none" />
+      <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-80 h-80 bg-purple-500/[0.02] blur-[140px] rounded-full pointer-events-none" />
 
-      <div className="flex flex-col items-center justify-center mb-10 gap-6 text-center">
-        <div>
-          <SectionHeading delay={0.1}>Client Stories</SectionHeading>
-          <p className="text-neutral-400 text-xs sm:text-sm font-sans mt-3 max-w-xl mx-auto">
-            Hear from partners and clients who have collaborated on brand identities, creative graphics, and digital products.
-          </p>
-        </div>
-        
-        {/* Navigation Controls (Desktop) */}
-        {!loading && list.length > 1 && (
-          <div className="hidden md:flex gap-3">
-            <button 
-              onClick={() => paginate(-1)} 
-              className="w-10 h-10 rounded-full bg-neutral-900/50 border border-white/10 flex items-center justify-center hover:bg-[#D1FF52] hover:text-black hover:border-[#D1FF52] transition-colors backdrop-blur-md"
-              aria-label="Previous testimonial"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-            <button 
-              onClick={() => paginate(1)} 
-              className="w-10 h-10 rounded-full bg-neutral-900/50 border border-white/10 flex items-center justify-center hover:bg-[#D1FF52] hover:text-black hover:border-[#D1FF52] transition-colors backdrop-blur-md"
-              aria-label="Next testimonial"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
-          </div>
-        )}
+      {/* Section Header */}
+      <div className="text-center mb-12 sm:mb-14">
+        <SectionHeading delay={0.1}>Client Stories</SectionHeading>
+        <p className="text-neutral-400 text-xs sm:text-sm font-sans mt-2 max-w-xl mx-auto px-4">
+          Genuine feedback from founders, creative directors, and brands on design craft and digital delivery.
+        </p>
       </div>
 
       {loading ? (
-        <div className="flex justify-center items-center min-h-[300px]">
-          <div className="w-8 h-8 border-4 border-neutral-800 border-t-[#D1FF52] rounded-full animate-spin"></div>
+        <div className="flex justify-center items-center min-h-[340px]">
+          <div className="w-8 h-8 border-3 border-neutral-800 border-t-[#D1FF52] rounded-full animate-spin" />
         </div>
       ) : (
-        <div className="relative w-full max-w-4xl mx-auto h-[350px] sm:h-[300px] flex items-center justify-center overflow-x-hidden md:overflow-visible">
-          <AnimatePresence initial={false} custom={direction} mode="popLayout">
-            <motion.div
-              key={currentIndex}
-              custom={direction}
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={{
-                x: { type: "spring", stiffness: 300, damping: 30 },
-                opacity: { duration: 0.2 },
-                scale: { duration: 0.2 }
-              }}
-              drag="x"
-              dragConstraints={{ left: 0, right: 0 }}
-              dragElastic={1}
-              onDragEnd={(e, { offset, velocity }) => {
-                const swipe = swipePower(offset.x, velocity.x);
-                if (swipe < -swipeConfidenceThreshold) {
-                  paginate(1);
-                } else if (swipe > swipeConfidenceThreshold) {
-                  paginate(-1);
-                }
-              }}
-              className="absolute w-full px-2 sm:px-0 cursor-grab active:cursor-grabbing"
-            >
-              <div className="relative bg-neutral-900/30 border border-white/10 backdrop-blur-xl rounded-[2.2rem] p-8 sm:p-12 flex flex-col justify-between overflow-hidden shadow-2xl group w-full h-full max-w-3xl mx-auto">
-                {/* Visual Glassmorphic Shine Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-white/[0.01] via-transparent to-white/[0.03] pointer-events-none"></div>
-                
-                {/* Decorative Quote Icon */}
-                <div className="absolute top-8 right-10 text-white/[0.04] group-hover:text-[#D1FF52]/[0.06] transition-colors duration-500 pointer-events-none">
-                  <Quote className="w-24 h-24 rotate-180 transform" />
-                </div>
+        <div 
+          className="relative max-w-4xl mx-auto px-4 sm:px-6"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          {/* Desktop Floating Navigation Arrows (Side of Card) */}
+          {list.length > 1 && (
+            <>
+              <button 
+                onClick={() => paginate(-1)} 
+                className="hidden md:flex absolute -left-5 lg:-left-7 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-neutral-900/90 border border-neutral-800 text-neutral-300 hover:text-black hover:bg-[#D1FF52] hover:border-[#D1FF52] transition-all duration-200 items-center justify-center shadow-2xl backdrop-blur-md cursor-pointer group active:scale-95"
+                aria-label="Previous testimonial"
+              >
+                <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
+              </button>
 
-                <div className="relative z-10">
-                  {/* Rating Stars */}
-                  <div className="flex gap-1 mb-6">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 sm:w-5 sm:h-5 fill-[#D1FF52] text-[#D1FF52] filter drop-shadow-[0_0_4px_rgba(209,255,82,0.4)]" />
-                    ))}
-                  </div>
+              <button 
+                onClick={() => paginate(1)} 
+                className="hidden md:flex absolute -right-5 lg:-right-7 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-neutral-900/90 border border-neutral-800 text-neutral-300 hover:text-black hover:bg-[#D1FF52] hover:border-[#D1FF52] transition-all duration-200 items-center justify-center shadow-2xl backdrop-blur-md cursor-pointer group active:scale-95"
+                aria-label="Next testimonial"
+              >
+                <ChevronRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
+              </button>
+            </>
+          )}
 
-                  {/* Feedback Quote text */}
-                  <p className="text-neutral-200 text-sm sm:text-base leading-relaxed mb-8 italic relative z-10 font-sans">
-                    "{activeTestimonial.description}"
-                  </p>
-                </div>
+          {/* Testimonial Card Slider */}
+          <div className="relative min-h-[320px] sm:min-h-[290px] flex items-center justify-center">
+            <AnimatePresence mode="wait" custom={direction}>
+              <motion.div
+                key={currentIndex}
+                custom={direction}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{
+                  x: { type: "spring", stiffness: 350, damping: 32 },
+                  opacity: { duration: 0.22 },
+                  scale: { duration: 0.22 }
+                }}
+                className="w-full"
+              >
+                <div className="relative bg-neutral-900/40 border border-neutral-800/90 hover:border-neutral-700/80 transition-colors duration-300 backdrop-blur-xl rounded-[2rem] p-7 sm:p-10 md:p-12 shadow-2xl overflow-hidden group">
+                  {/* Subtle Top-Corner Accent Light */}
+                  <div className="absolute -top-24 -right-24 w-48 h-48 bg-[#D1FF52]/[0.04] rounded-full blur-2xl pointer-events-none" />
 
-                {/* Client Profile Section */}
-                <div className="flex items-center gap-4 border-t border-white/5 pt-6 mt-auto relative z-10">
-                  {/* Glassmorphic Avatar Frame */}
-                  <div className="w-14 h-14 rounded-full border border-white/20 p-[2px] bg-white/5 flex-shrink-0 relative overflow-hidden group-hover:border-[#D1FF52]/40 transition-colors">
-                    {activeTestimonial.image ? (
-                      <img 
-                        src={activeTestimonial.image} 
-                        alt={name} 
-                        referrerPolicy="no-referrer"
-                        className="w-full h-full object-cover rounded-full filter grayscale hover:grayscale-0 transition-all duration-500" 
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-neutral-800 rounded-full flex items-center justify-center text-neutral-400">
-                        <User className="w-6 h-6" />
+                  {/* Top Bar inside Card: Stars + Quote Badge (Separated, Zero Overlap) */}
+                  <div className="flex items-center justify-between gap-4 mb-6 relative z-10">
+                    <div className="flex items-center gap-3">
+                      <div className="flex gap-1">
+                        {[...Array(5)].map((_, i) => (
+                          <Star 
+                            key={i} 
+                            className="w-4 h-4 sm:w-5 sm:h-5 fill-[#D1FF52] text-[#D1FF52] filter drop-shadow-[0_0_6px_rgba(209,255,82,0.4)]" 
+                          />
+                        ))}
                       </div>
-                    )}
+                      <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-mono tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-[#D1FF52]/10 text-[#D1FF52] border border-[#D1FF52]/20">
+                        <CheckCircle2 className="w-3 h-3" />
+                        Verified Client
+                      </span>
+                    </div>
+
+                    {/* Dedicated Quote Icon Badge */}
+                    <div className="w-11 h-11 rounded-2xl bg-neutral-800/70 border border-neutral-700/70 flex items-center justify-center text-[#D1FF52] shadow-sm shrink-0">
+                      <Quote className="w-5 h-5 rotate-180" />
+                    </div>
                   </div>
 
-                  {/* Client Typography Pair */}
-                  <div className="flex flex-col min-w-0">
-                    <span className="font-display font-bold text-base text-white tracking-tight truncate uppercase">
-                      {name}
-                    </span>
-                    {role && (
-                      <span className="text-xs text-neutral-400 font-mono tracking-wider truncate uppercase mt-0.5">
-                        {role}
+                  {/* Testimonial Quote Text - Clean, spacious, high contrast, zero overlap */}
+                  <blockquote className="text-neutral-100 text-base sm:text-lg md:text-xl leading-relaxed my-5 sm:my-7 relative z-10 font-sans font-normal italic">
+                    "{activeTestimonial.description}"
+                  </blockquote>
+
+                  {/* Client Profile Section */}
+                  <div className="flex items-center justify-between border-t border-neutral-800/80 pt-6 mt-6 relative z-10">
+                    <div className="flex items-center gap-4 min-w-0">
+                      {/* Avatar Frame */}
+                      <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-full border-2 border-neutral-800 hover:border-[#D1FF52]/50 p-0.5 bg-neutral-900 shrink-0 relative overflow-hidden transition-colors shadow-md">
+                        {activeTestimonial.image ? (
+                          <img 
+                            src={activeTestimonial.image} 
+                            alt={name} 
+                            referrerPolicy="no-referrer"
+                            className="w-full h-full object-cover rounded-full grayscale hover:grayscale-0 transition-all duration-300" 
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-neutral-800 rounded-full flex items-center justify-center text-neutral-400">
+                            <User className="w-6 h-6" />
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Name & Designation */}
+                      <div className="flex flex-col min-w-0">
+                        <h4 className="font-display font-bold text-sm sm:text-base text-white tracking-wide uppercase truncate">
+                          {name}
+                        </h4>
+                        {role && (
+                          <p className="text-xs text-neutral-400 font-mono tracking-wider uppercase truncate mt-0.5">
+                            {role}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Counter Indicator */}
+                    <div className="text-right shrink-0 pl-3">
+                      <span className="text-xs font-mono font-bold tracking-wider text-neutral-500">
+                        <span className="text-[#D1FF52]">{String(currentIndex + 1).padStart(2, '0')}</span>
+                        {" / "}
+                        {String(list.length).padStart(2, '0')}
                       </span>
-                    )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-      )}
+              </motion.div>
+            </AnimatePresence>
+          </div>
 
-      {/* Pagination Dots (Mobile / General) */}
-      {!loading && list.length > 1 && (
-        <div className="flex justify-center items-center gap-2 mt-8">
-          {list.map((_, idx) => (
-            <button 
-              key={idx}
-              onClick={() => {
-                setDirection(idx > currentIndex ? 1 : -1);
-                setCurrentIndex(idx);
-              }}
-              aria-label={`Go to testimonial ${idx + 1}`}
-              className={`h-2 rounded-full transition-all duration-300 ${
-                idx === currentIndex ? 'bg-[#D1FF52] w-8' : 'bg-white/20 w-2 hover:bg-white/40'
-              }`}
-            />
-          ))}
+          {/* Bottom Pagination Controls (Dots + Mobile Arrows) */}
+          {list.length > 1 && (
+            <div className="flex items-center justify-center gap-4 mt-8">
+              {/* Mobile Previous Button */}
+              <button 
+                onClick={() => paginate(-1)} 
+                className="md:hidden w-10 h-10 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-300 hover:text-black hover:bg-[#D1FF52] hover:border-[#D1FF52] transition-colors active:scale-95"
+                aria-label="Previous testimonial"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+
+              {/* Progress Indicator Pills */}
+              <div className="flex items-center gap-2">
+                {list.map((_, idx) => (
+                  <button 
+                    key={idx}
+                    onClick={() => {
+                      setDirection(idx > currentIndex ? 1 : -1);
+                      setCurrentIndex(idx);
+                    }}
+                    aria-label={`Go to testimonial ${idx + 1}`}
+                    className={`h-2 rounded-full transition-all duration-300 ${
+                      idx === currentIndex 
+                        ? 'bg-[#D1FF52] w-8 shadow-[0_0_8px_rgba(209,255,82,0.5)]' 
+                        : 'bg-neutral-800 hover:bg-neutral-600 w-2'
+                    }`}
+                  />
+                ))}
+              </div>
+
+              {/* Mobile Next Button */}
+              <button 
+                onClick={() => paginate(1)} 
+                className="md:hidden w-10 h-10 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-300 hover:text-black hover:bg-[#D1FF52] hover:border-[#D1FF52] transition-colors active:scale-95"
+                aria-label="Next testimonial"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          )}
         </div>
       )}
-    </div>
+    </section>
   );
 }

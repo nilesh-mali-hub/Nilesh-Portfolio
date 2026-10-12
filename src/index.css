@@ -39,7 +39,7 @@ body {
 
 /* Text Color Accents */
 .text-\[\#D1FF52\],
-[class*="text-[#D1FF52]"] {
+[class*="text-[#D1FF52]"]:not([class*="/"]):not([class*="hover"]) {
   color: var(--accent-color) !important;
 }
 

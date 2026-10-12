@@ -11,8 +11,7 @@ async function startServer() {
   const app = express();
   app.use(express.json());
   
-  const PORT = 3000;
-  app.use(express.json());
+  const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
   app.use("/api", apiRouter);
 
   app.post("/api/chat", async (req, res) => {
