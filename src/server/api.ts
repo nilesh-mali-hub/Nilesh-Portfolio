@@ -1,10 +1,12 @@
 import { Router } from 'express';
 import { readDB, writeDB } from './db';
 import { google } from 'googleapis';
+import crypto from 'crypto';
+import { sendInquiryEmails, sendTestResendEmail, getFromEmail } from './email';
 
 const router = Router();
 
-// Helper to safely clean and format Google Service Account private keys from environment variables
+// Helper to safely clean, format, and validate Google Service Account private keys
 function cleanPrivateKey(raw?: string): string | null {
   if (!raw || typeof raw !== 'string') return null;
   let key = raw.trim();
@@ -15,7 +17,23 @@ function cleanPrivateKey(raw?: string): string | null {
   if (!key.includes('BEGIN PRIVATE KEY') && !key.includes('BEGIN RSA PRIVATE KEY')) {
     return null;
   }
-  return key;
+  // If it contains dummy placeholder ellipsis, skip to prevent crypto decoder crashes
+  if (key.includes('...') || key.includes('your-private-key')) {
+    return null;
+  }
+  try {
+    crypto.createPrivateKey(key);
+    return key;
+  } catch {
+    return null;
+  }
+}
+
+// Helper to extract clean service account email even if surrounded by JSON formatting or quotes
+function cleanServiceAccountEmail(raw?: string): string | null {
+  if (!raw || typeof raw !== 'string') return null;
+  const match = raw.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+  return match ? match[0] : null;
 }
 
 // Helper to convert Google Drive share links into direct, high-performance embed links
@@ -348,7 +366,7 @@ router.post('/contact', async (req, res) => {
 
     // Try Google Sheets sync in background if credentials exist
     try {
-      const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL?.trim();
+      const clientEmail = cleanServiceAccountEmail(process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL);
       const privateKey = cleanPrivateKey(process.env.GOOGLE_PRIVATE_KEY);
 
       if (clientEmail && privateKey) {
@@ -370,28 +388,91 @@ router.post('/contact', async (req, res) => {
           requestBody: {
             values: [[new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }), name, whatsapp, message]]
           }
-        }).catch(err => {
-          // Log only non-fatal info or ignore invalid key formats gracefully
-          if (process.env.NODE_ENV !== 'production') {
-            console.info("Optional Google Sheets sync note:", err?.message || err);
-          }
+        }).catch(() => {
+          // Silent background sync handling
         });
       }
-    } catch (sheetErr: any) {
+    } catch {
       // Gracefully prevent background sync errors from breaking visitor requests
-      if (process.env.NODE_ENV !== 'production') {
-        console.info("Optional Google Sheets background setup note:", sheetErr?.message || sheetErr);
-      }
+    }
+
+    // Send Auto Thank-You email to visitor & lead notification to Admin via Resend API
+    let emailStatus = { visitorEmailSent: false, adminEmailSent: false, note: '' };
+    try {
+      const emailResult = await sendInquiryEmails({
+        name: newLead.name,
+        email: newLead.email,
+        whatsapp: newLead.whatsapp,
+        message: newLead.message,
+        timestamp: newLead.timestamp
+      }, {
+        resendApiKey: db.settings?.resendApiKey,
+        resendFromEmail: db.settings?.resendFromEmail,
+        adminEmail: db.settings?.email || db.contact?.email || 'work.nileshmali@gmail.com'
+      });
+      emailStatus = {
+        visitorEmailSent: emailResult.visitorEmailSent,
+        adminEmailSent: emailResult.adminEmailSent,
+        note: emailResult.note || (emailResult.error ? `Email note: ${emailResult.error}` : '')
+      };
+    } catch (emailErr: any) {
+      console.warn("Resend email background dispatch note:", emailErr?.message || emailErr);
     }
 
     return res.status(200).json({ 
       success: true, 
       message: 'Your message has been sent successfully!', 
-      lead: newLead 
+      lead: newLead,
+      emailSent: emailStatus.visitorEmailSent,
+      adminNotified: emailStatus.adminEmailSent
     });
   } catch (err: any) {
     console.error('Error submitting contact form:', err);
     return res.status(500).json({ error: err.message || 'Failed to submit contact message' });
+  }
+});
+
+// Resend Email API Status endpoint for Admin verification
+router.get('/resend/status', async (req, res) => {
+  try {
+    const db = await readDB();
+    const envKey = (process.env.RESEND_API_KEY || '').trim();
+    const dbKey = (db.settings?.resendApiKey || '').trim();
+    const configured = Boolean(envKey || dbKey);
+    const keySource = envKey ? 'Environment Variable (RESEND_API_KEY)' : dbKey ? 'Settings Database' : 'Not Configured';
+    const activeKey = envKey || dbKey;
+    const maskedKey = activeKey ? `${activeKey.slice(0, 7)}...${activeKey.slice(-4)}` : null;
+    const fromEmail = getFromEmail(db.settings);
+    const adminEmail = db.settings?.email || 'work.nileshmali@gmail.com';
+    const isSandbox = fromEmail.includes('@resend.dev');
+
+    return res.json({
+      configured,
+      keySource,
+      maskedKey,
+      fromEmail,
+      adminEmail,
+      isSandbox
+    });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Resend Manual Test Email Endpoint
+router.post('/resend/test', async (req, res) => {
+  try {
+    const { targetEmail } = req.body || {};
+    const db = await readDB();
+    const recipient = targetEmail || db.settings?.email || 'work.nileshmali@gmail.com';
+    const result = await sendTestResendEmail(recipient, {
+      resendApiKey: db.settings?.resendApiKey,
+      resendFromEmail: db.settings?.resendFromEmail,
+      adminEmail: db.settings?.email
+    });
+    return res.json(result);
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: err.message });
   }
 });
 

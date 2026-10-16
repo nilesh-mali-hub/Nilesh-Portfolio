@@ -10,9 +10,12 @@ export default function Contact() {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     name: '',
+    email: '',
     whatsapp: '',
     message: ''
   });
+  const [submittedEmail, setSubmittedEmail] = useState('');
+  const [emailAutoSent, setEmailAutoSent] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -30,7 +33,7 @@ export default function Contact() {
   };
 
   const nextStep = () => {
-    if (formData.name && formData.whatsapp) {
+    if (formData.name.trim() && formData.email.trim() && formData.email.includes('@')) {
       setStep(2);
     }
   };
@@ -45,7 +48,7 @@ export default function Contact() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.whatsapp || !formData.message) return;
+    if (!formData.name || !formData.email || !formData.message) return;
     
     setIsSubmitting(true);
     setError(null);
@@ -69,8 +72,10 @@ export default function Contact() {
       }
       
       if (response.ok || data.success) {
+        setSubmittedEmail(formData.email);
+        setEmailAutoSent(Boolean(data.emailSent));
         setSuccess(true);
-        setFormData({ name: '', whatsapp: '', message: '' });
+        setFormData({ name: '', email: '', whatsapp: '', message: '' });
       } else {
         setError(data.error || 'Failed to submit the message. Please try again or reach out on WhatsApp.');
       }
@@ -122,9 +127,16 @@ export default function Contact() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <h3 className="font-display font-bold text-2xl text-white mb-2">Message Sent!</h3>
-                <p className="text-neutral-400 text-sm max-w-xs mb-6">
-                  Thank you! Nilesh will review your message and get back to you shortly.
+                <h3 className="font-display font-bold text-2xl text-white mb-2">Message Sent! ✨</h3>
+                <p className="text-neutral-300 text-sm max-w-sm mb-2">
+                  Thank you! {submittedEmail ? (
+                    <>A confirmation email has been dispatched to <strong className="text-white underline decoration-[#D1FF52]">{submittedEmail}</strong>.</>
+                  ) : (
+                    <>Nilesh has received your inquiry and will review it shortly.</>
+                  )}
+                </p>
+                <p className="text-xs text-neutral-500 mb-6">
+                  Check your inbox for project summary and direct WhatsApp access.
                 </p>
                 <div className="flex gap-3 w-full">
                   <button
@@ -132,9 +144,9 @@ export default function Contact() {
                     onClick={() => {
                       setSuccess(false);
                       setStep(1);
-                      setFormData({ name: '', whatsapp: '', message: '' });
+                      setFormData({ name: '', email: '', whatsapp: '', message: '' });
                     }}
-                    className="flex-1 bg-neutral-800 hover:bg-neutral-700 text-white font-bold py-3.5 rounded-xl text-xs transition-colors"
+                    className="flex-1 bg-neutral-800 hover:bg-neutral-700 text-white font-bold py-3.5 rounded-xl text-xs transition-colors cursor-pointer"
                   >
                     Send Another
                   </button>
@@ -155,33 +167,60 @@ export default function Contact() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.2 }}
-                className="w-full flex flex-col gap-4"
+                className="w-full flex flex-col gap-3.5"
               >
-                <input 
-                  type="text" 
-                  name="name"
-                  placeholder="Full Name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="w-full bg-neutral-900/50 border border-neutral-750 rounded-xl px-4 py-4 text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#D1FF52] transition-colors"
-                  required
-                />
-                <input 
-                  type="tel" 
-                  name="whatsapp"
-                  placeholder="WhatsApp Number"
-                  value={formData.whatsapp}
-                  onChange={handleChange}
-                  className="w-full bg-neutral-900/50 border border-neutral-750 rounded-xl px-4 py-4 text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#D1FF52] transition-colors"
-                  required
-                />
+                <div>
+                  <label className="block text-[11px] font-mono uppercase tracking-wider text-neutral-400 mb-1.5">
+                    Your Name <span className="text-[#D1FF52]">*</span>
+                  </label>
+                  <input 
+                    type="text" 
+                    name="name"
+                    placeholder="e.g. Rahul Sharma"
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="w-full bg-neutral-900/60 border border-neutral-750 rounded-xl px-4 py-3.5 text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#D1FF52] transition-colors text-sm"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-mono uppercase tracking-wider text-neutral-400 mb-1.5">
+                    Email Address <span className="text-[#D1FF52]">*</span>
+                    <span className="text-neutral-500 font-sans text-[10px] ml-1.5 lowercase">(for auto confirmation)</span>
+                  </label>
+                  <input 
+                    type="email" 
+                    name="email"
+                    placeholder="you@company.com"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="w-full bg-neutral-900/60 border border-neutral-750 rounded-xl px-4 py-3.5 text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#D1FF52] transition-colors text-sm"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-mono uppercase tracking-wider text-neutral-400 mb-1.5">
+                    WhatsApp / Phone <span className="text-neutral-500 font-sans text-[10px] lowercase">(optional)</span>
+                  </label>
+                  <input 
+                    type="tel" 
+                    name="whatsapp"
+                    placeholder="+91 98765 43210"
+                    value={formData.whatsapp}
+                    onChange={handleChange}
+                    className="w-full bg-neutral-900/60 border border-neutral-750 rounded-xl px-4 py-3.5 text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#D1FF52] transition-colors text-sm"
+                  />
+                </div>
+
                 <button 
                   type="button"
                   onClick={nextStep}
-                  disabled={!formData.name || !formData.whatsapp}
-                  className="w-full bg-blue-600 hover:bg-blue-500 disabled:bg-neutral-800 disabled:text-neutral-500 text-white font-bold py-4 rounded-xl transition-colors mt-2 cursor-pointer select-none"
+                  disabled={!formData.name.trim() || !formData.email.trim() || !formData.email.includes('@')}
+                  className="w-full bg-blue-600 hover:bg-blue-500 disabled:bg-neutral-800 disabled:text-neutral-500 text-white font-bold py-3.5 rounded-xl transition-colors mt-2 cursor-pointer select-none text-sm"
                 >
-                  Next
+                  Next: Project Details &rarr;
                 </button>
               </motion.form>
             ) : (
@@ -192,35 +231,61 @@ export default function Contact() {
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.2 }}
                 onSubmit={handleSubmit}
-                className="w-full flex flex-col gap-4"
+                className="w-full flex flex-col gap-3.5"
               >
-                <textarea 
-                  name="message"
-                  placeholder="Your Message..."
-                  value={formData.message}
-                  onChange={handleChange}
-                  rows={4}
-                  className="w-full bg-neutral-900/50 border border-neutral-750 rounded-xl px-4 py-4 text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#D1FF52] transition-colors resize-none"
-                  required
-                />
-                <div className="flex gap-2 mt-2">
+                <div className="flex items-center justify-between text-xs text-neutral-400 bg-neutral-900/60 border border-neutral-800 rounded-lg px-3 py-2">
+                  <span className="truncate">
+                    From: <strong className="text-white">{formData.name}</strong> &bull; <span className="text-neutral-300">{formData.email}</span>
+                  </span>
+                  <button 
+                    type="button" 
+                    onClick={prevStep}
+                    className="text-[#D1FF52] hover:underline shrink-0 ml-2 font-mono text-[11px] cursor-pointer"
+                  >
+                    Edit
+                  </button>
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-mono uppercase tracking-wider text-neutral-400 mb-1.5">
+                    Project Message / Requirements <span className="text-[#D1FF52]">*</span>
+                  </label>
+                  <textarea 
+                    name="message"
+                    placeholder="Tell Nilesh about your brand, website, or creative goals..."
+                    value={formData.message}
+                    onChange={handleChange}
+                    rows={4}
+                    className="w-full bg-neutral-900/60 border border-neutral-750 rounded-xl px-4 py-3.5 text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#D1FF52] transition-colors resize-none text-sm"
+                    required
+                  />
+                </div>
+
+                <div className="flex gap-2 mt-1">
                   <button 
                     type="button"
                     onClick={prevStep}
                     disabled={isSubmitting}
-                    className="w-1/3 bg-neutral-850 hover:bg-neutral-800 disabled:opacity-50 text-white font-bold py-4 rounded-xl transition-colors cursor-pointer select-none"
+                    className="w-1/3 bg-neutral-850 hover:bg-neutral-800 disabled:opacity-50 text-white font-bold py-3.5 rounded-xl transition-colors cursor-pointer select-none text-sm"
                   >
                     Back
                   </button>
                   <button 
                     type="submit"
-                    disabled={!formData.message || isSubmitting}
-                    className="w-2/3 bg-blue-600 hover:bg-blue-500 disabled:bg-neutral-800 disabled:text-neutral-500 text-white font-bold py-4 rounded-xl transition-colors flex items-center justify-center gap-2 cursor-pointer select-none"
+                    disabled={!formData.message.trim() || isSubmitting}
+                    className="w-2/3 bg-blue-600 hover:bg-blue-500 disabled:bg-neutral-800 disabled:text-neutral-500 text-white font-bold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2 cursor-pointer select-none text-sm"
                   >
-                    {isSubmitting ? 'Sending...' : 'Send'}
+                    {isSubmitting ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
+                        <span>Sending...</span>
+                      </>
+                    ) : (
+                      'Send Message'
+                    )}
                   </button>
                 </div>
-                {error && <p className="text-red-500 text-xs mt-2 text-center bg-red-500/10 border border-red-500/20 py-2 px-3 rounded-lg">{error}</p>}
+                {error && <p className="text-red-500 text-xs mt-1 text-center bg-red-500/10 border border-red-500/20 py-2 px-3 rounded-lg">{error}</p>}
               </motion.form>
             )}
           </AnimatePresence>

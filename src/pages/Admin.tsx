@@ -1050,7 +1050,17 @@ function GenericTab({ collection }: { collection: string }) {
                 </p>
               </div>
 
-              <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
+              <div className="flex items-center gap-2 self-end sm:self-center shrink-0 flex-wrap">
+                {item.email && (
+                  <a
+                    href={`mailto:${item.email}?subject=Re:%20Inquiry%20from%20Nilesh%20Mali%20Portfolio`}
+                    className="px-3 py-2 bg-blue-500/10 text-blue-400 border border-blue-500/20 hover:bg-blue-500/20 rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5"
+                    title={`Reply to ${item.email}`}
+                  >
+                    <Mail className="w-3.5 h-3.5" />
+                    <span>Reply Email</span>
+                  </a>
+                )}
                 {item.whatsapp && (
                   <a
                     href={`https://api.whatsapp.com/send/?phone=${item.whatsapp.replace(/[^0-9]/g, '')}&text=Hi+${encodeURIComponent(item.name || '')}%2C+thank+you+for+reaching+out+to+Nilesh+Mali.`}
@@ -1540,6 +1550,10 @@ function SettingsTab({ name }: { name: string }) {
     accentId: currentAccentId
   });
 
+  const [testingEmail, setTestingEmail] = useState(false);
+  const [testEmailResult, setTestEmailResult] = useState<{ success: boolean; message: string } | null>(null);
+  const [resendStatus, setResendStatus] = useState<any>(null);
+
   useEffect(() => {
     setLoading(true);
     setSuccess(false);
@@ -1560,6 +1574,12 @@ function SettingsTab({ name }: { name: string }) {
               }
             })
             .catch(() => {});
+
+          // Fetch Resend email configuration status
+          fetch('/api/resend/status')
+            .then(rRes => rRes.json())
+            .then(rData => setResendStatus(rData))
+            .catch(() => {});
         }
         setLoading(false);
       })
@@ -1568,6 +1588,24 @@ function SettingsTab({ name }: { name: string }) {
         setLoading(false);
       });
   }, [name, currentThemeMode, currentAccentId]);
+
+  const handleTestResendEmail = async () => {
+    setTestingEmail(true);
+    setTestEmailResult(null);
+    try {
+      const res = await fetch('/api/resend/test', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ targetEmail: formData.email })
+      });
+      const data = await res.json();
+      setTestEmailResult(data);
+    } catch (err: any) {
+      setTestEmailResult({ success: false, message: err.message || 'Failed to send test email' });
+    } finally {
+      setTestingEmail(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -1833,6 +1871,75 @@ function SettingsTab({ name }: { name: string }) {
                   className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] font-mono text-sm"
                   placeholder="G-XXXXXXXXXX"
                 />
+              </div>
+            </div>
+
+            {/* Resend Email API Configuration */}
+            <div className="pt-4 border-t border-neutral-800 space-y-4">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <h3 className="text-sm font-bold font-display uppercase tracking-wider text-white flex items-center gap-2">
+                  <Mail className="w-4 h-4 text-[#D1FF52]" />
+                  Resend Email API (Auto Email on Form Submit)
+                </h3>
+                {resendStatus && (
+                  <span className={`text-[10px] font-mono px-2 py-0.5 rounded font-bold ${
+                    resendStatus.configured ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                  }`}>
+                    {resendStatus.configured ? (resendStatus.isSandbox ? '● Connected (Sandbox Mode)' : '● Connected (Custom Domain)') : '○ Not Configured'}
+                  </span>
+                )}
+              </div>
+              <p className="text-xs text-neutral-400">
+                Automatically dispatches an auto thank-you email to visitors when they fill out the contact form, and sends a lead notification to your inbox.
+              </p>
+
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
+                  Resend API Key
+                </label>
+                <input 
+                  type="password" 
+                  value={formData.resendApiKey || ''}
+                  onChange={(e) => setFormData({ ...formData, resendApiKey: e.target.value })}
+                  className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] font-mono text-sm"
+                  placeholder={resendStatus?.maskedKey ? `Active: ${resendStatus.maskedKey}` : 're_123456789...'}
+                />
+                <p className="text-[11px] text-neutral-500 mt-1">
+                  You can provide it here or set <code className="text-neutral-400 font-mono">RESEND_API_KEY</code> in environment variables. Get your key free at <a href="https://resend.com" target="_blank" rel="noreferrer" className="text-[#D1FF52] hover:underline">resend.com</a>.
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
+                  Sender From Address
+                </label>
+                <input 
+                  type="text" 
+                  value={formData.resendFromEmail || ''}
+                  onChange={(e) => setFormData({ ...formData, resendFromEmail: e.target.value })}
+                  className="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#D1FF52] text-sm"
+                  placeholder="Nilesh Mali <onboarding@resend.dev>"
+                />
+                <p className="text-[11px] text-neutral-500 mt-1">
+                  Default sandbox sender is <code className="text-neutral-400 font-mono">Nilesh Mali &lt;onboarding@resend.dev&gt;</code>. To send auto-emails to visitor inboxes, add and verify your custom domain (e.g. <code className="text-neutral-400 font-mono">hello@yourdomain.com</code>) at <a href="https://resend.com/domains" target="_blank" rel="noreferrer" className="text-[#D1FF52] hover:underline">resend.com/domains</a>. <em>(Note: Resend does not allow using public @gmail.com as the sender).</em>
+                </p>
+              </div>
+
+              <div className="pt-2 flex items-center gap-3 flex-wrap">
+                <button
+                  type="button"
+                  onClick={handleTestResendEmail}
+                  disabled={testingEmail}
+                  className="px-4 py-2.5 bg-neutral-900 hover:bg-neutral-800 border border-neutral-750 text-white rounded-xl text-xs font-bold flex items-center gap-2 transition-colors cursor-pointer disabled:opacity-50"
+                >
+                  <Mail className="w-3.5 h-3.5 text-[#D1FF52]" />
+                  <span>{testingEmail ? 'Sending Test...' : 'Send Test Resend Email'}</span>
+                </button>
+                {testEmailResult && (
+                  <span className={`text-xs ${testEmailResult.success ? 'text-emerald-400' : 'text-rose-400'}`}>
+                    {testEmailResult.message}
+                  </span>
+                )}
               </div>
             </div>
 
