@@ -349,6 +349,8 @@ export const HeroImageCard: React.FC<HeroImageCardProps> = ({
                   src={images[currentIndex]}
                   alt="Nilesh Mali brand identity design and visual strategy showcase"
                   title="Nilesh Mali brand identity design project"
+                  loading={currentIndex === 0 ? "eager" : "lazy"}
+                  decoding="async"
                   initial={{ opacity: 0, scale: 1.04, y: 12 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.98 }}

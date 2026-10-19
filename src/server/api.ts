@@ -275,6 +275,27 @@ router.get('/analytics/summary', async (req, res) => {
   }
 });
 
+// High-speed unified initialization endpoint for instant portfolio rendering
+router.get('/init', async (req, res) => {
+  try {
+    const db = await readDB();
+    res.json({
+      hero: db.hero || null,
+      experience: db.experience || [],
+      education: db.education || [],
+      skills: db.skills || [],
+      projects: db.projects || [],
+      services: db.services || [],
+      testimonials: db.testimonials || [],
+      contact: db.contact || null,
+      resume: db.resume || null,
+      settings: db.settings || null
+    });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 const collections = ['projects', 'services', 'testimonials', 'leads', 'blog', 'gallery', 'knowledge', 'experience', 'education', 'skills'];
 
 // Generic CRUD for collections

@@ -1,5 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import express from "express";
+import compression from "compression";
 import path from "path";
 import { createServer as createViteServer } from "vite";
 import apiRouter from "./src/server/api";
@@ -9,6 +10,7 @@ import fs from "fs";
 
 async function startServer() {
   const app = express();
+  app.use(compression());
   app.use(express.json());
   
   const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
@@ -121,8 +123,19 @@ Sitemap: ${origin}/sitemap.xml
     app.use(vite.middlewares);
   } else {
     const distPath = path.join(process.cwd(), 'dist');
-    app.use(express.static(distPath));
+    // Long-term immutable caching for Vite hashed assets
+    app.use('/assets', express.static(path.join(distPath, 'assets'), {
+      maxAge: '1y',
+      immutable: true
+    }));
+    // Standard caching for root assets (favicon, images, etc.)
+    app.use(express.static(distPath, {
+      maxAge: '1h',
+      etag: true
+    }));
     app.get('*', (req, res) => {
+      // Don't cache index.html so deployments take effect immediately
+      res.setHeader('Cache-Control', 'no-cache');
       res.sendFile(path.join(distPath, 'index.html'));
     });
   }

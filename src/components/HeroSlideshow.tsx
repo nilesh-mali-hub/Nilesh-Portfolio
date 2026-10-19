@@ -24,6 +24,8 @@ export function HeroSlideshow() {
           key={currentIndex}
           src={images[currentIndex]}
           alt="Profile"
+          loading={currentIndex === 0 ? "eager" : "lazy"}
+          decoding="async"
           initial={{ opacity: 0, scale: 1.05 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0 }}

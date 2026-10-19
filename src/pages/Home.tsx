@@ -53,35 +53,31 @@ export default function App() {
   const [experience, setExperience] = useState<any[]>(defaultData.experience);
   const [education, setEducation] = useState<any[]>((defaultData as any).education || []);
   const [skills, setSkills] = useState<any[]>(defaultData.skills);
-  const [projects, setProjects] = useState<any[]>(defaultData.projects);
-  const [isLoadingProjects, setIsLoadingProjects] = useState<boolean>(true);
+  const [projects, setProjects] = useState<any[]>(defaultData.projects || []);
+  const [isLoadingProjects, setIsLoadingProjects] = useState<boolean>(!defaultData.projects?.length);
   const [contact, setContact] = useState<any>(defaultData.contact);
   const [resumeUrl, setResumeUrl] = useState<string>('https://drive.google.com/file/d/1M-KDhvdXRdCUPmwFN6gi616c6ds8Snp0/view?usp=sharing');
 
   useEffect(() => {
-    setIsLoadingProjects(true);
-    Promise.all([
-      fetch('/api/hero').then(res => res.ok ? res.json() : null).catch(() => null),
-      fetch('/api/experience').then(res => res.ok ? res.json() : null).catch(() => null),
-      fetch('/api/education').then(res => res.ok ? res.json() : null).catch(() => null),
-      fetch('/api/skills').then(res => res.ok ? res.json() : null).catch(() => null),
-      fetch('/api/projects').then(res => res.ok ? res.json() : null).catch(() => null),
-      fetch('/api/contact').then(res => res.ok ? res.json() : null).catch(() => null),
-      fetch('/api/resume').then(res => res.ok ? res.json() : null).catch(() => null),
-    ])
-    .then(([heroData, expData, eduData, skillsData, projectsData, contactData, resumeData]) => {
-      if (heroData) setHero(heroData);
-      if (Array.isArray(expData) && expData.length > 0) setExperience(expData);
-      if (Array.isArray(eduData) && eduData.length > 0) setEducation(eduData);
-      if (Array.isArray(skillsData) && skillsData.length > 0) setSkills(skillsData);
-      if (Array.isArray(projectsData) && projectsData.length > 0) setProjects(projectsData);
-      if (contactData) setContact(contactData);
-      if (resumeData?.pdfUrl) setResumeUrl(resumeData.pdfUrl);
-    })
-    .catch(console.error)
-    .finally(() => {
-      setIsLoadingProjects(false);
-    });
+    // Single consolidated fetch for instant data hydration
+    fetch('/api/init')
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (!data) return;
+        if (data.hero) setHero(data.hero);
+        if (Array.isArray(data.experience) && data.experience.length > 0) setExperience(data.experience);
+        if (Array.isArray(data.education) && data.education.length > 0) setEducation(data.education);
+        if (Array.isArray(data.skills) && data.skills.length > 0) setSkills(data.skills);
+        if (Array.isArray(data.projects) && data.projects.length > 0) setProjects(data.projects);
+        if (data.contact) setContact(data.contact);
+        if (data.resume?.pdfUrl) setResumeUrl(data.resume.pdfUrl);
+      })
+      .catch(() => {
+        // Fallback silently if offline or cached
+      })
+      .finally(() => {
+        setIsLoadingProjects(false);
+      });
   }, []);
 
   const heroImages = [hero?.image1, hero?.image2, hero?.image3, ...(hero?.images || [])].filter(Boolean);
