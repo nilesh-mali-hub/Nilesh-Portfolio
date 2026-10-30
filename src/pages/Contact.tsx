@@ -52,35 +52,79 @@ export default function Contact() {
     
     setIsSubmitting(true);
     setError(null);
+
+    // Support configurable backend URL or relative /api/contact
+    const apiBase = ((import.meta as any).env?.VITE_API_URL || '').replace(/\/$/, '');
+    const apiUrl = `${apiBase}/api/contact`;
+
     try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData),
-      });
-      
-      let data: any = {};
+      let isSuccess = false;
+      let emailDispatched = false;
+
+      // 1. Attempt primary backend API
       try {
-        const text = await response.text();
-        if (text) {
-          data = JSON.parse(text);
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData),
+        });
+        
+        let data: any = {};
+        try {
+          const text = await response.text();
+          if (text) data = JSON.parse(text);
+        } catch {}
+
+        if (response.ok || data.success) {
+          isSuccess = true;
+          emailDispatched = Boolean(data.emailSent);
+        } else if (response.status === 404) {
+          // Expected on static hosting like Netlify when backend is separated
+          console.info('Backend /api/contact returned 404. Attempting Netlify Forms fallback...');
+        } else {
+          console.warn('API submission response not ok:', response.status, data);
         }
-      } catch (parseErr) {
-        console.warn('Response was not json, treating based on status code:', parseErr);
+      } catch (networkErr) {
+        console.warn('Primary API fetch failed, trying Netlify Forms fallback:', networkErr);
       }
-      
-      if (response.ok || data.success) {
+
+      // 2. Fallback to Netlify Forms submission
+      if (!isSuccess) {
+        try {
+          const netlifyParams = new URLSearchParams({
+            'form-name': 'contact',
+            name: formData.name,
+            email: formData.email,
+            whatsapp: formData.whatsapp || '',
+            message: formData.message
+          });
+
+          const netlifyRes = await fetch('/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: netlifyParams.toString(),
+          });
+
+          if (netlifyRes.ok) {
+            isSuccess = true;
+          }
+        } catch (netlifyErr) {
+          console.warn('Netlify form submission fallback failed:', netlifyErr);
+        }
+      }
+
+      if (isSuccess) {
         setSubmittedEmail(formData.email);
-        setEmailAutoSent(Boolean(data.emailSent));
+        setEmailAutoSent(emailDispatched);
         setSuccess(true);
         setFormData({ name: '', email: '', whatsapp: '', message: '' });
       } else {
-        setError(data.error || 'Failed to submit the message. Please try again or reach out on WhatsApp.');
+        setError('Could not reach the server right now. You can send your message directly to Nilesh in 1-click via WhatsApp or Email below.');
       }
     } catch (err: any) {
-      setError('An error occurred. You can also message Nilesh directly via WhatsApp below.');
+      setError('An unexpected error occurred. Please use the WhatsApp or Email button below.');
     } finally {
       setIsSubmitting(false);
     }
@@ -285,7 +329,33 @@ export default function Contact() {
                     )}
                   </button>
                 </div>
-                {error && <p className="text-red-500 text-xs mt-1 text-center bg-red-500/10 border border-red-500/20 py-2 px-3 rounded-lg">{error}</p>}
+                {error && (
+                  <div className="mt-2 text-center bg-red-500/10 border border-red-500/20 py-3 px-3.5 rounded-xl flex flex-col gap-2.5">
+                    <p className="text-red-400 text-xs font-medium leading-relaxed">{error}</p>
+                    <div className="flex flex-col sm:flex-row gap-2 mt-0.5">
+                      <a
+                        href={`https://api.whatsapp.com/send/?phone=916378954363&text=${encodeURIComponent(
+                          `Hi Nilesh! I am contacting you regarding a project:\n\n• Name: ${formData.name || 'Website Visitor'}\n• Email: ${formData.email || 'N/A'}\n• Phone: ${formData.whatsapp || 'N/A'}\n\n• Message:\n${formData.message}`
+                        )}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1 bg-[#D1FF52] hover:bg-[#b8e83b] text-black font-bold py-2.5 px-3 rounded-lg text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                      >
+                        <MessageCircle className="w-3.5 h-3.5" /> Send via WhatsApp (Instant)
+                      </a>
+                      <a
+                        href={`mailto:work.nileshmali@gmail.com?subject=${encodeURIComponent(
+                          `New Project Inquiry from ${formData.name || 'Website Visitor'}`
+                        )}&body=${encodeURIComponent(
+                          `Hi Nilesh,\n\nName: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.whatsapp}\n\nProject Requirements:\n${formData.message}`
+                        )}`}
+                        className="flex-1 bg-neutral-800 hover:bg-neutral-700 text-white font-medium py-2.5 px-3 rounded-lg text-xs flex items-center justify-center gap-1.5 transition-colors border border-neutral-700 cursor-pointer"
+                      >
+                        Send via Email
+                      </a>
+                    </div>
+                  </div>
+                )}
               </motion.form>
             )}
           </AnimatePresence>

@@ -370,9 +370,6 @@ router.post('/contact', async (req, res) => {
       return res.status(400).json({ error: 'Please enter your name, whatsapp number or message.' });
     }
 
-    const db = await readDB();
-    if (!db.leads) db.leads = [];
-    
     const newLead = {
       id: Date.now().toString(),
       name: name || 'Website Visitor',
@@ -381,9 +378,16 @@ router.post('/contact', async (req, res) => {
       message: message || '',
       timestamp: new Date().toISOString()
     };
-    
-    db.leads.unshift(newLead);
-    await writeDB(db);
+
+    let db: any = {};
+    try {
+      db = await readDB();
+      if (!db.leads) db.leads = [];
+      db.leads.unshift(newLead);
+      await writeDB(db);
+    } catch (dbErr: any) {
+      console.warn('DB file write note (continuing to process inquiry):', dbErr?.message || dbErr);
+    }
 
     // Try Google Sheets sync in background if credentials exist
     try {
@@ -420,7 +424,7 @@ router.post('/contact', async (req, res) => {
     // Send Auto Thank-You email to visitor & lead notification to Admin via Resend API
     let emailStatus = { visitorEmailSent: false, adminEmailSent: false, note: '' };
     try {
-      const emailResult = await sendInquiryEmails({
+      const emailPromise = sendInquiryEmails({
         name: newLead.name,
         email: newLead.email,
         whatsapp: newLead.whatsapp,
@@ -431,11 +435,21 @@ router.post('/contact', async (req, res) => {
         resendFromEmail: db.settings?.resendFromEmail,
         adminEmail: db.settings?.email || db.contact?.email || 'work.nileshmali@gmail.com'
       });
-      emailStatus = {
-        visitorEmailSent: emailResult.visitorEmailSent,
-        adminEmailSent: emailResult.adminEmailSent,
-        note: emailResult.note || (emailResult.error ? `Email note: ${emailResult.error}` : '')
-      };
+
+      // Don't keep the client waiting more than 3 seconds
+      const timeoutPromise = new Promise<{ timeout: true }>((resolve) => setTimeout(() => resolve({ timeout: true }), 3000));
+      const emailResult: any = await Promise.race([emailPromise, timeoutPromise]);
+
+      if (emailResult && !emailResult.timeout) {
+        emailStatus = {
+          visitorEmailSent: emailResult.visitorEmailSent,
+          adminEmailSent: emailResult.adminEmailSent,
+          note: emailResult.note || (emailResult.error ? `Email note: ${emailResult.error}` : '')
+        };
+      } else {
+        // Let it finish in background
+        emailPromise.catch(e => console.warn('Background Resend email notice:', e?.message || e));
+      }
     } catch (emailErr: any) {
       console.warn("Resend email background dispatch note:", emailErr?.message || emailErr);
     }

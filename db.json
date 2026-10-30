@@ -38,6 +38,16 @@
   ],
   "education": [
     {
+      "id": "edu-cs",
+      "institution": "Technical Institute",
+      "degree": "Diploma in Computer Science",
+      "duration": "2025 - 2027",
+      "year": "2025 - 2027",
+      "title": "Diploma in Computer Science",
+      "description": "Pursuing Diploma in Computer Science focusing on computing fundamentals, software development, and web technologies.",
+      "highlight": true
+    },
+    {
       "id": "edu-1",
       "institution": "Bachelor of Arts",
       "degree": "Bachelor of Arts",
@@ -45,7 +55,7 @@
       "year": "2022 - 2025",
       "title": "Bachelor of Arts",
       "description": "Graduated with foundational knowledge in visual arts, media and communication.",
-      "highlight": true
+      "highlight": false
     },
     {
       "id": "edu-2",
@@ -161,6 +171,22 @@
   ],
   "testimonials": [],
   "leads": [
+    {
+      "id": "1793017695123",
+      "name": "Aarav Patel",
+      "whatsapp": "+919876543210",
+      "email": "aarav@testcompany.com",
+      "message": "Looking for brand identity design",
+      "timestamp": "2026-10-26T12:28:15.123Z"
+    },
+    {
+      "id": "1793016990453",
+      "name": "Test User",
+      "whatsapp": "+919876543210",
+      "email": "test@example.com",
+      "message": "Testing contact form error",
+      "timestamp": "2026-10-26T12:16:30.453Z"
+    },
     {
       "id": "1792175054953",
       "name": "Nilesh Self Test",

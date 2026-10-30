@@ -38,6 +38,16 @@ export const defaultData = {
   ],
   education: [
     {
+      id: "edu-cs",
+      institution: "Technical Institute",
+      degree: "Diploma in Computer Science",
+      duration: "2025 - 2027",
+      year: "2025 - 2027",
+      title: "Diploma in Computer Science",
+      description: "Pursuing Diploma in Computer Science focusing on computing fundamentals, software development, and web technologies.",
+      highlight: true
+    },
+    {
       id: "edu-1",
       institution: "Bachelor of Arts",
       degree: "Bachelor of Arts",
@@ -45,7 +55,7 @@ export const defaultData = {
       year: "2022 - 2025",
       title: "Bachelor of Arts",
       description: "Graduated with foundational knowledge in visual arts, media and communication.",
-      highlight: true
+      highlight: false
     },
     {
       id: "edu-2",

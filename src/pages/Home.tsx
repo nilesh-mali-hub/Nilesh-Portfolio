@@ -23,6 +23,8 @@ import { TechStackCard } from '../components/TechStackCard';
 import { ExperienceCard } from '../components/ExperienceCard';
 import { Testimonials } from '../components/Testimonials';
 import { ServicesSection } from '../components/ServicesSection';
+import { BrandPartners } from '../components/BrandPartners';
+import { FAQSection } from '../components/FAQSection';
 import { GraduationCap } from 'lucide-react';
 import { 
   Smartphone, User, Mail, Instagram, Linkedin, 
@@ -352,11 +354,17 @@ export default function App() {
                 highlightColor: 'cyan'
               })) : [
                 { 
+                  year: "2025 - 2027", 
+                  title: "Diploma in Computer Science", 
+                  description: "Pursuing Diploma in Computer Science focusing on computing, software development, and modern technologies.",
+                  highlight: true,
+                  highlightColor: "cyan"
+                },
+                { 
                   year: "2022 - 2025", 
                   title: "Bachelor of Arts", 
                   description: "Graduated with foundational knowledge in visual arts, media and communication.",
-                  highlight: true,
-                  highlightColor: "cyan"
+                  highlight: false
                 },
                 { 
                   year: "2023 - 2024", 
@@ -402,8 +410,14 @@ export default function App() {
         {/* Services Section */}
         <ServicesSection />
 
-        {/* Testimonials Section */}
+        {/* Brands I've Partnered With (Between Services & Client Stories) */}
+        <BrandPartners />
+
+        {/* Testimonials Section (Client Stories) */}
         <Testimonials />
+
+        {/* Design Process & Timelines FAQ Section */}
+        <FAQSection />
 
         {/* Contact Layout */}
         <div className="mt-32">

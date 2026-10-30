@@ -1,5 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import express from "express";
+import cors from "cors";
 import compression from "compression";
 import path from "path";
 import { createServer as createViteServer } from "vite";
@@ -10,6 +11,12 @@ import fs from "fs";
 
 async function startServer() {
   const app = express();
+  app.use(cors({
+    origin: true,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
+  }));
   app.use(compression());
   app.use(express.json());
   

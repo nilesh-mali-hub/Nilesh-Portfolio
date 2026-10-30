@@ -106,9 +106,9 @@ export default function ResumePage() {
                 </p>
                 <div className="space-y-4 text-xs">
                   <div>
-                    <span className="font-mono font-bold text-[#D1FF52]">2025 – 2026</span>
-                    <p className="font-bold text-white text-sm mt-0.5">PGDCA</p>
-                    <p className="text-neutral-400">Madhav University</p>
+                    <span className="font-mono font-bold text-[#D1FF52]">2025 – 2027</span>
+                    <p className="font-bold text-white text-sm mt-0.5">Diploma in Computer Science</p>
+                    <p className="text-neutral-400">Computer Science & Engineering</p>
                   </div>
                   <div>
                     <span className="font-mono font-bold text-[#D1FF52]">2022 – 2025</span>

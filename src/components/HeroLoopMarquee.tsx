@@ -23,7 +23,7 @@ export function HeroLoopMarquee({
   label = '/YEARS EXP.',
   items = LOOP_ITEMS,
   className = '',
-  speedDuration = 40, // Smooth, relaxed continuous speed
+  speedDuration = 60, // Smooth, relaxed continuous slow speed
 }: HeroLoopMarqueeProps) {
   // Repeating list for seamless infinite right-to-left marquee loop
   const loopStream = [...Array(4)].flatMap(() => items);

@@ -6,21 +6,23 @@ import { RotatingText } from '../components/RotatingText';
 import { Eye, ExternalLink } from 'lucide-react';
 import { NileshIntroCard, ExperienceGaugeCard } from '../components/NileshIntroCard';
 
+import { defaultData } from '../data/defaultData';
+
 export default function About() {
   const [resumeUrl, setResumeUrl] = useState<string>('https://drive.google.com/file/d/1M-KDhvdXRdCUPmwFN6gi616c6ds8Snp0/view?usp=sharing');
-  const [hero, setHero] = useState<any>(null);
-  const [contact, setContact] = useState<any>(null);
+  const [hero, setHero] = useState<any>(defaultData.hero);
+  const [contact, setContact] = useState<any>(defaultData.contact);
 
   useEffect(() => {
-    Promise.all([
-      fetch('/api/resume').then(res => res.ok ? res.json() : null).catch(() => null),
-      fetch('/api/hero').then(res => res.ok ? res.json() : null).catch(() => null),
-      fetch('/api/contact').then(res => res.ok ? res.json() : null).catch(() => null),
-    ]).then(([resumeData, heroData, contactData]) => {
-      if (resumeData && resumeData.pdfUrl) setResumeUrl(resumeData.pdfUrl);
-      if (heroData) setHero(heroData);
-      if (contactData) setContact(contactData);
-    });
+    fetch('/api/init')
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (!data) return;
+        if (data.resume?.pdfUrl) setResumeUrl(data.resume.pdfUrl);
+        if (data.hero) setHero(data.hero);
+        if (data.contact) setContact(data.contact);
+      })
+      .catch(() => {});
   }, []);
 
   return (

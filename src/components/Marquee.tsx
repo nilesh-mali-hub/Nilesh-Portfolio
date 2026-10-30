@@ -11,11 +11,11 @@ export function Marquee() {
         transition={{
           repeat: Infinity,
           ease: "linear",
-          duration: 30,
+          duration: 90,
         }}
       >
-        {[...Array(20)].map((_, i) => (
-          <div key={i} className="flex items-center gap-4 sm:gap-8 font-sans font-medium text-5xl sm:text-7xl lg:text-8xl text-black tracking-tight">
+        {[...Array(12)].map((_, i) => (
+          <div key={i} className="flex items-center gap-4 sm:gap-8 font-sans font-medium text-5xl sm:text-7xl lg:text-8xl text-black tracking-tight select-none">
             <span>Let's connect</span>
             <span>✦</span>
             <span>Don't be a stranger</span>
