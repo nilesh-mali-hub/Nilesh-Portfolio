@@ -12,6 +12,25 @@
     <meta name="author" content="Nilesh Mali" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="theme-color" content="#111111" />
+    <script>
+      // Suppress transient Vite HMR WebSocket errors in iframe preview
+      window.addEventListener('unhandledrejection', function(event) {
+        if (event && event.reason && (
+          String(event.reason.message || event.reason).includes('WebSocket') ||
+          String(event.reason.message || event.reason).includes('vite')
+        )) {
+          event.preventDefault();
+        }
+      });
+      window.addEventListener('error', function(event) {
+        if (event && (
+          String(event.message).includes('WebSocket') ||
+          String(event.message).includes('vite')
+        )) {
+          event.preventDefault();
+        }
+      });
+    </script>
 
     <!-- Performance Optimization: Resource Hints & Fast Font Loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
