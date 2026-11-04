@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { SectionHeading } from './SectionHeading';
 
@@ -11,6 +11,12 @@ interface BrandItem {
 }
 
 const BRANDS: BrandItem[] = [
+  {
+    id: 'oryou',
+    name: 'ORYOU',
+    badgeBg: 'bg-white border border-neutral-200/60',
+    logoSrc: '/assets/aistudio/oryou.svg'
+  },
   {
     id: 'redes-creation',
     name: 'REDES CREATION',
@@ -101,10 +107,34 @@ const BRANDS: BrandItem[] = [
 ];
 
 export function BrandPartners() {
+  const [brands, setBrands] = useState<BrandItem[]>(BRANDS);
   const [isPaused, setIsPaused] = useState(false);
 
+  useEffect(() => {
+    fetch('/api/brands')
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0) {
+          const dynamicBrands: BrandItem[] = data.map((b: any, idx: number) => {
+            const matchedDefault = BRANDS.find(def => 
+              def.id === b.id || def.name.toLowerCase() === (b.title || b.name || '').toLowerCase()
+            );
+            return {
+              id: b.id || `brand-${idx}`,
+              name: b.name || b.title || 'Brand',
+              badgeBg: b.badgeBg || matchedDefault?.badgeBg || 'bg-white border border-neutral-200/60',
+              logoSrc: b.logoSrc || b.image || matchedDefault?.logoSrc,
+              icon: matchedDefault?.icon
+            };
+          });
+          setBrands(dynamicBrands);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   // Duplicate for seamless 0 to -50% infinite translation
-  const fullList = [...BRANDS, ...BRANDS];
+  const fullList = [...brands, ...brands];
 
   return (
     <section className="mt-28 sm:mt-32 relative overflow-hidden select-none" id="brands">

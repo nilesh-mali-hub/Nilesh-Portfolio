@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 130" fill="none">
+  <!-- 1. Left Emblem: Lime Circle with Lightbulb & Magnifying Glass -->
+  <g id="oryou-emblem">
+    <!-- Lime green background circle -->
+    <circle cx="65" cy="65" r="48" fill="#D4FF00"/>
+    
+    <!-- 5 Radial Dashes around bulb top -->
+    <line x1="65" y1="23" x2="65" y2="28" stroke="#000000" stroke-width="4" stroke-linecap="round"/>
+    <line x1="39" y1="33" x2="43" y2="37" stroke="#000000" stroke-width="4" stroke-linecap="round"/>
+    <line x1="91" y1="33" x2="87" y2="37" stroke="#000000" stroke-width="4" stroke-linecap="round"/>
+    <line x1="28" y1="58" x2="33" y2="58" stroke="#000000" stroke-width="4" stroke-linecap="round"/>
+    <line x1="102" y1="58" x2="97" y2="58" stroke="#000000" stroke-width="4" stroke-linecap="round"/>
+
+    <!-- Lightbulb Silhouette & Contour -->
+    <path d="M46 56 C46 44 54.5 35.5 65 35.5 C75.5 35.5 84 44 84 56 C84 62 81.5 67 77.5 71 C76 72.5 75 74.5 75 77 V79 H55 V77 C55 74.5 54 72.5 52.5 71 C48.5 67 46 62 46 56 Z" 
+          fill="#D4FF00" stroke="#000000" stroke-width="5" stroke-linejoin="round"/>
+    
+    <!-- Screw Base Threads -->
+    <line x1="56" y1="84" x2="74" y2="84" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+    <line x1="58" y1="90" x2="72" y2="90" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+    <line x1="60.5" y1="96" x2="69.5" y2="96" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+
+    <!-- Magnifying Glass inside bulb -->
+    <circle cx="63" cy="53" r="11.5" stroke="#000000" stroke-width="4.5" fill="#D4FF00"/>
+    <path d="M71.5 61.5 L81 71" stroke="#000000" stroke-width="5.5" stroke-linecap="round"/>
+  </g>
+
+  <!-- 2. Typography: O R Y O U -->
+  <g id="oryou-text" fill="#000000">
+    <!-- Letter 'O' (First) -->
+    <path d="M142 27 C159 27 172 43 172 65 C172 87 159 103 142 103 C125 103 112 87 112 65 C112 43 125 27 142 27 Z" fill="#000000"/>
+    <!-- Inner Counter -->
+    <ellipse cx="142" cy="65" rx="9" ry="21" fill="#FFFFFF"/>
+    <!-- Lime eyeball / pupil -->
+    <ellipse cx="142" cy="65" rx="7.5" ry="9" fill="#D4FF00"/>
+    <circle cx="144" cy="62" r="2.2" fill="#FFFFFF"/>
+
+    <!-- Letter 'R' -->
+    <path d="M182 28 C182 28 203 27 214 29 C224 31 230 38 230 48.5 C230 57 224 64 214 66.5 C222 70 228 78 231 89 L234 98 C235 101 233 103 229 103 H214 C211 103 209 101 208 98 L205 88 C203 81 200 77 193 77 H192 V103 H177 V28 H182 Z M192 42 V63 H207 C212 63 215 59.5 215 52.5 C215 45.5 212 42 207 42 H192 Z" fill="#000000"/>
+
+    <!-- Letter 'Y' -->
+    <path d="M239 28 H256 L267 56 L278 28 H295 L276 70 V103 H259 V70 L239 28 Z" fill="#000000"/>
+
+    <!-- Letter 'O' (Second) -->
+    <path d="M322 27 C339 27 352 43 352 65 C352 87 339 103 322 103 C305 103 292 87 292 65 C292 43 305 27 322 27 Z" fill="#000000"/>
+    <!-- Inner Counter -->
+    <ellipse cx="322" cy="65" rx="9" ry="21" fill="#FFFFFF"/>
+    <!-- Lime eyeball / pupil -->
+    <ellipse cx="322" cy="65" rx="7.5" ry="9" fill="#D4FF00"/>
+    <circle cx="324" cy="62" r="2.2" fill="#FFFFFF"/>
+
+    <!-- Letter 'U' -->
+    <path d="M362 28 H379 V72 C379 83 385 88.5 394.5 88.5 C404 88.5 410 83 410 72 V28 H427 V72 C427 93 413 103 394.5 103 C376 103 362 93 362 72 V28 Z" fill="#000000"/>
+  </g>
+</svg>

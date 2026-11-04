@@ -4,6 +4,15 @@ import { Link, useNavigate } from 'react-router-dom';
 
 export function Footer() {
   const [resumeUrl, setResumeUrl] = useState<string>('https://drive.google.com/file/d/1M-KDhvdXRdCUPmwFN6gi616c6ds8Snp0/view?usp=sharing');
+  const [contact, setContact] = useState<any>({
+    phone: '+91 63789 54363',
+    email: 'work.nileshmali@gmail.com',
+    whatsapp: '916378954363',
+    location: 'Abu Road, Sirohi, Rajasthan, India',
+    behance: 'https://www.behance.net/nileshmali25',
+    instagram: 'https://www.instagram.com/_nilesh._.mali_/',
+    linkedin: 'https://www.linkedin.com/in/nilesh-mali-a5997b28a/'
+  });
   const [secretClicks, setSecretClicks] = useState(0);
   const navigate = useNavigate();
 
@@ -13,6 +22,15 @@ export function Footer() {
       .then(data => {
         if (data && data.pdfUrl) {
           setResumeUrl(data.pdfUrl);
+        }
+      })
+      .catch(() => {});
+
+    fetch('/api/contact')
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (data && typeof data === 'object') {
+          setContact((prev: any) => ({ ...prev, ...data }));
         }
       })
       .catch(() => {});
@@ -27,7 +45,8 @@ export function Footer() {
     }
   };
 
-  const whatsappUrl = "https://api.whatsapp.com/send/?phone=916378954363&text=Hello+Nilesh+Mali%21&type=phone_number&app_absent=0";
+  const rawPhone = (contact.whatsapp || contact.phone || '916378954363').replace(/[^0-9]/g, '');
+  const whatsappUrl = `https://api.whatsapp.com/send/?phone=${rawPhone}&text=Hello+Nilesh+Mali%21&type=phone_number&app_absent=0`;
 
   return (
     <footer className="w-full bg-[#080B11] text-white pt-16 md:pt-20 pb-8 px-5 sm:px-8 md:px-12 lg:px-16 border-t border-neutral-800/80 relative overflow-hidden font-sans">
@@ -97,7 +116,7 @@ export function Footer() {
             <div className="flex items-center gap-3">
               {/* Behance */}
               <a
-                href="https://www.behance.net/nileshmali25"
+                href={contact.behance || "https://www.behance.net/nileshmali25"}
                 target="_blank"
                 rel="noopener noreferrer"
                 title="Behance Portfolio"
@@ -108,7 +127,7 @@ export function Footer() {
 
               {/* Instagram */}
               <a
-                href="https://www.instagram.com/_nilesh._.mali_/"
+                href={contact.instagram || "https://www.instagram.com/_nilesh._.mali_/"}
                 target="_blank"
                 rel="noopener noreferrer"
                 title="Instagram Profile"
@@ -119,7 +138,7 @@ export function Footer() {
 
               {/* LinkedIn */}
               <a
-                href="https://www.linkedin.com/in/nilesh-mali-a5997b28a/"
+                href={contact.linkedin || "https://www.linkedin.com/in/nilesh-mali-a5997b28a/"}
                 target="_blank"
                 rel="noopener noreferrer"
                 title="LinkedIn Profile"
@@ -200,18 +219,18 @@ export function Footer() {
             <div className="flex flex-col gap-3 font-sans text-sm text-neutral-300">
               <p>
                 <span className="text-neutral-400">Tel: </span>
-                <a href="tel:+916378954363" className="hover:text-[#E8AA38] transition-colors font-medium">
-                  +91 63789 54363
+                <a href={`tel:${(contact.phone || '+916378954363').replace(/\s+/g, '')}`} className="hover:text-[#E8AA38] transition-colors font-medium">
+                  {contact.phone || '+91 63789 54363'}
                 </a>
               </p>
               <p className="break-all">
                 <span className="text-neutral-400">Email: </span>
-                <a href="mailto:work.nileshmali@gmail.com" className="hover:text-[#E8AA38] transition-colors font-medium">
-                  work.nileshmali@gmail.com
+                <a href={`mailto:${contact.email || 'work.nileshmali@gmail.com'}`} className="hover:text-[#E8AA38] transition-colors font-medium">
+                  {contact.email || 'work.nileshmali@gmail.com'}
                 </a>
               </p>
               <p className="text-neutral-400 text-xs mt-1">
-                Abu Road, Sirohi, Rajasthan, India
+                {contact.location || 'Abu Road, Sirohi, Rajasthan, India'}
               </p>
             </div>
           </div>

@@ -7,6 +7,7 @@ import { Footer } from './components/Footer';
 import { AnalyticsTracker } from './components/AnalyticsTracker';
 import { ThemeProvider } from './context/ThemeContext';
 import { AIAssistantWidget } from './components/AIAssistantWidget';
+import { ScrollProgressBar } from './components/ScrollProgressBar';
 
 import Home from './pages/Home';
 
@@ -35,6 +36,7 @@ function AppContent() {
 
   return (
     <>
+      <ScrollProgressBar />
       <AnalyticsTracker />
       {!isAdmin && <Header />}
       <Suspense fallback={<LoadingScreen />}>

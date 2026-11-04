@@ -6,12 +6,38 @@ import { Link } from 'react-router-dom';
 
 export default function ResumePage() {
   const [pdfUrl, setPdfUrl] = useState<string>('https://drive.google.com/file/d/1M-KDhvdXRdCUPmwFN6gi616c6ds8Snp0/view?usp=sharing');
+  const [contact, setContact] = useState<any>({
+    phone: '+91 6378954363',
+    email: 'nileshmali605@gmail.com',
+    portfolio: 'https://nileshmali2026.netlify.app',
+    linkedin: 'https://www.linkedin.com/in/nilesh-mali-a5997b28a/',
+    instagram: 'https://www.instagram.com/_nilesh._.mali_/'
+  });
+  const [educationList, setEducationList] = useState<any[]>([]);
+  const [experienceList, setExperienceList] = useState<any[]>([]);
 
   useEffect(() => {
-    fetch('/api/resume')
+    fetch('/api/init')
       .then(res => res.ok ? res.json() : null)
       .then(data => {
-        if (data?.pdfUrl) setPdfUrl(data.pdfUrl);
+        if (!data) return;
+        if (data.resume?.pdfUrl) setPdfUrl(data.resume.pdfUrl);
+        if (data.contact) {
+          setContact((prev: any) => ({
+            ...prev,
+            ...data.contact,
+            phone: data.contact.phone || prev.phone,
+            email: data.contact.email || prev.email,
+            linkedin: data.contact.linkedin || prev.linkedin,
+            instagram: data.contact.instagram || prev.instagram
+          }));
+        }
+        if (Array.isArray(data.education) && data.education.length > 0) {
+          setEducationList(data.education);
+        }
+        if (Array.isArray(data.experience) && data.experience.length > 0) {
+          setExperienceList(data.experience);
+        }
       })
       .catch(() => {});
   }, []);
@@ -78,23 +104,27 @@ export default function ResumePage() {
                 <div className="space-y-2 text-xs text-neutral-300">
                   <p className="flex items-center gap-2">
                     <span className="text-[#D1FF52]">■</span>
-                    <a href="tel:+916378954363" className="hover:text-[#D1FF52] transition-colors">+91 6378954363</a>
+                    <a href={`tel:${contact.phone?.replace(/\s+/g, '')}`} className="hover:text-[#D1FF52] transition-colors">
+                      {contact.phone || '+91 6378954363'}
+                    </a>
                   </p>
                   <p className="flex items-center gap-2">
                     <span className="text-[#D1FF52]">■</span>
-                    <a href="mailto:nileshmali605@gmail.com" className="hover:text-[#D1FF52] transition-colors">nileshmali605@gmail.com</a>
+                    <a href={`mailto:${contact.email}`} className="hover:text-[#D1FF52] transition-colors">
+                      {contact.email || 'work.nileshmali@gmail.com'}
+                    </a>
                   </p>
                   <p className="flex items-center gap-2">
                     <span className="text-[#D1FF52]">■</span>
-                    <a href="https://nileshmali2026.netlify.app" target="_blank" rel="noopener noreferrer" className="hover:text-[#D1FF52] underline transition-colors">Portfolio (nileshmali.com)</a>
+                    <a href={contact.portfolio || "https://nileshmali2026.netlify.app"} target="_blank" rel="noopener noreferrer" className="hover:text-[#D1FF52] underline transition-colors">Portfolio</a>
                   </p>
                   <p className="flex items-center gap-2">
                     <span className="text-[#D1FF52]">■</span>
-                    <a href="https://www.linkedin.com/in/nilesh-mali-a5997b28a/" target="_blank" rel="noopener noreferrer" className="hover:text-[#D1FF52] underline transition-colors">LinkedIn (/in/nileshmali)</a>
+                    <a href={contact.linkedin || "https://www.linkedin.com/in/nilesh-mali-a5997b28a/"} target="_blank" rel="noopener noreferrer" className="hover:text-[#D1FF52] underline transition-colors">LinkedIn (/in/nileshmali)</a>
                   </p>
                   <p className="flex items-center gap-2">
                     <span className="text-[#D1FF52]">■</span>
-                    <a href="https://www.instagram.com/_nilesh._.mali_/" target="_blank" rel="noopener noreferrer" className="hover:text-[#D1FF52] underline transition-colors">Instagram (@_nilesh._.mali_)</a>
+                    <a href={contact.instagram || "https://www.instagram.com/_nilesh._.mali_/"} target="_blank" rel="noopener noreferrer" className="hover:text-[#D1FF52] underline transition-colors">Instagram (@_nilesh._.mali_)</a>
                   </p>
                 </div>
               </div>
@@ -105,16 +135,28 @@ export default function ResumePage() {
                   EDUCATION
                 </p>
                 <div className="space-y-4 text-xs">
-                  <div>
-                    <span className="font-mono font-bold text-[#D1FF52]">2025 – 2027</span>
-                    <p className="font-bold text-white text-sm mt-0.5">Diploma in Computer Science</p>
-                    <p className="text-neutral-400">Computer Science & Engineering</p>
-                  </div>
-                  <div>
-                    <span className="font-mono font-bold text-[#D1FF52]">2022 – 2025</span>
-                    <p className="font-bold text-white text-sm mt-0.5">B.A.</p>
-                    <p className="text-neutral-400 leading-snug">Mohanlal Sukhadia University, Udaipur</p>
-                  </div>
+                  {educationList.length > 0 ? (
+                    educationList.map((edu: any, idx: number) => (
+                      <div key={edu.id || idx}>
+                        <span className="font-mono font-bold text-[#D1FF52]">{edu.duration || edu.year || '2024'}</span>
+                        <p className="font-bold text-white text-sm mt-0.5">{edu.title || edu.degree || 'Degree'}</p>
+                        <p className="text-neutral-400 leading-snug">{edu.description || edu.institution || edu.field || ''}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <>
+                      <div>
+                        <span className="font-mono font-bold text-[#D1FF52]">2025 – 2027</span>
+                        <p className="font-bold text-white text-sm mt-0.5">Diploma in Computer Science</p>
+                        <p className="text-neutral-400">Computer Science & Engineering</p>
+                      </div>
+                      <div>
+                        <span className="font-mono font-bold text-[#D1FF52]">2022 – 2025</span>
+                        <p className="font-bold text-white text-sm mt-0.5">B.A.</p>
+                        <p className="text-neutral-400 leading-snug">Mohanlal Sukhadia University, Udaipur</p>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -197,52 +239,77 @@ export default function ResumePage() {
                   EXPERIENCE
                 </span>
 
-                <div className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-8">
-                  <div className="sm:w-28 shrink-0">
-                    <p className="font-bold text-sm text-neutral-900">Aug 2025</p>
-                    <p className="text-xs text-neutral-500 font-semibold">– Present</p>
-                  </div>
+                {experienceList.length > 0 ? (
+                  <div className="space-y-6">
+                    {experienceList.map((exp: any, idx: number) => (
+                      <div key={exp.id || idx} className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-8 pb-5 border-b border-neutral-100 last:border-0 last:pb-0">
+                        <div className="sm:w-28 shrink-0">
+                          <p className="font-bold text-sm text-neutral-900">{exp.timeline || exp.duration || 'Present'}</p>
+                        </div>
 
-                  <div className="flex-1">
-                    <h3 className="font-display font-bold text-lg text-neutral-950">
-                      Graphic Designer
-                    </h3>
-                    <p className="text-xs font-semibold text-neutral-600">
-                      Social Media & Digital Marketing • Redes Creation
-                    </p>
+                        <div className="flex-1">
+                          <h3 className="font-display font-bold text-lg text-neutral-950">
+                            {exp.role || exp.title || 'Graphic Designer'}
+                          </h3>
+                          <p className="text-xs font-semibold text-neutral-600">
+                            {exp.name || exp.company || exp.tagline || ''}
+                          </p>
 
-                    <ul className="mt-3 space-y-1.5 text-xs text-neutral-700">
-                      <li className="flex items-start gap-2">
-                        <span className="text-[#84cc16] mt-0.5">•</span>
-                        <span>Design Instagram posts, carousels and reels that follow each brand&apos;s visual style.</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="text-[#84cc16] mt-0.5">•</span>
-                        <span>Produce banners, hoardings, brochures and business cards for local business clients.</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="text-[#84cc16] mt-0.5">•</span>
-                        <span>Create logos, brand creatives and visual identity material.</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="text-[#84cc16] mt-0.5">•</span>
-                        <span>Design ad creatives and support Meta Ads campaigns on Facebook and Instagram.</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="text-[#84cc16] mt-0.5">•</span>
-                        <span>Plan content and manage posting for Instagram and Facebook pages.</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="text-[#84cc16] mt-0.5">•</span>
-                        <span>Plan campaigns and content strategy for local businesses; support Google Business Profile (GMB).</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="text-[#84cc16] mt-0.5">•</span>
-                        <span>Edit reels and short promotional videos; assist with video shoots, photography and storyboarding.</span>
-                      </li>
-                    </ul>
+                          <div className="mt-3 text-xs text-neutral-700 leading-relaxed whitespace-pre-line">
+                            {exp.description || exp.content || ''}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                </div>
+                ) : (
+                  <div className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-8">
+                    <div className="sm:w-28 shrink-0">
+                      <p className="font-bold text-sm text-neutral-900">Aug 2025</p>
+                      <p className="text-xs text-neutral-500 font-semibold">– Present</p>
+                    </div>
+
+                    <div className="flex-1">
+                      <h3 className="font-display font-bold text-lg text-neutral-950">
+                        Graphic Designer
+                      </h3>
+                      <p className="text-xs font-semibold text-neutral-600">
+                        Social Media & Digital Marketing • Redes Creation
+                      </p>
+
+                      <ul className="mt-3 space-y-1.5 text-xs text-neutral-700">
+                        <li className="flex items-start gap-2">
+                          <span className="text-[#84cc16] mt-0.5">•</span>
+                          <span>Design Instagram posts, carousels and reels that follow each brand&apos;s visual style.</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-[#84cc16] mt-0.5">•</span>
+                          <span>Produce banners, hoardings, brochures and business cards for local business clients.</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-[#84cc16] mt-0.5">•</span>
+                          <span>Create logos, brand creatives and visual identity material.</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-[#84cc16] mt-0.5">•</span>
+                          <span>Design ad creatives and support Meta Ads campaigns on Facebook and Instagram.</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-[#84cc16] mt-0.5">•</span>
+                          <span>Plan content and manage posting for Instagram and Facebook pages.</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-[#84cc16] mt-0.5">•</span>
+                          <span>Plan campaigns and content strategy for local businesses; support Google Business Profile (GMB).</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-[#84cc16] mt-0.5">•</span>
+                          <span>Edit reels and short promotional videos; assist with video shoots, photography and storyboarding.</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Skills */}

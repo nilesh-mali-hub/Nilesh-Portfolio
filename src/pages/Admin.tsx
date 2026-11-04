@@ -46,7 +46,8 @@ import {
   EyeOff,
   User,
   Key,
-  Globe
+  Globe,
+  HelpCircle
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { SEO } from '../components/SEO';
@@ -78,6 +79,8 @@ const ALL_TABS: TabConfig[] = [
   { id: 'experience', label: 'Experience', category: 'content', icon: Briefcase },
   { id: 'education', label: 'Education', category: 'content', icon: GraduationCap },
   { id: 'skills', label: 'Software Skills', category: 'content', icon: LayoutGrid },
+  { id: 'brands', label: 'Partner Brands', category: 'content', icon: Sparkles },
+  { id: 'faqs', label: 'Design FAQs', category: 'content', icon: HelpCircle },
   { id: 'gallery', label: 'Gallery Showcase', category: 'content', icon: ImageIcon },
 
   // Leads & Interactions
@@ -101,7 +104,7 @@ export default function Admin() {
     return localStorage.getItem('nilesh_admin_auth') === 'true';
   });
   const [usernameInput, setUsernameInput] = useState(() => {
-    return localStorage.getItem('nilesh_admin_user') || 'nilesh';
+    return localStorage.getItem('nilesh_admin_user') || '';
   });
   const [passwordInput, setPasswordInput] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -180,16 +183,6 @@ export default function Admin() {
       }
       setIsLoggingIn(false);
     }
-  };
-
-  const handleQuickUnlock = () => {
-    setUsernameInput('nilesh');
-    setPasswordInput('nilesh2025');
-    if (rememberMe) {
-      localStorage.setItem('nilesh_admin_auth', 'true');
-      localStorage.setItem('nilesh_admin_user', 'nilesh');
-    }
-    setIsAuthenticated(true);
   };
 
   const handleLogout = () => {
@@ -292,7 +285,6 @@ export default function Admin() {
                 />
                 <span>Remember session</span>
               </label>
-              <span className="font-mono text-[10px] text-neutral-500">Default: nilesh</span>
             </div>
 
             <button
@@ -312,18 +304,6 @@ export default function Admin() {
                 </>
               )}
             </button>
-
-            {/* Quick 1-Tap Access for Owner */}
-            <div className="pt-3 border-t border-neutral-800 text-center">
-              <button
-                type="button"
-                onClick={handleQuickUnlock}
-                className="w-full py-2.5 bg-neutral-950 hover:bg-neutral-800/80 border border-neutral-800 text-neutral-300 hover:text-white rounded-xl text-xs font-semibold transition-colors flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <ShieldCheck className="w-4 h-4 text-[var(--accent-color)]" />
-                <span>One-Tap Owner Sign-In (Nilesh)</span>
-              </button>
-            </div>
           </form>
 
           <div className="mt-6 text-center">
@@ -556,7 +536,7 @@ export default function Admin() {
                 {activeTab === 'seo' && <SEOTab />}
                 
                 {/* Generic CRUD Collections */}
-                {['projects', 'services', 'testimonials', 'leads', 'blog', 'gallery', 'knowledge', 'experience', 'education', 'skills'].includes(activeTab) && (
+                {['projects', 'services', 'testimonials', 'leads', 'blog', 'gallery', 'knowledge', 'experience', 'education', 'skills', 'brands', 'faqs'].includes(activeTab) && (
                   <GenericTab collection={activeTab} />
                 )}
                 
@@ -691,6 +671,8 @@ function DashboardTab({ onSelectTab }: { onSelectTab: (tab: string) => void }) {
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
           <QuickActionBtn label="Add New Project" icon={Briefcase} onClick={() => onSelectTab('projects')} />
           <QuickActionBtn label="Update Hero Section" icon={Zap} onClick={() => onSelectTab('hero')} />
+          <QuickActionBtn label="Partner Brands" icon={Sparkles} onClick={() => onSelectTab('brands')} />
+          <QuickActionBtn label="Design FAQs" icon={HelpCircle} onClick={() => onSelectTab('faqs')} />
           <QuickActionBtn label="Convert Drive Image" icon={Cloud} onClick={() => onSelectTab('drive')} />
           <QuickActionBtn label="Manage Skills" icon={LayoutGrid} onClick={() => onSelectTab('skills')} />
           <QuickActionBtn label="Update Experience" icon={GraduationCap} onClick={() => onSelectTab('experience')} />
@@ -835,10 +817,24 @@ function GenericTab({ collection }: { collection: string }) {
       const url = editingItem ? `/api/${collection}/${editingItem.id}` : `/api/${collection}`;
       const method = editingItem ? 'PUT' : 'POST';
       
+      const payload: any = { ...formData };
+      if (collection === 'brands') {
+        payload.name = formData.title;
+        payload.title = formData.title;
+        payload.logoSrc = formData.image;
+        payload.image = formData.image;
+        payload.badgeBg = formData.tagline || 'bg-white border border-neutral-200/60';
+      } else if (collection === 'faqs') {
+        payload.question = formData.title;
+        payload.title = formData.title;
+        payload.answer = formData.description;
+        payload.description = formData.description;
+      }
+      
       const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(payload)
       });
       
       if (res.ok) {
@@ -875,10 +871,10 @@ function GenericTab({ collection }: { collection: string }) {
   const openEdit = (item: any) => {
     setEditingItem(item);
     setFormData({ 
-      title: item.title || item.name || '', 
-      description: item.description || item.content || item.message || '',
-      image: item.image || item.icon || item.avatar || '',
-      tagline: item.tagline || item.category || '',
+      title: item.title || item.name || item.question || '', 
+      description: item.description || item.answer || item.content || item.message || '',
+      image: item.image || item.logoSrc || item.icon || item.avatar || '',
+      tagline: item.tagline || item.badgeBg || item.category || '',
       timeline: item.timeline || item.duration || '',
       role: item.role || item.position || '',
       duration: item.duration || item.year || '',
@@ -898,7 +894,7 @@ function GenericTab({ collection }: { collection: string }) {
       title: '', 
       description: '', 
       image: '', 
-      tagline: '', 
+      tagline: collection === 'brands' ? 'bg-white border border-neutral-200/60' : '', 
       timeline: '', 
       role: '', 
       duration: '',
@@ -913,7 +909,7 @@ function GenericTab({ collection }: { collection: string }) {
   };
 
   const filteredItems = items.filter(item => {
-    const text = `${item.title || ''} ${item.name || ''} ${item.description || ''} ${item.role || ''} ${item.message || ''} ${item.tagline || ''} ${item.category || ''}`.toLowerCase();
+    const text = `${item.title || ''} ${item.name || ''} ${item.question || ''} ${item.answer || ''} ${item.description || ''} ${item.role || ''} ${item.message || ''} ${item.tagline || ''} ${item.badgeBg || ''} ${item.category || ''}`.toLowerCase();
     return text.includes(searchTerm.toLowerCase());
   });
 
@@ -1016,6 +1012,94 @@ function GenericTab({ collection }: { collection: string }) {
               </div>
             );
           })}
+        </div>
+      ) : collection === 'brands' ? (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
+          {filteredItems.map(item => {
+            const logo = item.logoSrc || item.image;
+            return (
+              <div key={item.id} className="bg-neutral-950 border border-neutral-800 p-4 rounded-xl flex flex-col items-center justify-between group hover:border-[#D1FF52]/50 transition-colors relative min-h-[160px]">
+                <div className={`w-full h-16 rounded-lg flex items-center justify-center p-2.5 mb-2.5 transition-transform group-hover:scale-105 ${item.badgeBg || 'bg-white border border-neutral-200/60'}`}>
+                  {logo ? (
+                    <img 
+                      src={logo} 
+                      alt={item.name || item.title || 'Brand'} 
+                      className="max-h-12 max-w-full object-contain"
+                      onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }}
+                    />
+                  ) : (
+                    <span className="font-display font-black text-xs text-neutral-800 uppercase tracking-wider text-center line-clamp-2">
+                      {item.name || item.title || 'Brand'}
+                    </span>
+                  )}
+                </div>
+
+                <div className="w-full text-center">
+                  <h3 className="font-bold text-white text-xs truncate" title={item.name || item.title}>
+                    {item.name || item.title || 'Untitled Brand'}
+                  </h3>
+                  <span className="text-[9px] font-mono text-neutral-500 block truncate mt-0.5">
+                    {item.id}
+                  </span>
+                </div>
+                
+                <div className="flex gap-1 mt-3 pt-2 border-t border-neutral-800/80 w-full justify-center">
+                  <button 
+                    onClick={() => openEdit(item)}
+                    className="p-1.5 text-blue-400 hover:bg-blue-400/20 rounded-lg transition-colors cursor-pointer"
+                    title="Edit Brand"
+                  >
+                    <Edit2 className="w-3.5 h-3.5" />
+                  </button>
+                  <button 
+                    onClick={() => handleDelete(item.id)}
+                    className="p-1.5 text-red-400 hover:bg-red-400/20 rounded-lg transition-colors cursor-pointer"
+                    title="Delete Brand"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      ) : collection === 'faqs' ? (
+        <div className="space-y-3">
+          {filteredItems.map(item => (
+            <div key={item.id} className="bg-neutral-950 border border-neutral-800 rounded-xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-start justify-between gap-4 hover:border-neutral-700 transition-colors">
+              <div className="space-y-2 flex-1">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="w-5 h-5 rounded-full bg-[#D1FF52]/10 text-[#D1FF52] flex items-center justify-center font-bold text-xs shrink-0">
+                    ?
+                  </span>
+                  <h4 className="font-bold text-white text-sm sm:text-base leading-snug">
+                    {item.question || item.title || 'Untitled Question'}
+                  </h4>
+                </div>
+                
+                <div className="bg-neutral-900/60 p-3.5 rounded-xl border border-neutral-800/80 text-xs sm:text-sm text-neutral-300 leading-relaxed pl-4">
+                  {item.answer || item.description || 'No answer provided yet.'}
+                </div>
+              </div>
+
+              <div className="flex items-center gap-1.5 self-end sm:self-start shrink-0">
+                <button 
+                  onClick={() => openEdit(item)}
+                  className="p-2 text-blue-400 hover:bg-blue-400/10 rounded-lg transition-colors cursor-pointer"
+                  title="Edit FAQ"
+                >
+                  <Edit2 className="w-4 h-4" />
+                </button>
+                <button 
+                  onClick={() => handleDelete(item.id)}
+                  className="p-2 text-red-400 hover:bg-red-400/10 rounded-lg transition-colors cursor-pointer"
+                  title="Delete FAQ"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
       ) : collection === 'leads' ? (
         <div className="space-y-3">
@@ -1210,29 +1294,41 @@ function GenericTab({ collection }: { collection: string }) {
                     {collection === 'experience' ? 'Company / Studio Name' : 
                      collection === 'skills' ? 'Skill Name (e.g. Photoshop, Figma)' : 
                      collection === 'testimonials' ? 'Client Name' : 
+                     collection === 'brands' ? 'Brand Name (e.g. ORYOU, REDES CREATION)' :
+                     collection === 'faqs' ? 'FAQ Question' :
                      'Title / Name'}
                   </label>
                   <input 
                     type="text" 
                     value={formData.title}
                     onChange={(e) => setFormData({...formData, title: e.target.value})}
+                    placeholder={
+                      collection === 'brands' ? 'e.g. ORYOU' :
+                      collection === 'faqs' ? 'e.g. How long does a typical project take?' :
+                      ''
+                    }
                     className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white text-base sm:text-sm focus:outline-none focus:border-[#D1FF52]"
                     required
                   />
                 </div>
 
-                {(collection === 'services' || collection === 'projects' || collection === 'blog' || collection === 'gallery') && (
+                {(collection === 'services' || collection === 'projects' || collection === 'blog' || collection === 'gallery' || collection === 'brands') && (
                   <div>
                     <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
                       {collection === 'projects' ? 'Category (e.g. Brand Identity, UI/UX, Motion Graphics)' : 
                        collection === 'services' ? 'Tagline / Highlights' : 
+                       collection === 'brands' ? 'Badge Background Style (Tailwind classes)' :
                        'Category / Subtitle'}
                     </label>
                     <input 
                       type="text" 
                       value={formData.tagline}
                       onChange={(e) => setFormData({...formData, tagline: e.target.value})}
-                      placeholder={collection === 'projects' ? 'Brand Identity & UI/UX' : 'e.g. Fast turnaround, high quality'}
+                      placeholder={
+                        collection === 'projects' ? 'Brand Identity & UI/UX' : 
+                        collection === 'brands' ? 'bg-white border border-neutral-200/60' :
+                        'e.g. Fast turnaround, high quality'
+                      }
                       className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white text-base sm:text-sm focus:outline-none focus:border-[#D1FF52]"
                     />
                   </div>
@@ -1299,56 +1395,63 @@ function GenericTab({ collection }: { collection: string }) {
                   </div>
                 )}
 
-                {collection !== 'skills' && (
+                {collection !== 'skills' && collection !== 'brands' && (
                   <div>
                     <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
                       {collection === 'testimonials' ? 'Testimonial Quote' : 
                        collection === 'experience' ? 'Role Description & Key Accomplishments' : 
+                       collection === 'faqs' ? 'FAQ Answer / Explanation' :
                        'Description / Details'}
                     </label>
                     <textarea 
                       value={formData.description}
                       onChange={(e) => setFormData({...formData, description: e.target.value})}
+                      placeholder={collection === 'faqs' ? 'Provide a clear, helpful answer for your clients...' : ''}
                       className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white text-base sm:text-sm focus:outline-none focus:border-[#D1FF52] min-h-[90px] resize-y"
+                      required={collection === 'faqs'}
                     />
                   </div>
                 )}
 
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
-                    {collection === 'services' ? 'Icon Name (PenTool, Megaphone, Globe, BookOpen, Zap, Video, Palette)' : 
-                     collection === 'skills' ? 'Icon / 2-Letter Code (Ps, Ai, Figma, Pr, Ae, Id, Xd)' : 
-                     'Image URL / Direct Google Drive Link'}
-                  </label>
-                  <input 
-                    type="text" 
-                    value={formData.image}
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      const converted = (collection === 'services' || collection === 'skills') ? val : getGoogleDriveDirectLink(val);
-                      setFormData({...formData, image: converted});
-                    }}
-                    className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white text-base sm:text-sm focus:outline-none focus:border-[#D1FF52]"
-                    placeholder={
-                      collection === 'services' ? 'PenTool, Megaphone, Globe, Zap, etc' : 
-                      collection === 'skills' ? 'Ps, Ai, Figma, Pr, Ae, etc' : 
-                      'https://... or Google Drive image link'
-                    }
-                  />
-                  {formData.image && formData.image.startsWith('http') && (
-                    <div className="mt-3 aspect-video w-full rounded-xl overflow-hidden border border-neutral-800 bg-neutral-950 flex items-center justify-center relative">
-                      <img 
-                        src={formData.image} 
-                        alt="Preview" 
-                        className="object-contain max-h-[130px] max-w-full"
-                        onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }}
-                      />
-                      <div className="absolute top-2 right-2 text-[9px] bg-black/70 px-1.5 py-0.5 rounded text-neutral-400 font-mono">
-                        Live Preview
+                {collection !== 'faqs' && (
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1.5">
+                      {collection === 'services' ? 'Icon Name (PenTool, Megaphone, Globe, BookOpen, Zap, Video, Palette)' : 
+                       collection === 'skills' ? 'Icon / 2-Letter Code (Ps, Ai, Figma, Pr, Ae, Id, Xd)' : 
+                       collection === 'brands' ? 'Brand Logo URL or Asset Path (e.g. /assets/aistudio/... or https://...)' :
+                       'Image URL / Direct Google Drive Link'}
+                    </label>
+                    <input 
+                      type="text" 
+                      value={formData.image}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        const converted = (collection === 'services' || collection === 'skills' || collection === 'brands') ? val : getGoogleDriveDirectLink(val);
+                        setFormData({...formData, image: converted});
+                      }}
+                      className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-white text-base sm:text-sm focus:outline-none focus:border-[#D1FF52]"
+                      placeholder={
+                        collection === 'services' ? 'PenTool, Megaphone, Globe, Zap, etc' : 
+                        collection === 'skills' ? 'Ps, Ai, Figma, Pr, Ae, etc' : 
+                        collection === 'brands' ? '/assets/aistudio/image_3de4bc1f.png or https://...' :
+                        'https://... or Google Drive image link'
+                      }
+                    />
+                    {formData.image && (formData.image.startsWith('http') || formData.image.startsWith('/assets/')) && (
+                      <div className="mt-3 aspect-video w-full rounded-xl overflow-hidden border border-neutral-800 bg-neutral-950 flex items-center justify-center relative">
+                        <img 
+                          src={formData.image} 
+                          alt="Preview" 
+                          className="object-contain max-h-[130px] max-w-full"
+                          onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }}
+                        />
+                        <div className="absolute top-2 right-2 text-[9px] bg-black/70 px-1.5 py-0.5 rounded text-neutral-400 font-mono">
+                          Live Preview
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </div>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* Modal Sticky Footer Actions */}

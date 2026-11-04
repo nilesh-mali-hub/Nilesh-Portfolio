@@ -287,6 +287,8 @@ router.get('/init', async (req, res) => {
       projects: db.projects || [],
       services: db.services || [],
       testimonials: db.testimonials || [],
+      brands: db.brands || [],
+      faqs: db.faqs || [],
       contact: db.contact || null,
       resume: db.resume || null,
       settings: db.settings || null
@@ -296,7 +298,7 @@ router.get('/init', async (req, res) => {
   }
 });
 
-const collections = ['projects', 'services', 'testimonials', 'leads', 'blog', 'gallery', 'knowledge', 'experience', 'education', 'skills'];
+const collections = ['projects', 'services', 'testimonials', 'leads', 'blog', 'gallery', 'knowledge', 'experience', 'education', 'skills', 'brands', 'faqs'];
 
 // Generic CRUD for collections
 collections.forEach(collection => {

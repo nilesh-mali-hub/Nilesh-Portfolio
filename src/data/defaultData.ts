@@ -112,6 +112,118 @@ export const defaultData = {
     { id: "svc-6", title: "Video Editing", description: "Compelling video edits that tell your story and engage your audience.", image: "Video" }
   ],
   testimonials: [],
+  brands: [
+    {
+      id: "oryou",
+      name: "ORYOU",
+      title: "ORYOU",
+      badgeBg: "bg-white border border-neutral-200/60",
+      logoSrc: "/assets/aistudio/oryou.svg",
+      image: "/assets/aistudio/oryou.svg"
+    },
+    {
+      id: "redes-creation",
+      name: "REDES CREATION",
+      title: "REDES CREATION",
+      badgeBg: "bg-white border border-neutral-200/60",
+      logoSrc: "/assets/aistudio/image_3de4bc1f.png",
+      image: "/assets/aistudio/image_3de4bc1f.png"
+    },
+    {
+      id: "brahmos-logistics",
+      name: "BRAHMOS LOGISTICS",
+      title: "BRAHMOS LOGISTICS",
+      badgeBg: "bg-white border border-neutral-200/60",
+      logoSrc: "/assets/aistudio/image_acce1a2d.png",
+      image: "/assets/aistudio/image_acce1a2d.png"
+    },
+    {
+      id: "govt-rajasthan",
+      name: "GOVT. OF RAJASTHAN",
+      title: "GOVT. OF RAJASTHAN",
+      badgeBg: "bg-white border border-neutral-200/60",
+      logoSrc: "/assets/aistudio/image_64dbfd53.png",
+      image: "/assets/aistudio/image_64dbfd53.png"
+    },
+    {
+      id: "st-pauls",
+      name: "ST. PAUL'S SCHOOL",
+      title: "ST. PAUL'S SCHOOL",
+      badgeBg: "bg-white border border-neutral-200/60",
+      logoSrc: "/assets/aistudio/image_9c1adc74.png",
+      image: "/assets/aistudio/image_9c1adc74.png"
+    },
+    {
+      id: "soni-somalal",
+      name: "SONI SOMALAL & SONS",
+      title: "SONI SOMALAL & SONS",
+      badgeBg: "bg-white border border-neutral-200/60",
+      logoSrc: "/assets/aistudio/image_4b3662d9.png",
+      image: "/assets/aistudio/image_4b3662d9.png"
+    },
+    {
+      id: "paraag-developers",
+      name: "PARAAG DEVELOPERS",
+      title: "PARAAG DEVELOPERS",
+      badgeBg: "bg-[#0E1015] border border-neutral-700/80",
+      logoSrc: "/assets/aistudio/3_-_3_eefa29be.png",
+      image: "/assets/aistudio/3_-_3_eefa29be.png"
+    },
+    {
+      id: "just-wings",
+      name: "JUST WINGS",
+      title: "JUST WINGS",
+      badgeBg: "bg-[#0E1015] border border-neutral-800"
+    },
+    {
+      id: "sol-resorts",
+      name: "THE SOL RESORTS",
+      title: "THE SOL RESORTS",
+      badgeBg: "bg-[#183935] border border-teal-800/80"
+    },
+    {
+      id: "supps-spot",
+      name: "SUPPS SPOT",
+      title: "SUPPS SPOT",
+      badgeBg: "bg-neutral-900 border border-amber-500/40"
+    },
+    {
+      id: "shine-homes",
+      name: "SHINE HOMES",
+      title: "SHINE HOMES",
+      badgeBg: "bg-white border border-neutral-200/60"
+    }
+  ],
+  faqs: [
+    {
+      id: "faq-1",
+      question: "How long does a typical project take?",
+      title: "How long does a typical project take?",
+      answer: "Social & marketing assets take 3–5 days, while full brand identity or UI/UX systems take 7–14 business days. Express delivery is available for urgent deadlines.",
+      description: "Social & marketing assets take 3–5 days, while full brand identity or UI/UX systems take 7–14 business days. Express delivery is available for urgent deadlines."
+    },
+    {
+      id: "faq-2",
+      question: "What is your creative design process?",
+      title: "What is your creative design process?",
+      answer: "A structured 4-step flow: Brief & Discovery → Concept Moodboards → Collaborative Revisions → Production-ready file handoff.",
+      description: "A structured 4-step flow: Brief & Discovery → Concept Moodboards → Collaborative Revisions → Production-ready file handoff."
+    },
+    {
+      id: "faq-3",
+      question: "What file formats and deliverables do I get?",
+      title: "What file formats and deliverables do I get?",
+      answer: "Complete commercial ownership with editable vector files (AI, EPS, SVG), print-ready CMYK PDFs, high-res PNG/JPG, and interactive Figma links.",
+      description: "Complete commercial ownership with editable vector files (AI, EPS, SVG), print-ready CMYK PDFs, high-res PNG/JPG, and interactive Figma links."
+    },
+    {
+      id: "faq-4",
+      question: "How do revisions and payments work?",
+      title: "How do revisions and payments work?",
+      answer: "Every project includes 2–3 structured revision rounds. Projects start with a 50% deposit, with the remaining 50% due upon final approval before asset release.",
+      description: "Every project includes 2–3 structured revision rounds. Projects start with a 50% deposit, with the remaining 50% due upon final approval before asset release."
+    }
+  ],
   leads: [],
   blog: [],
   analytics: [],

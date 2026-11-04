@@ -12,7 +12,7 @@ export async function readDB() {
     // Deep-merge with defaultData to guarantee all collections and singletons exist
     const merged: any = { ...defaultData, ...parsed };
 
-    const arrayKeys = ['projects', 'services', 'testimonials', 'leads', 'blog', 'analytics', 'gallery', 'knowledge', 'experience', 'skills'];
+    const arrayKeys = ['projects', 'services', 'testimonials', 'leads', 'blog', 'analytics', 'gallery', 'knowledge', 'experience', 'education', 'skills', 'brands', 'faqs'];
     for (const key of arrayKeys) {
       if (!Array.isArray(merged[key])) {
         merged[key] = Array.isArray((defaultData as any)[key]) ? (defaultData as any)[key] : [];

@@ -17,7 +17,24 @@ export default function Contact() {
   const [submittedEmail, setSubmittedEmail] = useState('');
   const [emailAutoSent, setEmailAutoSent] = useState(false);
 
+  const [contactInfo, setContactInfo] = useState<any>({
+    phone: '+91 63789 54363',
+    whatsapp: '916378954363',
+    email: 'work.nileshmali@gmail.com',
+    instagram: 'https://www.instagram.com/_nilesh._.mali_/',
+    location: 'Abu Road, Sirohi, Rajasthan (307026)'
+  });
+
   useEffect(() => {
+    fetch('/api/contact')
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (data && typeof data === 'object') {
+          setContactInfo((prev: any) => ({ ...prev, ...data }));
+        }
+      })
+      .catch(() => {});
+
     const params = new URLSearchParams(location.search);
     const serviceParam = params.get('service');
     if (serviceParam) {
@@ -334,7 +351,7 @@ export default function Contact() {
                     <p className="text-red-400 text-xs font-medium leading-relaxed">{error}</p>
                     <div className="flex flex-col sm:flex-row gap-2 mt-0.5">
                       <a
-                        href={`https://api.whatsapp.com/send/?phone=916378954363&text=${encodeURIComponent(
+                        href={`https://api.whatsapp.com/send/?phone=${(contactInfo.whatsapp || contactInfo.phone || '916378954363').replace(/[^0-9]/g, '')}&text=${encodeURIComponent(
                           `Hi Nilesh! I am contacting you regarding a project:\n\n• Name: ${formData.name || 'Website Visitor'}\n• Email: ${formData.email || 'N/A'}\n• Phone: ${formData.whatsapp || 'N/A'}\n\n• Message:\n${formData.message}`
                         )}`}
                         target="_blank"
@@ -344,7 +361,7 @@ export default function Contact() {
                         <MessageCircle className="w-3.5 h-3.5" /> Send via WhatsApp (Instant)
                       </a>
                       <a
-                        href={`mailto:work.nileshmali@gmail.com?subject=${encodeURIComponent(
+                        href={`mailto:${contactInfo.email || 'work.nileshmali@gmail.com'}?subject=${encodeURIComponent(
                           `New Project Inquiry from ${formData.name || 'Website Visitor'}`
                         )}&body=${encodeURIComponent(
                           `Hi Nilesh,\n\nName: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.whatsapp}\n\nProject Requirements:\n${formData.message}`
@@ -366,7 +383,7 @@ export default function Contact() {
           <p className="text-neutral-400 text-base sm:text-lg flex flex-wrap items-center justify-center gap-2">
             <span>or connect directly via</span>
             <a 
-              href="https://api.whatsapp.com/send/?phone=916378954363&text=Hello+Nilesh+Mali%21&type=phone_number&app_absent=0"
+              href={`https://api.whatsapp.com/send/?phone=${(contactInfo.whatsapp || contactInfo.phone || '916378954363').replace(/[^0-9]/g, '')}&text=Hello+Nilesh+Mali%21&type=phone_number&app_absent=0`}
               target="_blank"
               rel="noopener noreferrer"
               className="text-white border-b-2 border-[#D1FF52] hover:text-[#D1FF52] transition-colors inline-flex items-center gap-1 font-medium"
@@ -375,7 +392,7 @@ export default function Contact() {
             </a>
             <span className="text-neutral-600">•</span>
             <a 
-              href="https://www.instagram.com/_nilesh._.mali_/"
+              href={contactInfo.instagram || "https://www.instagram.com/_nilesh._.mali_/"}
               target="_blank"
               rel="noopener noreferrer"
               className="text-white border-b-2 border-[#D1FF52] hover:text-[#D1FF52] transition-colors inline-flex items-center gap-1 font-medium"
@@ -388,7 +405,7 @@ export default function Contact() {
           <div className="mt-8 pt-6 border-t border-neutral-900 flex flex-col items-center gap-1.5 text-center">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-xs text-neutral-300">
               <span className="w-2 h-2 rounded-full bg-[#D1FF52] animate-pulse"></span>
-              <span>Based in <strong className="text-white">Abu Road, Sirohi, Rajasthan (307026)</strong></span>
+              <span>Based in <strong className="text-white">{contactInfo.location || 'Abu Road, Sirohi, Rajasthan (307026)'}</strong></span>
             </div>
             <p className="text-[11px] text-neutral-500 mt-1 max-w-sm">
               Providing freelance graphic design, branding, UI/UX & video editing services for businesses in Abu Road, Mount Abu, Palanpur, and clients worldwide.
